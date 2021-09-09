@@ -1,0 +1,209 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" *ngIf="Inputcomponent != 'ManuallyMatchedClaims' && Inputcomponent != 'Re-Match Claim'">
+      Match Practice to generate unmatched claim EDI file
+    </h5>
+    <h5 class="modal-title" *ngIf="Inputcomponent == 'ManuallyMatchedClaims'">
+      Match Practice to generate Re-Matched claim EDI file
+    </h5>
+    <h5 class="modal-title" *ngIf="Inputcomponent == 'Re-Match Claim'">
+      Match Practice to generate Re-Match claim EDI file
+    </h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <kendo-grid
+      [data]="SelectsubclientGridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [filterable]="true"
+      [loading]="SelectsubclientLoading"
+      (dataStateChange)="SelectsubclientdataStateChange($event)"
+      [selectable]="{ enabled: true, checkboxOnly: true, mode: mode }"
+      [kendoGridSelectBy]="SelectsubclientCallback"
+      [selectedKeys]="Selectedsubclient"
+      [height]="650"
+    >
+      <kendo-grid-checkbox-column width="15" >
+        <ng-template kendoGridCellTemplate let-idx="rowIndex">
+          <input [kendoGridSelectionCheckbox]="idx" />
+        </ng-template>
+      </kendo-grid-checkbox-column>
+
+      <!-- <kendo-grid-checkbox-column width="15">
+        <ng-template kendoGridHeaderTemplate>
+          <input class="k-checkbox" />
+        </ng-template>
+      </kendo-grid-checkbox-column> -->
+
+      <kendo-grid-column
+        field="subclientcode"
+        title="Practice Code"
+        width="70"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientname"
+        title="Practice Name"
+        width="80"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientdivisioncode"
+        title="Division Code"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientcontactname"
+        title="Contact Name"
+        width="80"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" (click)="OnClose()">
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="btnGenerate"
+      (click)="OnGenerate()"
+      [disabled]="!(disbablesend && Selectedsubclient.length > 0)"
+    >
+      Send 835 File
+    </button>
+    <!-- <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="btnGenerate"
+      (click)="ValidationRematched()"
+      [disabled]="!(disbablesend && Selectedsubclient.length > 0)"
+    >
+     Validate
+  </button> -->
+  </div>
+</div>
+
+<div class="progress-box" *ngIf="isFilesProcessing">
+  <div class="col-md-2 mx-auto" style="top:30%">
+    <circle-progress
+      [percent]="percentage"
+      [startFromZero]="false"
+      [animation]="true"
+      [animationDuration]="200"
+      subtitleColor="#000"
+      titleColor="#000"
+      unitsColor="#000"
+      innerStrokeColor="#fd9644"
+      outerStrokeColor="#e76800"
+      subtitleFontSize="12"
+      [subtitle]="'Please wait...'"
+    ></circle-progress>
+  </div>
+</div>
+
+<!-- Re-mathced Confirmation Model -->
+<!-- <div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="rematchedvalidationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+  [ngClass]="{
+    'hidevlidationmodal': validationrematchedflag
+  }"
+>
+  <div class="modal-dialog modal-lgc" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Warning</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onselectedCloseClick()"
+        ></button>
+      </div>
+      <div class="modal-body" style="height: 400px; overflow: auto;">
+        {{ConfirmationMessage}}
+       
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th style="text-transform: none; font-weight: 600; color: #495057;">Claim #</th>                
+              <th style="text-transform: none; font-weight: 600; color: #495057;">Matched By</th>
+              <th style="text-transform: none; font-weight: 600; color: #495057;">Matched Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let obj of rematchedvalidationlist">
+              <td>{{ obj.claimnumber }}</td>             
+              <td>{{ obj.username }}</td>
+              <td>{{ obj.mapped_date | date: "MM-dd-yyyy hh:mm:ss a" }}</td>
+            </tr>              
+          </tbody>
+        </table>
+       
+      </div>
+      <div class="modal-footer">        
+        <button
+          type="button"
+          class="btn btn-primary"         
+          (click)="onselectedYesClick()"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<kendo-dialog class="customdialog" title="Warning" *ngIf="openeddia" (close)="closeWarning('Yes')" [minWidth]="250" [width]="450" style="pointer-events: visible;">
+  <p style="font-size: 16px;">{{ConfirmationMessage}}</p>
+    <div style="height: auto; overflow: auto; max-height: 350px;">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th style="text-transform: none; font-weight: 600; color: #495057;">Claim #</th>                
+            <th style="text-transform: none; font-weight: 600; color: #495057;">Matched By</th>
+            <th style="text-transform: none; font-weight: 600; color: #495057;">Matched Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let obj of rematchedvalidationlist">
+            <td>{{ obj.claimnumber }}</td>             
+            <td>{{ obj.username }}</td>
+            <td>{{ obj.mapped_date | date: "MM-dd-yyyy hh:mm:ss a" }}</td>
+          </tr>              
+        </tbody>
+      </table>  
+    </div>   
+    <div class="d-flex border-top pt-2">
+      <div class="ml-auto">
+        <button kendoButton (click)="closeWarning('Yes')" primary="true">Ok</button>
+      </div>      
+    </div>
+</kendo-dialog>
+<!-- Re-mathced Confirmation Model -->

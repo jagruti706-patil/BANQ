@@ -1,0 +1,122 @@
+<div class="card" style=" height: 75vh">
+  <div class="card-header ">
+    <h4 class="mb-0">Group FTP List</h4>
+    <button
+      class="ml-auto"
+      kendoButton
+      [primary]="true"
+      routerLink="/client/new"
+    >
+      Add New FTP
+    </button>
+  </div>
+  <div class="card-body">
+    <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [filterable]="true"
+      (dataStateChange)="dataStateChange($event)"
+    >
+      <kendo-grid-column
+        field="ftpcode"
+        title="Code"
+        width="30"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="ftpname"
+        title="FTP Name"
+        width="50"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="ftpurl"
+        title="FTP Url"
+        width="110"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="ftpusername"
+        title="FTP User Name"
+        width="70"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="ftptype"
+        title="FTP Type"
+        width="40"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="ftpport"
+        title="FTP Port"
+        width="40"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="status"
+        title="Status"
+        width="40"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <!-- {{dataItem.status ? "Active" : "Inactive" }} -->
+          <div *ngIf="dataItem.status == true" class="text-success">Active</div>
+          <div *ngIf="dataItem.status == false" class="text-danger">
+            Inactive
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="ftp835inboundfolder"
+        title="835 Ftp Folder"
+        width="60"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="ftp837inboundfolder"
+        title="837 Ftp Folder"
+        width="60"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+      </kendo-grid-column>
+
+      <!-- <kendo-grid-command-column title="Action" width="50" [headerStyle]="{'font-weight': 'bold'}">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button kendoGridEditCommand [primary]="true" title="Edit" data-toggle="modal"
+                data-target="#editftpconfirmationModal">
+                <i class="fe fe-edit-2"></i>
+              </button>
+              <button kendoGridRemoveCommand title="Delete" data-toggle="modal"
+                data-target="#deleteftpconfirmationModal">
+                <i class="fe fe-x"></i>
+              </button>
+            </ng-template>
+          </kendo-grid-command-column> -->
+      <!--       
+            <kendo-grid-command-column title="Action" width="90" [headerStyle]="{ 'font-weight': 'bold' }">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoGridRemoveCommand title="Modify" data-toggle="modal"
+                  [routerLink]="['/client',dataItem.clientid]">
+                  <i class="fe fe-x"></i> Modify
+                </button>
+                <button kendoGridRemoveCommand title="Delete" data-toggle="modal" (click)="deleteConfiratmion(dataItem)">
+                  <i class="fe fe-x"></i> Remove
+                </button>
+              </ng-template>
+            </kendo-grid-command-column> -->
+    </kendo-grid>
+  </div>
+</div>

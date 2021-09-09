@@ -1,0 +1,453 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex">
+      <h4>My Account</h4>
+      <div class="ml-auto">
+        <span class="text-muted"
+          >{{ this.subClientList.length }} records found</span
+        >
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        #kendoGridInstance
+        [data]="gridView"
+        [sort]="state.sort"
+        [sortable]="true"
+        (detailExpand)="onExpand($event)"
+        [height]="600"
+        (dataStateChange)="dataStateChange($event)"
+        [loading]="loading"
+        class="w-100 wrap-grid master"
+      >
+        <!-- [pageSize]="state.take"
+      [skip]="state.skip"
+      [pageable]="true" -->
+        <!-- [filter]="state.filter" [filterable]="true" -->
+        <ng-template
+          kendoGridToolbarTemplate
+          *ngIf="this.subClientList?.length > 1"
+        >
+          <button
+            kendoButton
+            [primary]="true"
+            class="float-right mr-1"
+            type="button"
+            title="Collapse All"
+            (click)="collapseAll(kendoGridInstance)"
+            id="collapseId"
+          >
+            Collapse All
+          </button>
+          <button
+            kendoButton
+            [primary]="true"
+            class="float-right mr-1"
+            type="button"
+            title="Expand All"
+            (click)="expandAll(kendoGridInstance)"
+          >
+            Expand All
+          </button>
+        </ng-template>
+        <kendo-grid-column
+          field="subclientcode"
+          title="Code"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.subclientcode }}
+            <button
+              style="display: none;"
+              type="button"
+              id="myAccountGrid"
+              (click)="expandDefault(kendoGridInstance)"
+            ></button>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientdivisioncode"
+          title="Division"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientname"
+          title="Name"
+          width="90"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientcontactname"
+          title="Contact Name"
+          width="90"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientcontactemail"
+          title="Contact Email"
+          width="110"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientcontactphone"
+          title="Contact Phone"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.subclientcontactphone | phone }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="billinglocationcode"
+          title="Billing Location"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.billinglocationcode }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientstatus"
+          title="Status"
+          width="50"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <!-- filter="boolean" -->
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.subclientstatus == true" class="text-success">
+              Active
+            </div>
+            <div *ngIf="dataItem.subclientstatus == false" class="text-danger">
+              Inactive
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <ng-template
+          kendoGridDetailTemplate
+          let-dataItem
+          let-rowIndex="rowIndex"
+        >
+          <div class="card">
+            <div class="card-header p-0">
+              <div
+                class="nav nav-tabs m-0 border-bottom-0"
+                id="nav-tab"
+                role="tablist"
+              >
+                <a
+                  class="nav-item nav-link active mr-3"
+                  id="nav-parameters-tab"
+                  data-toggle="tab"
+                  [attr.data-target]="'#param' + dataItem.id"
+                  role="tab"
+                  aria-controls="nav-parameters"
+                  aria-selected="false"
+                  >Claim Identifier</a
+                >
+
+                <a
+                  class="nav-item nav-link mr-3"
+                  id="nav-parameters-tab"
+                  data-toggle="tab"
+                  [attr.data-target]="'#provider' + dataItem.id"
+                  role="tab"
+                  aria-controls="nav-parameters"
+                  aria-selected="false"
+                  (click)="getProviderDetails(dataItem, rowIndex)"
+                  >Practice Provider</a
+                >
+
+                <a
+                  *ngIf="dataItem.ftpoption == 1"
+                  class="nav-item nav-link mr-3"
+                  id="nav-parameters-tab"
+                  data-toggle="tab"
+                  [attr.data-target]="'#ftp' + dataItem.id"
+                  role="tab"
+                  aria-controls="nav-parameters"
+                  aria-selected="false"
+                  (click)="getFtpDetails(dataItem, rowIndex)"
+                  >ERA Inbox FTP</a
+                >
+              </div>
+            </div>
+            <div class="card-body p-2">
+              <div class="tab-content" id="nav-tabContent">
+                <div
+                  class="tab-pane fade show active"
+                  [attr.id]="'param' + dataItem.id"
+                  role="tabpanel"
+                  aria-labelledby="nav-parameters-tab"
+                >
+                  <div class="card mb-0">
+                    <div class="card-body p-0 o-auto">
+                      <kendo-grid
+                        id="gridSplitparameter"
+                        [data]="dataItem.splitParameters"
+                        style="max-height: 220px;"
+                      >
+                        <kendo-grid-column
+                          field="splitparametername"
+                          title="Claim Identitifer"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="splitparametervalue"
+                          title="Value"
+                          width="50"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="splitparameterstatus"
+                          title="Status"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                          <ng-template kendoGridCellTemplate let-dataItem>
+                            <div
+                              *ngIf="dataItem.splitparameterstatus"
+                              class="text-success"
+                            >
+                              Active
+                            </div>
+                            <div
+                              *ngIf="!dataItem.splitparameterstatus"
+                              class="text-danger"
+                            >
+                              Inactive
+                            </div>
+                          </ng-template>
+                        </kendo-grid-column>
+                      </kendo-grid>
+                    </div>
+                    <!-- <div class="card-header pl-3">
+                      <h5 class="mb-0">Split Parameters</h5>
+                    </div> -->
+                    <!-- <div class="card-body p-0 o-auto" style="max-height: 133px;">
+                      <div
+                        class="col-lg-12 mt-2"
+                        *ngIf="dataItem.splitParameters?.length == 0"
+                      >
+                        <p class="text-muted">
+                          <i class="fe fe-alert-circle mr-1"></i>
+                          No Records Available.
+                        </p>
+                      </div>
+    
+                      <div
+                        class="table-responsive"
+                        *ngIf="dataItem.splitParameters?.length > 0"
+                      >
+                        <table class="table card-table table-striped table-vcenter">
+                          <thead>
+                            <tr>
+                              <th>Claim Identifier</th>
+                              <th>Value</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of dataItem.splitParameters">
+                              <td>{{ item.splitparametername }}</td>
+                              <td>{{ item.splitparametervalue }}</td>
+                              <td>
+                                <span
+                                  class="badge badge-success"
+                                  *ngIf="item.splitparameterstatus"
+                                  >Active</span
+                                >
+                                <span
+                                  class="badge badge-secondary"
+                                  *ngIf="!item.splitparameterstatus"
+                                  >Inactive</span
+                                >
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  [attr.id]="'provider' + dataItem.id"
+                  role="tabpanel"
+                  aria-labelledby="nav-parameters-tab"
+                >
+                  <div class="card mb-0">
+                    <!-- <div class="card-header pl-3">
+                      <h5 class="mb-0">Provider Mapping</h5>
+                    </div> -->
+                    <div class="card-body p-0 o-auto">
+                      <kendo-grid
+                        id="gridProvider"
+                        [data]="dataItem.providerlist"
+                        style="max-height: 220px;"
+                      >
+                        <kendo-grid-column
+                          field="providernpi"
+                          title="NPI"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="sname"
+                          title="Provider Name"
+                          width="50"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="npitype"
+                          title="Type"
+                          width="20"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="status"
+                          title="Status"
+                          width="20"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                          <ng-template kendoGridCellTemplate let-dataItem>
+                            <div
+                              *ngIf="dataItem.status != 'false'"
+                              class="text-success"
+                            >
+                              Active
+                            </div>
+                            <div
+                              *ngIf="dataItem.status == 'false'"
+                              class="text-danger"
+                            >
+                              Inactive
+                            </div>
+                          </ng-template>
+                        </kendo-grid-column>
+                      </kendo-grid>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  [attr.id]="'ftp' + dataItem.id"
+                  role="tabpanel"
+                  aria-labelledby="nav-parameters-tab"
+                >
+                  <div class="card mb-0">
+                    <!-- <div class="card-header pl-3">
+                      <h5 class="mb-0">FTP Details</h5>
+                    </div> -->
+                    <div class="card-body p-0 o-auto">
+                      <kendo-grid
+                        id="gridMaster"
+                        [data]="dataItem.subclientftplist"
+                        style="max-height: 210px;"
+                      >
+                        <kendo-grid-column
+                          field="ftpcode"
+                          title="Code"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="ftpname"
+                          title="FTP Name"
+                          width="50"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="ftpurl"
+                          title="FTP Url"
+                          width="70"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="ftpusername"
+                          title="FTP User Name"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                          <ng-template kendoGridHeaderTemplate let-column>
+                            <span title="FTP User Name">FTP User Name</span>
+                          </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="ftptype"
+                          title="FTP Type"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="ftpport"
+                          title="FTP Port"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="ftp835outboundfolder"
+                          title="835 Outbound Folder"
+                          width="40"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                          <ng-template kendoGridHeaderTemplate let-column>
+                            <span title="835 Outbound Folder"
+                              >835 Outbound Folder</span
+                            >
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                              <span title="{{ dataItem.ftp835outboundfolder }}">
+                                {{ dataItem.ftp835outboundfolder }}
+                              </span>
+                            </ng-template>
+                          </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column
+                          field="status"
+                          title="Status"
+                          width="30"
+                          [headerStyle]="{ 'font-weight': '600' }"
+                        >
+                          <ng-template kendoGridCellTemplate let-dataItem>
+                            <div *ngIf="dataItem.status" class="text-success">
+                              Active
+                            </div>
+                            <div *ngIf="!dataItem.status" class="text-danger">
+                              Inactive
+                            </div>
+                          </ng-template>
+                        </kendo-grid-column>
+                      </kendo-grid>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template kendoGridNoRecordsTemplate>
+          No records available.
+        </ng-template>
+      </kendo-grid>
+    </div>
+  </div>
+</div>

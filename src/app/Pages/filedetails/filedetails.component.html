@@ -1,0 +1,878 @@
+<div class="card">
+  <app-breadcrumb></app-breadcrumb>
+  <div class="card-body">
+    <!-- <div class="row">
+          <div class="col-md-2">
+            Clients :
+          </div>
+          <div class="col-md-4">
+            <kendo-dropdownlist id="ddClients"
+              [class.is-invalid]="ClientName.invalid && ClientName.touched" [data]="sAllClients" [textField]="'clientname'"
+              [valueField]="'clientid'" [valuePrimitive]="true" (ngModelChange)='onClientChange($event)'>
+            </kendo-dropdownlist>            
+          </div>
+          <div class="col-md-2">
+            SubClients :
+          </div>
+          <div class="col-md-4">
+            <kendo-dropdownlist id="ddSubClients"
+              [class.is-invalid]="SubClientName.invalid && SubClientName.touched" [data]="sSubClients"
+              [textField]="'clientname'" [valueField]="'clientid'">
+            </kendo-dropdownlist>            
+          </div>
+        </div> -->
+    <div class="panelSep">
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <div class="d-flex">
+            <div class="mr-3">
+              <div class="form-group">
+                <label class="form-label">Processed Start Date</label>
+                <kendo-datepicker
+                  id="dtstartDate"
+                  [(value)]="startDate"
+                  (valueChange)="onDateChange($event, 'start date')"
+                  class="w-100"
+                  [max]="endDate"
+                  [disabled]="disabledstartdate"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label class="form-label">Processed End Date</label>
+                <kendo-datepicker
+                  id="dtendDate"
+                  [(value)]="endDate"
+                  (valueChange)="onDateChange($event, 'end date')"
+                  class="w-100"
+                  [min]="startDate"
+                  [disabled]="disabledenddate"
+                ></kendo-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 p-0">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="form-group">
+              <label class="form-label">Group</label>
+              <kendo-dropdownlist
+                class="form-control form-control-sm"
+                formControlName="fcClientName"
+                id="ddClients"
+                [class.is-invalid]="ClientName.invalid && ClientName.touched"
+                [data]="sAllClients"
+                [textField]="'clientname'"
+                [valueField]="'clientid'"
+                [(ngModel)]="nSelectedClientID"
+                [valuePrimitive]="true"
+                (valueChange)="onClientChange($event)"
+                [filterable]="true"
+                [disabled]="disabledclient"
+                (filterChange)="handleClientFilter($event)"
+              >
+              </kendo-dropdownlist>
+              <div *ngIf="ClientName.invalid && ClientName.touched">
+                <small *ngIf="ClientName.errors?.required" class="text-danger"
+                  >Group is required</small
+                >
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-7">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="d-flex">
+              <div class="form-group">
+                <label for="" class="form-label">Status</label>
+                <kendo-dropdownlist
+                  formControlName="fcMasterStatus"
+                  id="ddMasterStatus"
+                  [class.is-invalid]="
+                    MasterStatus.invalid && MasterStatus.touched
+                  "
+                  [data]="sMasterStatus"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedMasterStatus"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledstatus"
+                  (valueChange)="onMasterStatusChange($event)"
+                  style="max-width: 7rem;"
+                >
+                </kendo-dropdownlist>
+                <div *ngIf="MasterStatus.invalid && MasterStatus.touched">
+                  <small
+                    *ngIf="MasterStatus.errors?.required"
+                    class="text-danger"
+                    >Status is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group ml-2">
+                <label for="" class="form-label">Search By</label>
+                <kendo-dropdownlist
+                  formControlName="fcMasterSearchBy"
+                  id="ddMasterSearchBy"
+                  [class.is-invalid]="
+                    MasterSearchBy.invalid && MasterSearchBy.touched
+                  "
+                  [data]="sMasterSearchBy"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedMasterSearchBy"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledSearchBy"
+                  (valueChange)="onMasterSearchByChange($event)"
+                >
+                </kendo-dropdownlist>
+                <div *ngIf="MasterSearchBy.invalid && MasterSearchBy.touched">
+                  <small
+                    *ngIf="MasterSearchBy.errors?.required"
+                    class="text-danger"
+                    >SearchBy is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group ml-3 mr-3 flex-fill">
+                <label for="" class="form-label">Search</label>
+                <div class="d-flex">
+                  <input
+                    kendoTextBox
+                    formControlName="fcSearch"
+                    type="text"
+                    id="Search"
+                    [ngClass]="{ disabled: disabledsearch }"
+                    class="form-control form-control-sm flex-fill"
+                    title="Search by {{ sSelectedMasterSearchBy }}"
+                    placeholder="Search by {{ sSelectedMasterSearchBy }}"
+                  />
+                  <!-- <div> (keyup.enter)="onSearch($event)"
+                    <button
+                      (click)="onSearch($event)"
+                      [disabled]="disabledsearch"
+                      [icon]="'search'"
+                      kendoButton
+                    ></button>
+                  </div> -->
+                </div>
+              </div>
+
+              <div class="ml-auto">
+                <div class="form-group">
+                  <label for="" class="form-label">&nbsp;</label>
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    type="button"
+                    (click)="applyFilters()"
+                    title="Apply filters"
+                    [disabled]="disabledapplybtn"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    kendoButton
+                    class="ml-3"
+                    type="button"
+                    (click)="clearFilters()"
+                    title="Default filters set"
+                    [disabled]="disabledclearbtn"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <h4>Master Files</h4>
+      <div class="ml-auto">
+        <span class="text-muted"
+          >{{ MasterFilesdisplaytotalrecordscount }} records found</span
+        >
+      </div>
+    </div>
+    <!-- <div class="row mb-1">
+      <div *ngIf="MasterFilesGridView != undefined" class="ml-auto">
+        {{ MasterFilesdisplaytotalrecordscount }} records found
+      </div>
+    </div> -->
+    <div class="grid-wrapper">
+      <kendo-grid
+        [data]="MasterFilesGridView"
+        (cellClick)="OnCellClickMasterFile($event)"
+        [sortable]="true"
+        [sort]="sortMaster"
+        (sortChange)="sortMasterChange($event)"
+        [selectable]="true"
+        class="master"
+        [loading]="loadingMasterFilesGrid"
+        [pageable]="true"
+        [pageSize]="MasterFilespagesize"
+        [skip]="MasterFilesSkip"
+        (pageChange)="pageChangeMasterFile($event)"
+        [height]="465"
+      >
+        <ng-template kendoGridToolbarTemplate>
+          <button
+            kendoButton
+            [primary]="true"
+            class="pull-right mr-1"
+            type="button"
+            style="float: right;"
+            title="Refresh"
+            (click)="onRefreshClick()"
+            [disabled]="MasterFilesdisplaytotalrecordscount <= 0"
+          >
+            <i class="ti ti-reload" style="line-height: 1.4285714286;"></i>
+          </button>
+        </ng-template>
+
+        <kendo-grid-column
+          field="clientcode"
+          title="Code"
+          width="8"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.clientcode }}">
+              {{ dataItem.clientcode }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="clientname"
+          title="Group Name"
+          width="18"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.clientname }}">
+              {{ dataItem.clientname }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="sfilename"
+          title="File Name"
+          width="20"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.sfilename }}">
+              {{ dataItem.sfilename }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="dtimportdate"
+          title="Date"
+          width="18"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span>
+              {{ dataItem.dtimportdate | date: "MM-dd-yyyy hh:mm:ss a" }}</span
+            >
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="nstatus"
+          title="Status"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem?.nstatus == 'InProcess'" title="In-process">
+              <img
+                *ngIf="dataItem?.nstatus == 'InProcess'"
+                title="In-process"
+                src="../../../assets/img/warning-loader.gif"
+                alt=""
+                width="150"
+              />
+            </div>
+            <div
+              #target
+              title="{{
+                dataItem?.nstatus === 'UnProcess'
+                  ? clsPermission.fileunprocesslogs
+                    ? dataItem.serrormsg
+                    : ''
+                  : ''
+              }}"
+            >
+              <!-- <span *ngIf="dataItem?.nstatus == 'InProcess'" title="In-process"> <img src="../../../assets/img/warning-loader.gif" alt="" width="100"> </span> -->
+              <span
+                class="badge badge-success"
+                *ngIf="dataItem?.nstatus == 'Process'"
+                >Processed</span
+              >
+              <span
+                class="badge badge-danger"
+                *ngIf="dataItem?.nstatus == 'UnProcess'"
+                title="{{
+                  clsPermission.fileunprocesslogs ? dataItem.serrormsg : ''
+                }}"
+              >
+                Un-processed</span
+              >
+            </div>
+            <kendo-contextmenu
+              *ngIf="
+                dataItem?.nstatus == 'UnProcess' &&
+                (clsPermission.reprocessaccess || clsPermission.viewerrorcontext) &&
+                (currentusername
+                  .toLowerCase()
+                  .includes('vijay.patil@triarqhealth.com') ||
+                  currentusername
+                    .toLowerCase()
+                    .includes('sagar.ghodke@triarqhealth.com') ||
+                  currentusername
+                    .toLowerCase()
+                    .includes('juily.hardas@triarqhealth.com') ||
+                  currentusername
+                    .toLowerCase()
+                    .includes('manisha.sonawane@triarqhealth.com') ||
+                  currentusername
+                    .toLowerCase()
+                    .includes('dhananjay.wagh@triarqhealth.com') ||
+                  currentusername
+                    .toLowerCase()
+                    .includes('pravina.khandbahale@triarqhealth.com') ||
+                  currentusername
+                    .toLowerCase()
+                    .includes('priyanka.nikam@triarqhealth.com'))
+              "
+              [target]="target"
+              [items]="dataItem?.serrormsg == 'File is invalid' ? itemsexpand : items"
+              (select)="onMenuItemSelect(dataItem, $event)"
+            >
+            </kendo-contextmenu>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="claimcount"
+          title="Payer"
+          width="7"
+          [headerStyle]="{ 'font-weight': '600' }"
+          [style]="{
+            'font-weight': '600',
+            color: '#467fd0',
+            cursor: 'Pointer'
+          }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              *ngIf="
+                dataItem?.nstatus == 'UnProcess' ||
+                dataItem?.nstatus == 'InProcess'
+              "
+              title="Payer details not available"
+            >
+              Payer
+            </div>
+            <div *ngIf="dataItem?.nstatus == 'Process'">
+              Payer
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          title="Unmatched Claim Count"
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+          [style]="{
+            'font-weight': '600',
+            color: '#467fd0',
+            cursor: 'Pointer'
+          }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="" style="white-space: pre-wrap !important;"
+              >Un-Matched Claim Count</span
+            >
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              *ngIf="dataItem?.unmatchedclaimcount == '0'"
+              title="Un-Mmatched claim count is 0"
+            >
+              {{ dataItem.unmatchedclaimcount }}
+            </div>
+            <div *ngIf="dataItem?.unmatchedclaimcount != '0'">
+              {{ dataItem.unmatchedclaimcount }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+        title="Unmatched PLB Count"
+        width="11"
+        [headerStyle]="{ 'font-weight': '600' }"
+        [style]="{
+          'font-weight': '600',
+          color: '#467fd0',
+          cursor: 'Pointer'
+        }"
+      >
+        <ng-template kendoGridHeaderTemplate let-column>
+          <span title="" style="white-space: pre-wrap !important;"
+            >Un-Matched PLB Count</span
+          >
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div
+            *ngIf="dataItem?.unmatchedplbcount == '0'"
+            title="Un-Mmatched PLB count is 0"
+          >
+            {{ dataItem.unmatchedplbcount }}
+          </div>
+          <div *ngIf="dataItem?.unmatchedplbcount != '0'">
+            {{ dataItem.unmatchedplbcount }}
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+        <!-- <kendo-grid-column
+          title="Split Files"
+          width="8"
+          [headerStyle]="{ 'font-weight': '600' }"
+          [style]="{
+            'font-weight': '600',
+            color: '#467fd0',
+            cursor: 'Pointer'
+          }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Split Files">Split Files</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              *ngIf="dataItem?.nstatus == 'InProcess'"
+              title="File inprocess split files not generated"
+            >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="File inprocess split files not generated"                
+                >
+                <i class="ti ti-files"></i>
+              </button>
+            </div>
+            <div
+              *ngIf="dataItem?.nstatus == 'UnProcess'"
+              title="File unprocessed split files not generated"
+            >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="File unprocessed split files not generated"                
+                >
+                <i class="ti ti-files"></i>
+              </button>
+            </div>
+            <div
+              *ngIf="
+                dataItem?.nstatus == 'Process' &&
+                dataItem?.subclientcount == '0'
+              "
+              title="No practice is active"
+            >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="No practice is active"                
+                >
+                <i class="ti ti-files"></i>
+              </button>
+            </div>
+            <div
+              *ngIf="
+                dataItem?.nstatus == 'Process' &&
+                dataItem?.splitcount == '0' &&
+                dataItem?.subclientcount != '0'
+              "
+              title="Split files not generated"
+            >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="Split files not generated"                
+                >
+                <i class="ti ti-files"></i>
+              </button>
+            </div>
+            <div
+              *ngIf="
+                dataItem?.nstatus == 'Process' &&
+                dataItem?.splitcount != '0' &&
+                dataItem?.subclientcount != '0'
+              "
+            >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="View"                
+                >
+                <i class="ti ti-files"></i>
+              </button>
+            </div>
+          </ng-template>
+        </kendo-grid-column> -->
+        <kendo-grid-command-column
+          title=""
+          width="15"
+          [headerStyle]="{ 'font-weight': '600' }"
+          media="(min-width: 1025px)"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem let-gridView>
+            <div>
+              <span
+                *ngIf="dataItem?.nstatus == 'InProcess'"
+                title="File inprocess split files not generated"
+              >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="File inprocess split files not generated"
+                  (click)="onSplitfileClick(dataItem)"
+                >
+                  <i class="ti ti-files"></i>
+                </button>
+              </span>
+              <span
+                *ngIf="dataItem?.nstatus == 'UnProcess'"
+                title="File unprocessed split files not generated"
+              >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="File unprocessed split files not generated"
+                  (click)="onSplitfileClick(dataItem)"
+                >
+                  <i class="ti ti-files"></i>
+                </button>
+              </span>
+              <span
+                *ngIf="
+                  dataItem?.nstatus == 'Process' &&
+                  dataItem?.subclientcount == '0'
+                "
+                title="No practice is active"
+              >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="No practice is active"
+                  (click)="onSplitfileClick(dataItem)"
+                >
+                  <i class="ti ti-files"></i>
+                </button>
+              </span>
+              <span
+                *ngIf="
+                  dataItem?.nstatus == 'Process' &&
+                  dataItem?.splitcount == '0' &&
+                  dataItem?.subclientcount != '0'
+                "
+                title="Split files not generated"
+              >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="Split files not generated"
+                  (click)="onSplitfileClick(dataItem)"
+                >
+                  <i class="ti ti-files"></i>
+                </button>
+              </span>
+              <span
+                *ngIf="
+                  dataItem?.nstatus == 'Process' &&
+                  dataItem?.splitcount != '0' &&
+                  dataItem?.subclientcount != '0'
+                "
+              >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="View Split Files"
+                  (click)="onSplitfileClick(dataItem)"
+                >
+                  <i class="ti ti-files"></i>
+                </button>
+              </span>
+
+              <span
+                *ngIf="gridView?.nstatus == 'InProcess'"
+                title="File inprocess cannot be viewed or downloaded"
+              >
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  title="View Master File"
+                  disabled
+                >
+                  <i class="fe fe-file"></i>
+                </button>
+                <button
+                  id="btnPrintMaster"
+                  class="k-button k-primary"
+                  title="Download"
+                  disabled
+                >
+                  <i class="fe fe-download"></i>
+                </button>
+                <!-- <button
+                    id="btnPublish"
+                    class="k-button k-primary"
+                    title="Publish"
+                    disabled
+                  >
+                    <i class=" fe fe-sunrise"></i>
+                  </button> -->
+              </span>
+              <span *ngIf="gridView?.nstatus != 'InProcess'">
+                <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  (click)="
+                    RetriveMaster835File(
+                      gridView.nmastererafileid,
+                      gridView.sfilename,
+                      'View'
+                    )
+                  "
+                  title="View Master File"
+                >
+                  <i class="fe fe-file"></i>
+                </button>
+                <button
+                  id="btnPrintMaster"
+                  class="k-button k-primary"
+                  (click)="
+                    RetriveMaster835File(
+                      gridView.nmastererafileid,
+                      gridView.sfilename,
+                      'Download'
+                    )
+                  "
+                  title="Download"
+                >
+                  <i class="fe fe-download"></i>
+                </button>
+              </span>
+            </div>
+          </ng-template>
+        </kendo-grid-command-column>
+        <ng-template kendoGridNoRecordsTemplate>
+          No records available.
+        </ng-template>
+      </kendo-grid>
+    </div>
+    <!-- <div class="row mt-2">
+      <button
+        id="btnprevious"
+        class="btn btn-secondary btn-sm float-left mr-2"
+        kendoButton
+        [primary]="true"
+        (click)="onMasterFilesClickPrevious()"
+        [disabled]="MasterFilesIspreviousdisabled"
+      >
+        Previous
+      </button>
+      <button
+        id="btnnext"
+        class="btn btn-primary btn-sm float-right mr-2"
+        kendoButton
+        [primary]="true"
+        (click)="onMasterFilesClickNext()"
+        [disabled]="MasterFilesIsnextdisabled"
+      >
+        Next
+      </button>
+
+      <div class="ml-auto">
+        {{ MasterFilesdisplaycurrentpages }} of
+        {{ MasterFilesdisplaytotalpages }} pages
+      </div>
+    </div> -->
+
+    <!-- <h4 class="mt-5">Split Files</h4>
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridSplit"
+        [data]="SplitFilesGridView"
+        style="width:100%"
+        [height]="450"
+        [pageSize]="SplitFilesPageSize"
+        [pageable]="true"
+        [skip]="SplitFilesSkip"
+        (pageChange)="pageChangeSplit($event)"
+        [sortable]="true"
+        [sort]="sortSplit"
+        (sortChange)="sortSplitChange($event)"
+        [selectable]="true"
+      >
+        <kendo-grid-column
+          field="ssubclientcode"
+          title="Code"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="ssubclientname"
+          title="SubClient Name"
+          width="30"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="sfilename"
+          title="File Name"
+          width="30"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="dtcreateddate"
+          title="Date"
+          width="20"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.dtcreateddate | date: "MM-dd-yyyy hh:mm:ss.SSS" }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="status"
+          title="Status"
+          width="7"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-command-column
+          title="Open File"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-gridView>
+            <button
+              id="btnViewSplit"
+              class="k-button k-primary"
+              (click)="
+                RetriveSplit835File(
+                  gridView.nerafileid,
+                  gridView.sfilename,
+                  'View'
+                )
+              "
+              title="View"
+            >
+              <i class=" fe fe-file"></i>
+            </button>
+            <button
+              id="btnPrintSplit"
+              class="k-button k-primary"
+              (click)="
+                RetriveSplit835File(
+                  gridView.nerafileid,
+                  gridView.sfilename,
+                  'Download'
+                )
+              "
+              title="Download"
+            >
+              <i class=" fe fe-download"></i>
+            </button>
+          </ng-template>
+        </kendo-grid-command-column>
+      </kendo-grid>
+      <div
+        *ngIf="!this.SplitFilesGridView"
+        class="k-icon k-i-loading"
+        style="font-size: 64px; "
+      ></div>
+    </div> -->
+  </div>
+</div>
+
+<!-- SubClient Modal -->
+<kendo-dialog
+  id="modelMaster"
+  [width]="650"
+  class="modal"
+  title="{{ stitleMasterfile }}"
+  *ngIf="masteropened"
+  (close)="masterclose()"
+>
+  <div>
+    <textarea
+      class="form-control"
+      id="txtSplitFile"
+      style="font-size: 0.9em; width: 100%;"
+      rows="21"
+      readonly
+      >{{ s835erainstring }}</textarea
+    >
+  </div>
+</kendo-dialog>
+
+<!-- SplitFile Modal -->
+<kendo-dialog
+  id="modelSplit"
+  [width]="650"
+  class="modal"
+  title="{{ stitleSplitfile }}"
+  *ngIf="splitopened"
+  (close)="splitclose()"
+>
+  <div>
+    <textarea
+      class="form-control"
+      id="txtSplitFile"
+      style="font-size: 0.9em; width: 100%;"
+      rows="21"
+      readonly
+      >{{ s835splitstring }}</textarea
+    >
+  </div>
+</kendo-dialog>
+
+<!-- Error Context Details Model -->
+<kendo-dialog class="customdialog" title="{{Filename}}" *ngIf="openederrorcontext" (close)="closeErrorDailog()" [minWidth]="250" [width]="550" style="pointer-events: visible;">  
+  <div class="d-flex pt-2">
+    <p style="font-size: 16px;">{{ConfirmationMessage}}</p>
+    <div class="ml-auto">
+      <button class="mr-1" kendoButton (click)="masterreprocess(false)" *ngIf="clsPermission.reprocessaccess" primary="true">Reprocess</button>
+      <button class="ml-1" kendoButton (click)="masterreprocess(true)" *ngIf="clsPermission.reprocessaccessoverride" primary="true">Reprocess (Override Validation)</button>
+    </div>      
+  </div>
+    <div style="height: auto; overflow: auto; max-height: 350px;">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th style="text-transform: none; font-weight: 600; color: #495057;">Error</th>                
+            <th style="text-transform: none; font-weight: 600; color: #495057;">Control Number</th>         
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let obj of errorresponse">
+            <td>{{ obj.error }}</td>             
+            <td>{{ obj.stsetcontrolnumber }}</td>           
+          </tr>              
+        </tbody>
+      </table>  
+    </div>   
+    <div class="d-flex border-top pt-2">
+      <div class="ml-auto">
+        <button kendoButton (click)="closeErrorDailog()" primary="true">Ok</button>
+      </div>      
+    </div>
+</kendo-dialog>
+<!-- Error Context Details Model -->

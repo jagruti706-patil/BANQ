@@ -1,0 +1,940 @@
+<div
+  *ngIf="!ChangePasswordClick && !this.nopermission"
+  class="row align-items-center"
+>
+  <div class="col-lg order-lg-first">
+    <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
+      <!-- <li *ngIf="clsPermission.dashboardmenu" class="nav-item">
+        <a routerLink="/Dashboard" routerLinkActive="active" class="nav-link"
+          ><i class="ti ti-panel"></i> Dashboard</a
+        >
+      </li> -->
+
+      <li *ngIf="clsPermission.summarymenu" class="nav-item">
+        <a routerLink="/Summary" routerLinkActive="active" class="nav-link"
+          ><i class="fe fe-grid"></i> Summary</a
+        >
+      </li>
+
+      <li
+        class="nav-item dropdown"
+        *ngIf="
+          clsPermission.downloadsummarymenu &&
+          (clsPermission.downloadsummaryhubpendingfiles ||
+            clsPermission.downloadsummaryftppendingfiles)
+        "
+      >
+        <a
+          *ngIf="
+            clsPermission.downloadsummarymenu &&
+            clsPermission.downloadsummaryhubpendingfiles &&
+            clsPermission.downloadsummaryftppendingfiles
+          "
+          routerLink="/hubpendingsummary"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/pendingsummary') ||
+              currenturl.toLowerCase().includes('/hubpendingsummary') ||
+              currenturl.toLowerCase().includes('/ftppendingsummary')
+          }"
+          ><i class="ti ti-map"></i>Pending Summary</a
+        >
+        <a
+          *ngIf="
+            clsPermission.downloadsummarymenu &&
+            clsPermission.downloadsummaryhubpendingfiles &&
+            !clsPermission.downloadsummaryftppendingfiles
+          "
+          routerLink="/hubpendingsummary"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/pendingsummary') ||
+              currenturl.toLowerCase().includes('/hubpendingsummary')
+          }"
+          ><i class="ti ti-map"></i>Pending Summary</a
+        >
+        <a
+          *ngIf="
+            clsPermission.downloadsummarymenu &&
+            clsPermission.downloadsummaryftppendingfiles &&
+            !clsPermission.downloadsummaryhubpendingfiles
+          "
+          routerLink="/ftppendingsummary"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/pendingsummary') ||
+              currenturl.toLowerCase().includes('/ftppendingsummary')
+          }"
+          ><i class="ti ti-map"></i>Pending Summary</a
+        >
+
+        <div class="dropdown-menu dropdown-content mt-2 p-0">
+          <ng-container *ngIf="clsPermission.downloadsummaryhubpendingfiles">
+            <a
+              routerLink="/hubpendingsummary"
+              routerLinkActive="active"
+              class="dropdown-item"
+              ><em class="ti ti-control-forward mr-1"></em> HUB
+            </a>
+          </ng-container>
+          <ng-container *ngIf="clsPermission.downloadsummaryftppendingfiles">
+            <a
+              routerLink="/ftppendingsummary"
+              routerLinkActive="active"
+              class="dropdown-item"
+              ><em class="ti ti-control-forward mr-1"></em> FTP
+            </a>
+          </ng-container>
+        </div>
+      </li>
+
+      <!-- <li class="nav-item">
+        <a routerLink="/ClientchartDashboard" routerLinkActive="active" class="nav-link"><i class="fe fe-bar-chart"></i>
+          Clientchart Dashboard</a>
+      </li> -->
+
+      <li *ngIf="clsPermission.filesaccessmenu" class="nav-item">
+        <a
+          routerLink="/Files"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/files') ||
+              currenturl.toLowerCase().includes('/splitfiles') ||
+              currenturl.toLowerCase().includes('/unmatchedclaims') ||
+              currenturl.toLowerCase().includes('/filesclaimdetails')
+          }"
+          ><i class="ti ti-files"></i>Files</a
+        >
+      </li>
+
+      <li *ngIf="clsPermission.filedatamenu" class="nav-item">
+        <a
+          routerLink="/filedata"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/filedata') ||
+              currenturl.toLowerCase().includes('/checksummary') ||
+              currenturl.toLowerCase().includes('/claimsummary') ||
+              currenturl.toLowerCase().includes('/plbsummary') ||
+              currenturl
+                .toLowerCase()
+                .includes('/practicefilesummaryreport/erareport')
+          }"
+          ><i class="fe fe-file-text"></i>File Data</a
+        >
+      </li>
+
+      <!-- <li *ngIf="clsPermission.allunmatchedclaims" class="nav-item">
+        <a
+          routerLink="/allunmatchedclaimdetails"
+          routerLinkActive="active"
+          class="nav-link"
+          ><i class="fe fe-settings"></i> All Unmatched Claims</a
+        >
+      </li> -->
+
+      <li
+        *ngIf="
+          clsPermission.unmatchmenu &&
+          (clsPermission.allunmatchedclaims || clsPermission.allunmatchedplbs)
+        "
+        class="nav-item dropdown"
+      >
+        <a
+          *ngIf="
+            clsPermission.unmatchmenu &&
+            clsPermission.allunmatchedclaims &&
+            clsPermission.allunmatchedplbs
+          "
+          routerLink="/allunmatchedclaimdetails"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/tabunmatch') ||
+              currenturl.toLowerCase().includes('/allunmatchedclaimdetails') ||
+              currenturl.toLowerCase().includes('/allunmatchedplbdetails')
+          }"
+          (click)="RetriveAllClient()"
+        >
+          <i class="fas fa-not-equal"></i>Un-Matched Data
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/tabunmatch') ||
+                currenturl
+                  .toLowerCase()
+                  .includes('/allunmatchedclaimdetails') ||
+                currenturl.toLowerCase().includes('/allunmatchedplbdetails')
+            }"
+          >
+            {{ dataService.totalunmatchedcount }}</span
+          >
+        </a>
+        <a
+          *ngIf="
+            clsPermission.unmatchmenu &&
+            clsPermission.allunmatchedclaims &&
+            !clsPermission.allunmatchedplbs
+          "
+          routerLink="/allunmatchedclaimdetails"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/tabunmatch') ||
+              currenturl.toLowerCase().includes('/allunmatchedclaimdetails')
+          }"
+          (click)="RetriveAllClient()"
+          ><i class="fas fa-not-equal"></i>Un-Matched Data
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/tabunmatch') ||
+                currenturl
+                  .toLowerCase()
+                  .includes('/allunmatchedclaimdetails') ||
+                currenturl.toLowerCase().includes('/allunmatchedplbdetails')
+            }"
+          >
+            {{ dataService.totalunmatchedcount }}</span
+          >
+        </a>
+        <a
+          *ngIf="
+            clsPermission.unmatchmenu &&
+            clsPermission.allunmatchedplbs &&
+            !clsPermission.allunmatchedclaims
+          "
+          routerLink="/allunmatchedplbdetails"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/tabunmatch') ||
+              currenturl.toLowerCase().includes('/allunmatchedplbdetails')
+          }"
+          (click)="RetriveAllClient()"
+          ><i class="fas fa-not-equal"></i>Un-Matched Data
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/tabunmatch') ||
+                currenturl
+                  .toLowerCase()
+                  .includes('/allunmatchedclaimdetails') ||
+                currenturl.toLowerCase().includes('/allunmatchedplbdetails')
+            }"
+          >
+            {{ dataService.totalunmatchedcount }}</span
+          >
+        </a>
+        <a
+          *ngIf="
+            clsPermission.unmatchmenu &&
+            !clsPermission.allunmatchedclaims &&
+            !clsPermission.allunmatchedplbs
+          "
+          routerLink="/tabunmatch"
+          class="nav-link"
+          [ngClass]="{
+            active: currenturl.toLowerCase().includes('/tabunmatch')
+          }"
+          (click)="RetriveAllClient()"
+        >
+          <i class="fas fa-not-equal"></i>Un-Matched Data
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/tabunmatch') ||
+                currenturl
+                  .toLowerCase()
+                  .includes('/allunmatchedclaimdetails') ||
+                currenturl.toLowerCase().includes('/allunmatchedplbdetails')
+            }"
+          >
+            {{ dataService.totalunmatchedcount }}</span
+          >
+        </a>
+        <div class="dropdown-menu dropdown-content mt-2 p-0">
+          <ng-container *ngIf="clsPermission.allunmatchedclaims">
+            <a
+              routerLink="/allunmatchedclaimdetails"
+              routerLinkActive="active"
+              class="dropdown-item"
+              (click)="RetriveAllClient()"
+              ><em class="ti ti-control-forward mr-1"></em> Claims
+              <span
+                class="badge badge-red ml-2 float-right"
+                [ngClass]="{
+                  'white-active': currenturl
+                    .toLowerCase()
+                    .includes('/allunmatchedclaimdetails')
+                }"
+              >
+                {{ dataService.unmatchedclaimcount }}
+              </span>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="clsPermission.allunmatchedplbs">
+            <a
+              routerLink="/allunmatchedplbdetails"
+              routerLinkActive="active"
+              class="dropdown-item"
+              ><em class="ti ti-control-forward mr-1"></em> PLB's
+              <!-- <span
+                class="badge badge-red ml-2 float-right"
+                [ngClass]="{
+                  'white-active': currenturl
+                    .toLowerCase()
+                    .includes('/allunmatchedplbdetails')
+                }"
+              >
+                {{ dataService.unmatchedplbcount }}
+              </span> -->
+            </a>
+          </ng-container>
+        </div>
+      </li>
+
+      <li *ngIf="clsPermission.divisionalsplitfilesmenu" class="nav-item">
+        <a
+          routerLink="/divisionalsplitFiles"
+          routerLinkActive="active"
+          class="nav-link"
+          ><i class="ti ti-layers-alt"></i>Practice Files</a
+        >
+      </li>
+
+      <li
+        class="nav-item dropdown"
+        *ngIf="
+          clsPermission.myfilesmenu &&
+          (clsPermission.pendingdownloaded ||
+            clsPermission.downloaded ||
+            clsPermission.ftptransfer)
+        "
+      >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            clsPermission.pendingdownloaded &&
+            clsPermission.downloaded &&
+            clsPermission.ftptransfer
+          "
+          routerLink="/pendingdownload"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/myfiles') ||
+              currenturl.toLowerCase().includes('/pendingdownload') ||
+              currenturl.toLowerCase().includes('/downloaded') ||
+              currenturl.toLowerCase().includes('/ftptransfer')
+          }"
+          ><i class="ti ti-agenda"></i>My Files</a
+        >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            clsPermission.pendingdownloaded &&
+            !clsPermission.downloaded &&
+            !clsPermission.ftptransfer
+          "
+          routerLink="/pendingdownload"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/myfiles') ||
+              currenturl.toLowerCase().includes('/pendingdownload')
+          }"
+          ><i class="ti ti-agenda"></i>My Files</a
+        >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            clsPermission.downloaded &&
+            !clsPermission.pendingdownloaded &&
+            !clsPermission.ftptransfer
+          "
+          routerLink="/downloaded"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/myfiles') ||
+              currenturl.toLowerCase().includes('/downloaded')
+          }"
+          ><i class="ti ti-agenda"></i>My Files</a
+        >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            !clsPermission.downloaded &&
+            !clsPermission.pendingdownloaded &&
+            clsPermission.ftptransfer
+          "
+          routerLink="/ftptransfer"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/myfiles') ||
+              currenturl.toLowerCase().includes('/ftptransfer')
+          }"
+          ><i class="ti ti-agenda"></i>My Files</a
+        >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            !clsPermission.pendingdownloaded &&
+            !clsPermission.downloaded &&
+            !clsPermission.ftptransfer
+          "
+          routerLink="/myfiles"
+          class="nav-link"
+          [ngClass]="{
+            active: currenturl.toLowerCase().includes('/myfiles')
+          }"
+        >
+          <i class="ti ti-agenda"></i>My Files</a
+        >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            clsPermission.pendingdownloaded &&
+            clsPermission.downloaded &&
+            !clsPermission.ftptransfer
+          "
+          routerLink="/pendingdownload"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/myfiles') ||
+              currenturl.toLowerCase().includes('/pendingdownload') ||
+              currenturl.toLowerCase().includes('/downloaded')
+          }"
+          ><i class="ti ti-agenda"></i>My Files</a
+        >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            clsPermission.pendingdownloaded &&
+            !clsPermission.downloaded &&
+            clsPermission.ftptransfer
+          "
+          routerLink="/pendingdownload"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/myfiles') ||
+              currenturl.toLowerCase().includes('/pendingdownload') ||
+              currenturl.toLowerCase().includes('/ftptransfer')
+          }"
+          ><i class="ti ti-agenda"></i>My Files</a
+        >
+        <a
+          *ngIf="
+            clsPermission.myfilesmenu &&
+            !clsPermission.pendingdownloaded &&
+            clsPermission.downloaded &&
+            clsPermission.ftptransfer
+          "
+          routerLink="/pendingdownload"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/myfiles') ||
+              currenturl.toLowerCase().includes('/downloaded') ||
+              currenturl.toLowerCase().includes('/ftptransfer')
+          }"
+          ><i class="ti ti-agenda"></i>My Files</a
+        >
+        <div class="dropdown-menu dropdown-content mt-2 p-0">
+          <ng-container *ngIf="clsPermission.pendingdownloaded">
+            <a
+              routerLink="/pendingdownload"
+              routerLinkActive="active"
+              class="dropdown-item"
+              ><em class="ti ti-control-forward mr-1"></em> Pending Download
+            </a>
+          </ng-container>
+          <ng-container *ngIf="clsPermission.downloaded">
+            <a
+              routerLink="/downloaded"
+              routerLinkActive="active"
+              class="dropdown-item"
+              ><em class="ti ti-control-forward mr-1"></em> Downloaded
+            </a>
+          </ng-container>
+          <ng-container *ngIf="clsPermission.ftptransfer">
+            <a
+              routerLink="/ftptransfer"
+              routerLinkActive="active"
+              class="dropdown-item"
+              ><em class="ti ti-control-forward mr-1"></em> FTP Transferred
+            </a>
+          </ng-container>
+        </div>
+      </li>
+
+      <li *ngIf="clsPermission.allclaims" class="nav-item">
+        <a routerLink="/allclaims" routerLinkActive="active" class="nav-link"
+          ><i class="fe fe-search"></i>Claim Search</a
+        >
+      </li>
+
+      <li
+        *ngIf="
+          clsPermission.unprocessmenu &&
+          (clsPermission.masterfilesunprocessmenu ||
+            clsPermission.splitfilesunprocessmenu)
+        "
+        class="nav-item dropdown"
+      >
+        <a
+          *ngIf="
+            clsPermission.unprocessmenu &&
+            clsPermission.masterfilesunprocessmenu &&
+            clsPermission.splitfilesunprocessmenu
+          "
+          routerLink="/masterfilesunprocess"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/unprocess') ||
+              currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+              currenturl.toLowerCase().includes('/unprocesssplitfiles')
+          }"
+          (click)="RetriveAllClient()"
+        >
+          <i class="fe fe-loader"></i>Failed Processing
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/unprocess') ||
+                currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+                currenturl.toLowerCase().includes('/unprocesssplitfiles')
+            }"
+          >
+            {{ dataService.totalunprocesscount }}</span
+          >
+        </a>
+        <a
+          *ngIf="
+            clsPermission.unprocessmenu &&
+            clsPermission.masterfilesunprocessmenu &&
+            !clsPermission.splitfilesunprocessmenu
+          "
+          routerLink="/masterfilesunprocess"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/unprocess') ||
+              currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+              currenturl.toLowerCase().includes('/unprocesssplitfiles')
+          }"
+          (click)="RetriveAllClient()"
+        >
+          <i class="fe fe-loader"></i>Failed Processing
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/unprocess') ||
+                currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+                currenturl.toLowerCase().includes('/unprocesssplitfiles')
+            }"
+          >
+            {{ dataService.totalunprocesscount }}</span
+          >
+        </a>
+        <a
+          *ngIf="
+            clsPermission.unprocessmenu &&
+            clsPermission.splitfilesunprocessmenu &&
+            !clsPermission.masterfilesunprocessmenu
+          "
+          routerLink="/unprocesssplitfiles"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/unprocess') ||
+              currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+              currenturl.toLowerCase().includes('/unprocesssplitfiles')
+          }"
+          (click)="RetriveAllClient()"
+        >
+          <i class="fe fe-loader"></i>Failed Processing
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/unprocess') ||
+                currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+                currenturl.toLowerCase().includes('/unprocesssplitfiles')
+            }"
+          >
+            {{ dataService.totalunprocesscount }}</span
+          >
+        </a>
+        <a
+          *ngIf="
+            clsPermission.unprocessmenu &&
+            !clsPermission.splitfilesunprocessmenu &&
+            !clsPermission.masterfilesunprocessmenu
+          "
+          routerLink="/unprocess"
+          class="nav-link"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/unprocess') ||
+              currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+              currenturl.toLowerCase().includes('/unprocesssplitfiles')
+          }"
+          (click)="RetriveAllClient()"
+        >
+          <i class="fe fe-loader"></i>Failed Processing
+          <span
+            class="badge badge-red ml-2"
+            [ngClass]="{
+              active:
+                currenturl.toLowerCase().includes('/unprocess') ||
+                currenturl.toLowerCase().includes('/masterfilesunprocess') ||
+                currenturl.toLowerCase().includes('/unprocesssplitfiles')
+            }"
+          >
+            {{ dataService.totalunprocesscount }}</span
+          >
+        </a>
+        <div class="dropdown-menu dropdown-content mt-2 p-0">
+          <ng-container *ngIf="clsPermission.masterfilesunprocessmenu">
+            <a
+              routerLink="/masterfilesunprocess"
+              routerLinkActive="active"
+              class="dropdown-item"
+              (click)="RetriveAllClient()"
+              ><em class="ti ti-control-forward mr-1"></em> Master Files
+              <span
+                class="badge badge-red ml-2 float-right"
+                [ngClass]="{
+                  'white-active': currenturl
+                    .toLowerCase()
+                    .includes('/masterfilesunprocess')
+                }"
+              >
+                {{ dataService.totalunprocessmastercount }}
+              </span>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="clsPermission.splitfilesunprocessmenu">
+            <a
+              routerLink="/unprocesssplitfiles"
+              routerLinkActive="active"
+              class="dropdown-item"
+              (click)="RetriveAllClient()"
+              ><em class="ti ti-control-forward mr-1"></em> Split Files
+              <span
+                [ngClass]="{
+                  'white-active': currenturl
+                    .toLowerCase()
+                    .includes('/unprocesssplitfiles')
+                }"
+                class="badge badge-red ml-2 float-right"
+              >
+                {{ dataService.totalunprocesssplitcount }}
+              </span>
+            </a>
+          </ng-container>
+        </div>
+      </li>
+
+      <li class="nav-item" *ngIf="clsPermission.manuallymatchedclaim">
+        <a 
+          routerLink="/manuallymatchedclaimdetails"
+          routerLinkActive="active"
+          class="nav-link"
+          ><i class="ti ti-receipt"></i>Manually Matched Claim</a
+        >
+      </li>
+
+      <li class="nav-item" *ngIf="clsPermission.holdpaymentaccess">
+        <a 
+          routerLink="/holdpayment"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="getHoldPaymentCount()"
+          ><i class="fa fa-ban"></i>Hold Payment<span
+          class="badge badge-red ml-2"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/holdpayment')              
+          }"
+        >
+          {{ dataService.holdpaymentcount }}</span
+        ></a
+        >
+      </li>
+
+      <li *ngIf="clsPermission.rematchclaim && displayrematchclaimtab" class="nav-item">
+        <a routerLink="/rematchclaim" routerLinkActive="active" class="nav-link"
+          ><i class="fe fe-repeat"></i>Re-Match Claim</a
+        >
+      </li>
+
+      <li class="nav-item dropdown"         
+        *ngIf="clsPermission.inprocessmenu &&
+              clsPermission.masterfilesinprocessmenu ||
+              clsPermission.splitfilesinprocessmenu">
+      <a routerLink="/inprocessmasterfiles"
+        class="nav-link"
+        *ngIf="
+          clsPermission.inprocessmenu &&
+          (clsPermission.masterfilesinprocessmenu &&
+          clsPermission.splitfilesinprocessmenu)
+        "
+        [ngClass]="{
+          active:
+            currenturl.toLowerCase().includes('/inprocess') ||
+            currenturl.toLowerCase().includes('/inprocessmasterfiles') ||
+            currenturl.toLowerCase().includes('/inprocesssplitfiles')
+          }"
+        (click)="RetriveAllClient()"
+        >
+        <i class="fe fe-list"></i>In-process Files 
+        <span
+          class="badge badge-red ml-2"
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/inprocess') ||
+              currenturl.toLowerCase().includes('/inprocessmasterfiles') ||
+              currenturl.toLowerCase().includes('/inprocesssplitfiles')
+          }"
+        >
+          {{ dataService.totalinprocesscount }}</span
+        >
+      </a>
+      <a routerLink="/inprocessmasterfiles"
+      class="nav-link"
+        *ngIf="
+          clsPermission.inprocessmenu &&
+          clsPermission.masterfilesinprocessmenu &&
+          !clsPermission.splitfilesinprocessmenu
+        "
+        [ngClass]="{
+          active:
+            currenturl.toLowerCase().includes('/inprocess') ||
+            currenturl.toLowerCase().includes('/inprocessmasterfiles') ||
+            currenturl.toLowerCase().includes('/inprocesssplitfiles')
+          }"
+        (click)="RetriveAllClient()"
+      >
+      <i class="fe fe-list"></i>In-process Files 
+      <span
+        class="badge badge-red ml-2"
+        [ngClass]="{
+          active:
+            currenturl.toLowerCase().includes('/inprocess') ||
+            currenturl.toLowerCase().includes('/inprocessmasterfiles') ||
+            currenturl.toLowerCase().includes('/inprocesssplitfiles')
+        }"
+      >
+        {{ dataService.totalinprocesscount }}</span
+      >
+    </a>
+      <a routerLink="/inprocesssplitfiles"
+      class="nav-link"
+        *ngIf="
+          clsPermission.inprocessmenu &&
+          clsPermission.splitfilesinprocessmenu &&
+          !clsPermission.masterfilesinprocessmenu
+        " 
+        [ngClass]="{
+          active:
+            currenturl.toLowerCase().includes('/inprocess') ||
+            currenturl.toLowerCase().includes('/inprocessmasterfiles') ||
+            currenturl.toLowerCase().includes('/inprocesssplitfiles')
+          }"
+        (click)="RetriveAllClient()"
+      >
+      <i class="fe fe-list"></i>In-process Files 
+      <span
+        class="badge badge-red ml-2"
+        [ngClass]="{
+          active:
+            currenturl.toLowerCase().includes('/inprocess') ||
+            currenturl.toLowerCase().includes('/inprocessmasterfiles') ||
+            currenturl.toLowerCase().includes('/inprocesssplitfiles')
+        }"
+      >
+        {{ dataService.totalinprocesscount }}</span
+      >
+    </a>
+      <div class="dropdown-menu dropdown-content mt-2 p-0">
+        <ng-container>
+          <a
+            routerLink="/inprocessmasterfiles"
+            routerLinkActive="active"
+            class="dropdown-item"  
+            *ngIf="
+              (clsPermission.inprocessmenu &&
+              clsPermission.masterfilesinprocessmenu) ||
+              !clsPermission.splitfilesinprocessmenu
+            "
+            (click)="RetriveAllClient()"         
+            ><em class="ti ti-control-forward mr-1"></em> Master Files
+            <span
+              class="badge badge-red ml-2 float-right"
+              [ngClass]="{
+                'white-active': currenturl
+                  .toLowerCase()
+                  .includes('/inprocessmasterfiles')
+              }"
+            >
+              {{ dataService.totalinprocessmastercount }}
+            </span>
+          </a>
+        </ng-container>
+        <ng-container>
+          <a
+            routerLink="/inprocesssplitfiles"
+            routerLinkActive="active"
+            class="dropdown-item"        
+            *ngIf="
+              (clsPermission.inprocessmenu &&
+              clsPermission.splitfilesinprocessmenu) ||
+              !clsPermission.masterfilesinprocessmenu
+            "   
+            (click)="RetriveAllClient()"
+            ><em class="ti ti-control-forward mr-1"></em> Split Files
+            <span
+              [ngClass]="{
+                'white-active': currenturl
+                  .toLowerCase()
+                  .includes('/inprocesssplitfiles')
+              }"
+              class="badge badge-red ml-2 float-right"
+            >
+              {{ dataService.totalinprocesssplitcount }}
+            </span>
+          </a>
+        </ng-container>
+      </div>
+    </li>
+
+      <li *ngIf="clsPermission.configurationmenu" class="nav-item">
+        <a
+          routerLink="/Configuration"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          <i class="fe fe-sliders"></i>Configuration</a
+        >
+      </li>
+
+      <li class="nav-item dropdown" *ngIf="clsPermission.reportmenu && clsPermission.filedistributionreportmenu">
+        <a routerLink="/filedistribution"
+          class="nav-link"   
+          [ngClass]="{
+            active:
+              currenturl.toLowerCase().includes('/filedistribution') 
+          }"       
+          >
+          <i class="fe fe-book"></i>Reports         
+        </a>
+        <div class="dropdown-menu dropdown-content mt-2 p-0">
+          <ng-container>
+            <a
+              *ngIf="clsPermission.filedistributionreportmenu"
+              routerLink="/filedistribution"
+              routerLinkActive="active"
+              class="dropdown-item"                      
+              ><em class="ti ti-control-forward mr-1"></em> File Distribution              
+            </a>
+          </ng-container>
+        </div>
+      </li>
+
+      <li *ngIf="clsPermission.myaccountmenu" class="nav-item">
+        <a routerLink="/MyAccount" routerLinkActive="active" class="nav-link"
+          ><i class="fe fe-user"></i> My Account</a
+        >
+      </li>
+      <li *ngIf="clsPermission.practicefilesummary" class="nav-item">
+        <a
+          routerLink="/practicefilesummary"
+          routerLinkActive="active"
+          class="nav-link"
+          ><i class="far fa-file-alt"></i> File Summary</a
+        >
+      </li>
+           
+      <li *ngIf="clsPermission.servicecontrollermenu" class="nav-item">
+        <a
+          routerLink="/ServiceController"
+          routerLinkActive="active"
+          class="nav-link"
+          ><i class="fe fe-settings"></i> Service Controller</a
+        >
+      </li>
+
+      <!-- <li *ngIf="clsPermission.allunmatchedplbs" class="nav-item">
+        <a
+          routerLink="/allunmatchedplbdetails"
+          routerLinkActive="active"
+          class="nav-link"
+          ><i class="fe fe-settings"></i> All Unmatched PLB's</a
+        >
+      </li> -->
+
+      <!-- 
+      <li class="nav-item">
+        Permission -  {{clsPermission | json}}
+      </li> -->
+
+      <!-- <li *ngIf="vwHome" class="nav-item">
+        <a routerLink="/Dashboard" routerLinkActive="active" class="nav-link"><i class="fe fe-home"></i> Home</a>
+      </li> -->
+      <!-- <li *ngIf="vwAllClients" class="nav-item">
+        <a routerLink="/AllClients" routerLinkActive="active" class="nav-link"
+          ><i class="fa fa-user"></i> Clients</a
+        >
+      </li> -->
+
+      <!-- 
+      <li *ngIf="vwServiceLogs" class="nav-item">
+        <a routerLink="/Logs" routerLinkActive="active" class="nav-link"><i class="fe fe-layers"></i> Service Logs</a>
+            </li> -->
+
+      <!--       
+      <li  class="nav-item">
+          <a routerLink="/clientlist" routerLinkActive="active" class="nav-link"
+            ><i class="fe fe-home"></i> Client</a
+          >
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/subclientlist" routerLinkActive="active" class="nav-link"
+            ><i class="fe fe-home"></i> Sub Client</a>
+            </li> -->
+      <!-- <li *ngIf="vwHome" class="nav-item">
+            <a routerLink="/clientftplist" routerLinkActive="active" class="nav-link"
+              ><i class="fe fe-home"></i> Client FTP</a
+            >
+          </li> -->
+
+      <!-- <li *ngIf="vwConfiguration" class="nav-item">
+        <a
+          routerLink="/Configuration/provider"
+          routerLinkActive="active"
+          class="nav-link"
+          ><i class="fe fe-settings"></i> Configuration</a
+        >
+      </li> -->
+    </ul>
+  </div>
+</div>

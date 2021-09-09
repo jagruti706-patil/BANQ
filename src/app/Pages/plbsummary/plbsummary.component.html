@@ -1,0 +1,420 @@
+<ngx-loading
+[show]="emailloading"
+[config]="{
+  backdropBorderRadius: '1px',
+  fullScreenBackdrop: true,
+  primaryColour: '#EEA127',
+  secondaryColour: '#EEA127',
+  tertiaryColour: '#EEA127',
+  backdropBackgroundColour: 'rgba(255, 255, 255, 0.5)'
+}"
+></ngx-loading>
+
+<div class="card">
+  <app-breadcrumb></app-breadcrumb>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="mb-1">
+          Check #: {{ dataService.filecheckno }}
+          <span class="ml-3">Payer : {{ payername }}</span>
+        </h4>
+      </div>
+
+      <div class="col-md-2">
+        <span class="text-muted float-right"
+          >{{ PLBdisplaytotalrecordscount }} records found</span
+        >
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <!-- <kendo-grid
+        id="gridMaster"
+        [data]="PLBGridView"
+        class="w-100"
+        [height]="535"
+        [sortable]="true"
+        [sort]="sortPLB"
+        [selectable]="true"
+        [pageable]="true"
+        [pageSize]="PLBpagesize"
+        [skip]="PLBSkip"
+        [loading]="loadingPLBDetailsGrid"
+        (pageChange)="pageChangePLB($event)"
+      >
+        <kendo-grid-column
+          field="adjustmentreasoncode_03"
+          title="AdjustmentIdentifier_03"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="AdjustmentIdentifier_03">AdjustmentIdentifier_03</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentreasoncode_03 }}">
+              {{ dataItem.adjustmentreasoncode_03 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="provideradjustmentamount_04"
+          title="Adjustment Amount"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Adjustment Amount">Adjustment Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.provideradjustmentamount_04 }}">
+              {{ dataItem.provideradjustmentamount_04 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="adjustmentreasoncode_05"
+          title="AdjustmentIdentifier_05"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="AdjustmentIdentifier_05">AdjustmentIdentifier_05</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentreasoncode_05 }}">
+              {{ dataItem.adjustmentreasoncode_05 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="provideradjustmentamount_06"
+          title="Adjustment Amount"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Adjustment Amount">Adjustment Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.provideradjustmentamount_06 }}">
+              {{ dataItem.provideradjustmentamount_06 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="adjustmentreasoncode_07"
+          title="AdjustmentIdentifier_07"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="AdjustmentIdentifier_07">AdjustmentIdentifier_07</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentreasoncode_07 }}">
+              {{ dataItem.adjustmentreasoncode_07 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="provideradjustmentamount_08"
+          title="Adjustment Amount"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Adjustment Amount">Adjustment Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.provideradjustmentamount_08 }}">
+              {{ dataItem.provideradjustmentamount_08 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="adjustmentreasoncode_09"
+          title="AdjustmentIdentifier_09"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="AdjustmentIdentifier_09">AdjustmentIdentifier_09</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentreasoncode_09 }}">
+              {{ dataItem.adjustmentreasoncode_09 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="provideradjustmentamount_10"
+          title="Adjustment Amount"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Adjustment Amount">Adjustment Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.provideradjustmentamount_10 }}">
+              {{ dataItem.provideradjustmentamount_10 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="adjustmentreasoncode_11"
+          title="AdjustmentIdentifier_11"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="AdjustmentIdentifier_11">AdjustmentIdentifier_11</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentreasoncode_11 }}">
+              {{ dataItem.adjustmentreasoncode_11 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="provideradjustmentamount_12"
+          title="Adjustment Amount"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Adjustment Amount">Adjustment Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.provideradjustmentamount_12 }}">
+              {{ dataItem.provideradjustmentamount_12 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="adjustmentreasoncode_13"
+          title="AdjustmentIdentifier_13"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="AdjustmentIdentifier_13">AdjustmentIdentifier_13</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentreasoncode_13 }}">
+              {{ dataItem.adjustmentreasoncode_13 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="provideradjustmentamount_14"
+          title="Adjustment Amount"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Adjustment Amount">Adjustment Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.provideradjustmentamount_14 }}">
+              {{ dataItem.provideradjustmentamount_14 }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid> -->
+
+      <kendo-grid
+        id="gridMaster"
+        [data]="PLBGridView"
+        class="w-100"
+        [height]="535"
+        [sortable]="true"
+        [sort]="sortPLB"
+        [selectable]="true"
+        [pageable]="true"
+        [pageSize]="PLBpagesize"
+        [skip]="PLBSkip"
+        [loading]="loadingPLBDetailsGrid"
+        (pageChange)="pageChangePLB($event)"
+        (excelExport)="onMasterExcelExport($event)"
+      >
+
+        <ng-template kendoGridToolbarTemplate *ngIf="clsPermission.filedataexportexcel">
+          <button  
+            *ngIf="clsPermission.filedataexportexcel"   
+            [primary]="true"          
+            kendoButton
+            class="float-right mr-1"
+            type="button"
+            title="Export Excel"  
+            (click)="onMasterFilesExcelExportClick()"            
+            [disabled]="PLBdisplaytotalrecordscount==0"  
+          >
+            Export Excel
+          </button>
+
+          <button  
+            hidden
+            [primary]="true"
+            kendoGridExcelCommand
+            kendoButton
+            class="float-right mr-1"
+            type="button"
+            title="Export Excel"   
+            id="hbtnPLBMasterExportExcel"              
+            >
+              Hidden Export Excel
+            </button>
+          </ng-template>
+
+        <kendo-grid-column
+          field=""
+          title=""
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Adjustment Identifier">Adjustment Identifier</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentreasoncode }}">
+              {{ dataItem.adjustmentreasoncode }} <
+              {{ dataItem.adjustmentidentifier }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field=""
+          title=""
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="Amount">Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentamount }}">
+              {{ dataItem.adjustmentamount }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-excel [fetchData]="allDataPLB" >
+
+          <kendo-excelexport-column
+            field="adjustmentidentifier"
+            title="Adjustment Identifier"
+            [width]="400"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="adjustmentamount"
+            title="Amount"
+            [width]="400"
+          >
+          </kendo-excelexport-column>
+
+        </kendo-grid-excel>
+
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<!--PLB Export Excel Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="PLBMasterExportExcelClaimconfirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lgc" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onMasterPLBExportExcelCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ MasterPLBExportExcelDownloadConfirmationMessage }}
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onMasterPLBExportExcelCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="onMasterPLBExportExcelYesConfirmationClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--PLB Export Excel Confirmation Model -->

@@ -1,0 +1,815 @@
+<div class="modal-content">
+  <div class="modal-header p-3">
+    <h4 class="modal-title">Client Details</h4>
+    <button
+      *ngIf="CallingForm != 'dashbaord'"
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header pl-3">
+            <h5 class="mb-0">Contact Details</h5>
+          </div>
+          <div class="card-body p-3">
+            <div class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td class="font-weight-bold">Client Code</td>
+                  <td>{{ clsObject.clientcode }}</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Client Name</td>
+                  <td>{{ clsObject.clientname }}</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Contact Name</td>
+                  <td>{{ clsObject.clientcontactname }}</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Contact Phone</td>
+                  <td>{{ clsObject.clientcontactphone | phone }}</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Contact Email</td>
+                  <td>{{ clsObject.clientcontactemail }}</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Client Status</td>
+                  <td *ngIf="clsObject.clientstatus" class="text-success">
+                    Active
+                  </td>
+                  <td *ngIf="!clsObject.clientstatus" class="text-danger">
+                    Inactive
+                  </td>
+                </tr>
+              </tbody>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-md-6">
+        <div class="card">
+          <div class="card-header pl-3">
+            <h5 class="mb-0">Inbound FTP Details</h5>
+          </div>
+
+          <div class="card-body p-3">
+            <div class="row">
+              <div class="col-md-3">
+                <label class="font-weight-bold">FTP Name</label>
+              </div>
+              <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label>{{ftpObj.ftpname}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="font-weight-bold">FTP URL</label>
+              </div>
+              <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label>{{ftpObj.ftpurl}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="font-weight-bold">User Name</label>
+              </div>
+              <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label>{{ftpObj.ftpusername}}</label>
+              </div>
+
+              <div class="col-md-3">
+                <label class="font-weight-bold">Port</label>
+              </div>
+              <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label>{{ftpObj.ftpport}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="font-weight-bold">FTP Status</label>
+              </div>
+              <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label *ngIf="ftpObj.status" class="text-success">Active</label>
+                <label *ngIf="!ftpObj.status" class="text-danger">Inactive</label>
+              </div>
+              <div class="col-md-3">
+                <label class="font-weight-bold">Type</label>
+              </div>
+              <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label>{{ftpObj.ftptype}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="font-weight-bold">835 Folder</label>
+              </div>
+              <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label>{{ftpObj.ftp835inboundfolder}}</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="font-weight-bold">837 Folder</label>
+              </div>
+              <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                <label>{{ftpObj.ftp837inboundfolder}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="col-md-12">
+        <h4 class="mt-2">Service Details</h4>
+        <div class="card">
+          <div class="card-body card-details p-3">
+            <div class="d-flex flex-row">
+              <div
+                class="pr-3"
+                *ngFor="let serviceObj of clsObject.clientservicetypes"
+              >
+                <span *ngIf="serviceObj.status == true">
+                  <p class="mb-0">
+                    <i class="fa fa-tags font-10 mr-1"></i
+                    >{{ serviceObj.servicetypename }}
+                  </p>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <h4 class="mt-2">Inboubd FTP Details</h4>
+
+        <kendo-grid [data]="clsObject.clientinboundftp">
+          <kendo-grid-column
+            field="ftpcode"
+            title="Code"
+            width="30"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpname"
+            title="FTP Name"
+            width="50"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpurl"
+            title="FTP Url"
+            width="130"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpusername"
+            title="FTP User Name"
+            width="50"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftptype"
+            title="FTP Type"
+            width="30"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpport"
+            title="FTP Port"
+            width="30"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <!-- <kendo-grid-column field="status" title="Status" width="90" [headerStyle]="{'font-weight': 'bold'}">
+                  </kendo-grid-column> -->
+
+          <kendo-grid-column
+            field="ftp835inboundfolder"
+            title="835 Ftp Folder"
+            width="50"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftp837inboundfolder"
+            title="837 Ftp Folder"
+            width="50"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="status"
+            title="Status"
+            width="25"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <!-- {{dataItem.status ? "Active" : "Inactive" }} -->
+              <div *ngIf="dataItem.status == true" class="text-success">
+                Active
+              </div>
+              <div *ngIf="dataItem.status == false" class="text-danger">
+                Inactive
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+
+      <div class="col-md-12">
+        <span *ngIf="clsObject.subclients !== null">
+          <h4 class="mt-2">Subclient Details</h4>
+          <kendo-grid [data]="clsObject.subclients">
+            <kendo-grid-column
+              field="subclientcode"
+              title="Code"
+              width="60"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientdivisioncode"
+              title="Division"
+              width="50"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientname"
+              title="Name"
+              width="90"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientcontactname"
+              title="Contact Name"
+              width="90"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientcontactemail"
+              title="Contact Email"
+              width="110"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientcontactphone"
+              title="Contact Phone"
+              width="80"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.subclientcontactphone | phone }}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientsplitparameters"
+              title="Split Parameter"
+              width="100"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template
+                kendoGridCellTemplate
+                let-dataItem="dataItem.subclientsplitparameters[0]"
+              >
+                {{ dataItem.splitparametername }} [{{
+                  dataItem.splitparametervalue
+                }}]
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientstatus"
+              title="Status"
+              width="50"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div
+                  *ngIf="dataItem.subclientstatus == true"
+                  class="text-success"
+                >
+                  Active
+                </div>
+                <div
+                  *ngIf="dataItem.subclientstatus == false"
+                  class="text-danger"
+                >
+                  Inactive
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <ng-template kendoGridDetailTemplate let-dataItem>
+              <section>
+                <!-- <div class="row h5"><label>Split Parameter Details:</label></div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">Parameter Name: </div>
+                          <div class="col-md-6">{{dataItem.subclientsplitparameters[0]?.splitparametername}}</div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="row">
+                              <div class="col-md-6 font-weight-bold">Parameter Value: </div>
+                              <div class="col-md-6">{{dataItem.subclientsplitparameters[0]?.splitparametervalue}}</div>
+                            </div>
+                      </div>
+                    </div>
+                    <hr> -->
+
+                <div class="card">
+                  <div class="card-header pl-3">
+                    <h5 class="mb-0">Outbound FTP Details</h5>
+                  </div>
+                  <div class="card-body p-3">
+                    <div class="table table-borderless mb-0">
+                      <tbody>
+                        <tr>
+                          <td class="font-weight-bold">Name</td>
+                          <td class="border-0">
+                            {{ dataItem.subclientoutboundftp?.ftpname }}
+                          </td>
+
+                          <td class="font-weight-bold border-0">Username</td>
+                          <td class="border-0">
+                            {{ dataItem.subclientoutboundftp?.ftpusername }}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="font-weight-bold">URL</td>
+                          <td class="border-0">
+                            {{ dataItem.subclientoutboundftp?.ftpurl }}
+                          </td>
+
+                          <td class="font-weight-bold border-0">Port</td>
+                          <td class="border-0">
+                            {{ dataItem.subclientoutboundftp?.ftpport }}
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td class="font-weight-bold">Type</td>
+                          <td class="border-0">
+                            {{ dataItem.subclientoutboundftp?.ftptype }}
+                          </td>
+
+                          <td class="font-weight-bold border-0">Status</td>
+                          <td class="border-0">
+                            <span
+                              *ngIf="
+                                dataItem.subclientoutboundftp?.status == true
+                              "
+                              class="text-success"
+                              >Active</span
+                            >
+                            <span
+                              *ngIf="
+                                dataItem.subclientoutboundftp?.status == false
+                              "
+                              class="text-danger"
+                              >Inactive</span
+                            >
+                            <!-- {{dataItem.subclientoutboundftp?.status ? "Active" : "Inactive" }} -->
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="font-weight-bold">835 Outbound Folder</td>
+                          <td class="border-0">
+                            {{
+                              dataItem.subclientoutboundftp
+                                ?.ftp835outboundfolder
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="row h5"><label>Outbound FTP Details</label></div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">Name: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpname}}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">Url: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpurl}}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">Type: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftptype}}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">835 Outbound Folder: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftp835outboundfolder}}</div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">User Name: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpusername}}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">Port: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpport}}</div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 font-weight-bold">Status: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.status ? "Active" : "Inactive" }}</div>
+                        </div>
+                      </div>
+                    </div> -->
+              </section>
+            </ng-template>
+          </kendo-grid>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Client Code : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsObject.clientcode}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Client Name : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsObject.clientname}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Contact Name : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsObject.clientcontactname}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Contact Phone : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsObject.clientcontactphone | phone}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Contact Email : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsObject.clientcontactemail}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Client Status : </label></div>
+                <div class="col-md-9"> <label *ngIf="clsObject.clientstatus" class="text-success">Active</label>
+                  <label *ngIf="!clsObject.clientstatus" class="text-danger">Inactive</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <h5 class="card-header k-bg-primary text-light">
+              Inbound FTP Details
+            </h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">FTP Name : </label></div>
+                <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label>{{ftpObj.ftpname}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">FTP URL : </label></div>
+                <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label>{{ftpObj.ftpurl}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">User Name : </label></div>
+                <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label>{{ftpObj.ftpusername}}</label></div>
+
+                <div class="col-md-3"><label class="font-weight-bold">Port : </label></div>
+                <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label>{{ftpObj.ftpport}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">FTP Status : </label></div>
+                <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label *ngIf="ftpObj.status" class="text-success">Active</label>
+                  <label *ngIf="!ftpObj.status" class="text-danger">Inactive</label>
+                </div>
+                <div class="col-md-3"><label class="font-weight-bold">Type : </label></div>
+                <div class="col-md-3 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label>{{ftpObj.ftptype}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">835 Folder : </label></div>
+                <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label>{{ftpObj.ftp835inboundfolder}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">837 Folder : </label></div>
+                <div class="col-md-9 float-right" *ngIf="clsObject.clientinboundftp; let ftpObj ">
+                  <label>{{ftpObj.ftp837inboundfolder}}</label></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row col-md-12">
+        <div class="card">
+          <h5 class="card-header k-bg-primary text-light">
+            Service Details
+          </h5>
+          <div class="card-body">
+            <ul *ngFor="let serviceObj of clsObject.clientservicetypes">
+              <div *ngIf="serviceObj.status==true">
+                <li>{{serviceObj.servicetypename}}</li>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <hr *ngIf="clsObject.subclients!==null">
+      <div *ngIf="clsObject.subclients!==null" class="row col-md-12">
+        <div class="card">
+          <h5 class="card-header k-bg-primary text-light">
+            Subclient Details
+          </h5>
+          <div class="card body">
+            <kendo-grid [data]="clsObject.subclients" style="width:100%">
+              <kendo-grid-column field="subclientcode" title="Code" width="40" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientdivisioncode" title="Division" width="50"
+                [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientname" title="Name" width="90" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientcontactname" title="Contact Name" width="80"
+                [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientcontactemail" title="Contact Email" width="110"
+                [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientcontactphone" title="Contact Phone" width="80"
+                [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.subclientcontactphone | phone}}
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientsplitparameters" title="Split Parameter" width="80"
+                [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem.subclientsplitparameters[0]">
+                  {{dataItem.splitparametername}} [{{dataItem.splitparametervalue}}]
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientstatus" title="Status" width="50"
+                [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  <div *ngIf="dataItem.subclientstatus==true" class="text-success">Active</div>
+                  <div *ngIf="dataItem.subclientstatus==false" class="text-danger">Inactive</div>
+                </ng-template>
+              </kendo-grid-column>
+              <ng-template kendoGridDetailTemplate let-dataItem>
+                <section>
+                   <div class="row h5"><label>Split Parameter Details:</label></div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Parameter Name: </div>
+                        <div class="col-md-6">{{dataItem.subclientsplitparameters[0]?.splitparametername}}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 font-weight-bold">Parameter Value: </div>
+                            <div class="col-md-6">{{dataItem.subclientsplitparameters[0]?.splitparametervalue}}</div>
+                          </div>
+                    </div>
+                  </div>
+                  <hr> 
+                  <div class="row h5"><label>Outbound FTP Details</label></div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Name: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpname}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Url: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpurl}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Type: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftptype}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">835 Outbound Folder: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftp835outboundfolder}}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">User Name: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpusername}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Port: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpport}}</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Status: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.status ? "Active" : "Inactive" }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </ng-template>
+            </kendo-grid>
+          </div>
+        </div>
+      </div> -->
+
+<!-- <div *ngFor="let subclientObj of clsObject.subclients; let i = index">
+        <div class="row">
+          <div class="col-md-12">
+            <label class="font-weight-bold">Sub-Client Information</label>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header bg-primary">
+              <h4 class="text-center text-success">Subclient {{i+1}}</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Subclient Basic Information</label>
+                </div>
+                <div class="col-md-6">
+                  <label>Subclient Outbound FTP</label>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">Code : </label></div>
+                    <div class="col-md-9 float-right"><label>{{subclientObj.subclientcode}}</label></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">Name : </label></div>
+                    <div class="col-md-9 float-right" *ngIf="subclientObj.subclientoutboundftp, let ftpObj">
+                      <label>{{ftpObj.ftpname}}</label></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">Name : </label></div>
+                    <div class="col-md-9 float-right"><label>{{subclientObj.subclientname}}</label></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">URL : </label></div>
+                    <div class="col-md-9 float-right" *ngIf="subclientObj.subclientoutboundftp, let ftpObj">
+                      <label>{{ftpObj.ftpurl}}</label></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">Contact Name : </label></div>
+                    <div class="col-md-9 float-right"><label>{{subclientObj.subclientcontactname}}</label></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">User Name : </label></div>
+                    <div class="col-md-3 float-right" *ngIf="subclientObj.subclientoutboundftp, let ftpObj">
+                      <label>{{ftpObj.ftpusername}}</label></div>
+                    <div class="col-md-3"><label class="font-weight-bold">Port : </label></div>
+                    <div class="col-md-3 float-right" *ngIf="subclientObj.subclientoutboundftp, let ftpObj">
+                      <label>{{ftpObj.ftpport}}</label></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">Contact Phone : </label></div>
+                    <div class="col-md-9 float-right"><label>{{subclientObj.subclientcontactphone}}</label></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">Status : </label></div>
+                    <div class="col-md-3 float-right" *ngIf="subclientObj.subclientoutboundftp, let ftpObj">
+                      <label *ngIf="ftpObj.status">Active</label>
+                      <label *ngIf="!ftpObj.status">Inactive</label>
+                    </div>
+                    <div class="col-md-3"><label class="font-weight-bold">Type : </label></div>
+                    <div class="col-md-3 float-right" *ngIf="subclientObj.subclientoutboundftp, let ftpObj">
+                      <label>{{ftpObj.ftptype}}</label></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">Contact Email : </label></div>
+                    <div class="col-md-9 float-right"><label>{{subclientObj.subclientcontactemail}}</label></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3"><label class="font-weight-bold">835 Folder : </label></div>
+                    <div class="col-md-9 float-right" *ngIf="subclientObj.subclientoutboundftp, let ftpObj">
+                      <label>{{ftpObj.ftp835outboundfolder}}</label></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label class="font-weight-bold">Status : </label></div>
+                    <label *ngIf="subclientObj.subclientstatus">Active</label>
+                    <label *ngIf="!subclientObj.subclientstatus">Inactive</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <label>Subclient Split Information</label>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label class="font-weight-bold">Name :</label>
+                    </div>
+                    <div class="col-md-9 float-right">
+                      <label *ngFor="let splitObj of subclientObj.subclientsplitparameters">{{splitObj.splitparametername}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label class="font-weight-bold">Value :</label>
+                    </div>
+                    <div class="col-md-9 float-right">
+                      <label *ngFor="let splitObj of subclientObj.subclientsplitparameters">{{splitObj.splitparametervalue}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div> -->
+
+<!-- </div>
+  </div>
+</div> -->
+
+<div class="black-box" *ngIf="loading">
+  <div class="k-i-loading"></div>
+</div>

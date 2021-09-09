@@ -1,0 +1,344 @@
+<form [formGroup]="SubClientContactGroup">
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="text-center text-success">Group Contact info.</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <strong class="text-danger">*</strong>
+            <label>Practice Name: </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="
+                subClientName.invalid && subClientName.touched
+              "
+              formControlName="fcSubClientName"
+              type="text"
+              id="subClientName"
+              class="form-control"
+            />
+            <div *ngIf="subClientName.invalid && subClientName.touched">
+              <small *ngIf="subClientName.errors?.required" class="text-danger"
+                >Client name is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <strong class="text-danger">*</strong>
+            <label>Contact Name: </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="
+                subContactName.invalid && subContactName.touched
+              "
+              formControlName="fcSubContactName"
+              type="text"
+              id="subContactName"
+              class="form-control"
+            />
+            <div *ngIf="subContactName.invalid && subContactName.touched">
+              <small *ngIf="subContactName.errors?.required" class="text-danger"
+                >Contact name is required</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <strong class="text-danger">*</strong>
+            <label>Contact Email: </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="
+                subContactEmail.invalid && subContactEmail.touched
+              "
+              formControlName="fcSubContactEmail"
+              type="text"
+              id="subContactEmail"
+              class="form-control"
+            />
+            <div *ngIf="subContactEmail.invalid && subContactEmail.touched">
+              <small
+                *ngIf="subContactEmail.errors?.required"
+                class="text-danger"
+                >Email is required</small
+              >
+              <small *ngIf="subContactEmail.errors?.email" class="text-danger"
+                >Email is not valid</small
+              >
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <strong class="text-danger">*</strong>
+            <label>Contact Phone: </label>
+            <kendo-maskedtextbox
+              [mask]="mask"
+              [class.is-invalid]="
+                subContactPhone.invalid && subContactPhone.touched
+              "
+              formControlName="fcSubContactPhone"
+              type="text"
+              id="subContactPhone"
+              class="form-control"
+            ></kendo-maskedtextbox>
+            <!-- <input kendoTextBox [class.is-invalid]="subContactPhone.invalid && subContactPhone.touched"  formControlName="fcfcSubContactPhone" type="text"
+                  id="subContactPhone" class="form-control"> -->
+            <div *ngIf="subContactPhone.invalid && subContactPhone.touched">
+              <small
+                *ngIf="subContactPhone.errors?.required"
+                class="text-danger"
+                >Contact phone is required</small
+              >
+              <small *ngIf="subContactPhone.errors?.pattern" class="text-danger"
+                >Only number is allowed</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-6">
+            <strong class="text-danger">*</strong>
+            <label>Group Status: </label>
+            <span class="col-md-4 form-check-label">Active&nbsp;&nbsp;</span>
+            <kendo-switch
+              class="col-md-2 form-control"
+              [onLabel]="' '"
+              [offLabel]="' '"
+              formControlName="fcSubClientStatus"
+            ></kendo-switch>
+            <span class="col-md-4 form-check-label">Inactive</span>
+            <!-- <input kendoTextBox [class.is-invalid]="contactPhone.invalid && contactPhone.touched"  formControlName="fcContactPhone" type="text"
+                  id="ContactPhone" class="form-control"> -->
+            <div *ngIf="subClientStatus.invalid && subClientStatus.touched">
+              <small
+                *ngIf="subClientStatus.errors?.required"
+                class="text-danger"
+                >Client Status is required</small
+              >
+            </div>
+          </div>
+        </div>
+        <!-- {{SubClientContactGroup.value|json}} -->
+        <!-- </form> -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="text-center text-success">Group Split Information.</h4>
+      </div>
+      <div class="card-body">
+        <!-- <form [formGroup]="SubClientSplitGroup"> -->
+        <div class="row">
+          <div class="form-group col-md-6">
+            <strong class="text-danger">*</strong>
+            <label>Split Parameter: </label>
+
+            <kendo-dropdownlist
+              class="form-control"
+              id="ParameterName"
+              [class.is-invalid]="
+                ParameterName.invalid && ParameterName.touched
+              "
+              formControlName="fcSplitParameterName"
+              [data]="arrSplitParameter"
+              [textField]="'splitparametername'"
+              [valueField]="'splitparametername'"
+              [valuePrimitive]="true"
+              (ngModelChange)="onSplitParameterChange($event)"
+            >
+            </kendo-dropdownlist>
+            <div *ngIf="ParameterName.invalid && ParameterName.touched">
+              <small *ngIf="ParameterName.errors?.required" class="text-danger"
+                >Client name is required</small
+              >
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <strong class="text-danger">*</strong>
+            <label>Split Parameter Value: </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="
+                ParameterValue.invalid && ParameterValue.touched
+              "
+              formControlName="fcSplitParameterValue"
+              type="text"
+              id="ParameterValue"
+              class="form-control"
+            />
+            <div *ngIf="ParameterValue.invalid && ParameterValue.touched">
+              <small *ngIf="ParameterValue.errors?.required" class="text-danger"
+                >Contact name is required</small
+              >
+            </div>
+          </div>
+        </div>
+        <!-- {{SubClientSplitGroup.value|json}} -->
+
+        <!-- </form> -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="text-center text-success">Group Split Information.</h4>
+      </div>
+      <div class="card-body">
+        <!-- <form [formGroup]="SubClientFTPGroup"> -->
+        <div class="row">
+          <div class="form-group col-md-10">
+            <label>FTP Url</label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPUrl.invalid && FTPUrl.touched"
+              formControlName="fcFTPUrl"
+              type="text"
+              id="FTPUrl"
+              class="form-control"
+            />
+            <!-- <input type="text" class="form-control" formControlName="fcFTPUrl" [class.is-invalid]="FTPUrl.invalid && FTPUrl.touched" /> -->
+            <div *ngIf="FTPUrl.invalid && FTPUrl.touched" class="text-danger">
+              <small *ngIf="FTPUrl.errors?.required">FTP Url is required</small>
+            </div>
+          </div>
+
+          <div class="k-form-field col-md-2">
+            <label>Port</label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPPort.invalid && FTPPort.touched"
+              formControlName="fcFTPPort"
+              type="text"
+              id="FTPPort"
+              class="form-control"
+            />
+            <!-- <input type="text" class="k-textbox form-control" formControlName="fcFTPPort" [class.is-invalid]="FTPPort.invalid && FTPPort.touched" />-->
+            <div *ngIf="FTPPort.invalid && FTPPort.touched" class="text-danger">
+              <small *ngIf="FTPPort.errors?.required">Port is required</small>
+              <small *ngIf="FTPPort.errors?.pattern"
+                >Only number is allowed</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="k-form-field col-md-6">
+            <label>UserName</label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPUsername.invalid && FTPUsername.touched"
+              formControlName="fcFTPUsername"
+              type="text"
+              id="FTPUsername"
+              class="form-control"
+            />
+            <!-- <input type="text" class="k-textbox form-control" formControlName="fcFTPUsername" [class.is-invalid]="FTPUsername.invalid && FTPUsername.touched"
+            /> -->
+            <div
+              *ngIf="FTPUsername.invalid && FTPUsername.touched"
+              class="text-danger"
+            >
+              <small *ngIf="FTPUsername.errors?.required"
+                >UserName is required</small
+              >
+            </div>
+          </div>
+
+          <div class="k-form-field col-md-6">
+            <label>Password</label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPPassword.invalid && FTPPassword.touched"
+              formControlName="fcFTPPassword"
+              type="text"
+              id="FTPPassword"
+              class="form-control"
+            />
+            <!-- <input type="password" class="k-textbox form-control" formControlName="fcFTPPassword" [class.is-invalid]="FTPPassword.invalid && FTPPassword.touched"
+            /> -->
+            <div
+              *ngIf="FTPPassword.invalid && FTPPassword.touched"
+              class="text-danger"
+            >
+              <small *ngIf="FTPPassword.errors?.required"
+                >Password is required</small
+              >
+              <small *ngIf="FTPPassword.errors?.minlength"
+                >Password must have 6 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="k-form-field col-md-4">
+            <label>FTP Name</label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPName.invalid && FTPName.touched"
+              formControlName="fcFTPName"
+              type="text"
+              id="asdFTPName"
+              class="form-control"
+            />
+            <!-- <input type="text" class="k-textbox form-control" formControlName="fcFTPName" [class.is-invalid]="FTPName.invalid && FTPName.touched"
+            /> -->
+            <div *ngIf="FTPName.invalid && FTPName.touched" class="text-danger">
+              <small *ngIf="FTPName.errors?.required"
+                >FTP Name is required</small
+              >
+            </div>
+          </div>
+
+          <div class="k-form-field col-md-3">
+            <label>FTP Type</label>
+            <kendo-dropdownlist
+              formControlName="fcFTPType"
+              [data]="arrFTPType"
+              class="form-control"
+            >
+            </kendo-dropdownlist>
+          </div>
+
+          <div class="form-group col-md-5">
+            <label>Status</label><br />
+            <!-- <span class="col-md-4 form-check-label">Active&nbsp;&nbsp;</span> -->
+            <kendo-switch
+              class="col-md-2 form-control"
+              [onLabel]="' '"
+              [offLabel]="' '"
+              formControlName="fcFTPStatus"
+              (click)="statusChanged()"
+            ></kendo-switch>
+            <label id="lblFTPStatus" class="col-md-4 form-check-label"></label>
+            <!-- <input kendoTextBox [class.is-invalid]="contactPhone.invalid && contactPhone.touched"  formControlName="fcContactPhone" type="text"
+                    id="ContactPhone" class="form-control"> -->
+            <div *ngIf="FTPStatus.invalid && FTPStatus.touched">
+              <small *ngIf="FTPStatus.errors?.required" class="text-danger"
+                >Status is required</small
+              >
+            </div>
+          </div>
+        </div>
+        <!-- </form> -->
+      </div>
+    </div>
+  </div>
+  <div class="row ml-auto">
+    <button
+      class="ml-auto"
+      id="AddClientFTP"
+      kendoButton
+      [primary]="true"
+      (click)="validateSubClient()"
+    >
+      Add SubClient
+    </button>
+  </div>
+</form>

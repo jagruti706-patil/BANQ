@@ -1,0 +1,203 @@
+<div class="card">
+  <!-- <div class="card-header"></div> -->
+  <div class="card-body">
+    <form [formGroup]="ClientGroup">
+      <div class="row">
+        <div class="col-md-2">
+          <input
+            type="radio"
+            name="fcStatus"
+            id="rdActivate"
+            class="k-radio"
+            value="Activate"
+            formControlName="fcStatus"
+            (change)="OnStatusChange()"
+            checked
+          />
+          <label for="rdActivate" class="k-radio-label">
+            Activate
+          </label>
+        </div>
+        <div class="col-md-2">
+          <input
+            type="radio"
+            name="fcStatus"
+            id="rdDeactivate"
+            class="k-radio"
+            value="Deactivate"
+            formControlName="fcStatus"
+            (change)="OnStatusChange()"
+          />
+          <label for="rdDeactivate" class="k-radio-label">
+            Deactivate
+          </label>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-md-2">
+          Clients :
+        </div>
+        <div class="col-md-4">
+          <kendo-dropdownlist
+            class="form-control"
+            formControlName="fcClientName"
+            id="ddClients"
+            [class.is-invalid]="ClientName.invalid && ClientName.touched"
+            [data]="sAllClients"
+            [textField]="'clientname'"
+            [valueField]="'clientid'"
+            [(ngModel)]="nSelectedClientID"
+            [valuePrimitive]="true"
+            (ngModelChange)="onClientChange($event)"
+          >
+          </kendo-dropdownlist>
+          <div *ngIf="ClientName.invalid && ClientName.touched">
+            <small *ngIf="ClientName.errors?.required" class="text-danger"
+              >Client is required</small
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr />
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridSubclient"
+        [data]="ActivateDeactivateSubclientsgridView"
+        style="width:100%"
+        [height]="480"
+        [pageSize]="ActivateDeactivateSubclientspageSize"
+        [pageable]="true"
+        [skip]="ActivateDeactivateSubclientsskip"
+        (pageChange)="pageChangeSubClients($event)"
+        [sortable]="true"
+        [sort]="sortSubclients"
+        (sortChange)="sortSubClientsChange($event)"
+        [selectable]="selectableSettings"
+        [kendoGridSelectBy]="'subclientcode'"
+        [selectedKeys]="mySelection"
+      >
+        <kendo-grid-checkbox-column
+          showSelectAll="true"
+          width="5"
+        ></kendo-grid-checkbox-column>
+        <kendo-grid-column
+          field="subclientcode"
+          title="Code"
+          width="10"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientname"
+          title="SubClient Name"
+          width="15"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientcontactname"
+          title="Contact Name"
+          width="15"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientcontactphone"
+          title="Contact Phone"
+          width="10"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientcontactemail"
+          title="Contact Email"
+          width="10"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="subclientstatus"
+          title="Status"
+          width="5"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.subclientstatus == "true" ? "Active" : "Inactive" }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="splitparametername"
+          title="Parameter Name"
+          width="10"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+    <hr />
+    <form [formGroup]="CommentGroup">
+      <div class="row">
+        <div class="col-md-2">
+          <label class="form-label"
+            ><strong class="text-danger">*</strong>Comment:</label
+          >
+        </div>
+        <div class="col-md-10">
+          <textarea
+            kendoTextArea
+            [autoSize]="true"
+            class="form-control"
+            formControlName="fcComment"
+            id="txtComment"
+            [class.is-invalid]="Comment.invalid && Comment.touched"
+          ></textarea>
+          <div *ngIf="Comment.invalid && Comment.touched" class="text-danger">
+            <small *ngIf="Comment.errors?.required">Commnet is required</small>
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr />
+    <div class="row">
+      <div class="col-md-2">
+        Status:
+      </div>
+      <div class="col-md-10">
+        <textarea
+          kendoTextArea
+          [autoSize]="true"
+          class="form-control"
+          id="txtFTPDetailStatus"
+          >{{ SubclientFTPDetails }}</textarea
+        >
+      </div>
+    </div>
+    <hr />
+    <div class="row ml-auto">
+      <button
+        *ngIf="rdStatus == 'Activate'"
+        class="ml-auto"
+        type="button"
+        id="btnActivate"
+        kendoButton
+        [primary]="true"
+        (click)="onActivate('Activate')"
+      >
+        Activate
+      </button>
+      <button
+        *ngIf="rdStatus == 'Deactivate'"
+        class="ml-auto"
+        type="button"
+        id="btnDeactivate"
+        kendoButton
+        [primary]="true"
+        (click)="onActivate('Deactivate')"
+      >
+        Deactivate
+      </button>
+    </div>
+  </div>
+</div>

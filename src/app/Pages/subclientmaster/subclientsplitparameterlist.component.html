@@ -1,0 +1,87 @@
+<div class="card border-0">
+  <div class="card-header pl-4">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i>Split
+      Parameters
+    </h4>
+  </div>
+  <div class="card-body o-auto p-3" style=" height: 78vh">
+    <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [filterable]="true"
+      [loading]="loading"
+      (dataStateChange)="dataStateChange($event)"
+      [height]="660"
+    >
+      <kendo-grid-column
+        field="clientname"
+        title="Group"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientname"
+        title="Practice Name"
+        width="70"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientdivisioncode"
+        title="Division Code"
+        width="50"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="splitparametername"
+        title="Split Parameter Type"
+        width="70"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="splitparametervalue"
+        title="Split Parameter Value"
+        width="70"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="splitparameterstatus"
+        title="Status"
+        width="50"
+        [filterable]="true"
+        filter="boolean"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div
+            *ngIf="dataItem.splitparameterstatus == true"
+            class="text-success"
+          >
+            Active
+          </div>
+          <div
+            *ngIf="dataItem.splitparameterstatus == false"
+            class="text-danger"
+          >
+            Inactive
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>
+  </div>
+</div>

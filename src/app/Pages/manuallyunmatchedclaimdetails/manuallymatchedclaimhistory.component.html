@@ -1,0 +1,145 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Histroy View For Claim: {{ InputClaimnumber }}, Check: {{ InputChecknumber }}
+    </h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridhistory"  
+        class="w-100"      
+        [data]="SelectsubclientGridView"
+        [sort]="historysort"
+        [sortable]="true"
+        class="master"
+        [loading]="SelectsubclientLoading"     
+        [height]="500"
+      >
+
+        <kendo-grid-column
+            field="filename"
+            title="File Name"
+            width="15"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.filename }}">
+                {{ dataItem.filename }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            field="sfilename"
+            title="Practice File Name"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.sfilename }}">
+                {{ dataItem.sfilename }}
+              </span>
+            </ng-template>            
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            field="subclientname"
+            title="Practice Name"
+            width="18"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.subclientname }}">
+                {{ dataItem.subclientname }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <!-- <kendo-grid-column
+            field="claimnumber"
+            title="Claim #"
+            width="12"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.claimnumber }}">
+                {{ dataItem.claimnumber }}
+              </span>
+            </ng-template>
+          </kendo-grid-column> -->
+
+          <kendo-grid-column
+          field="sstatus"
+          title="Status"
+          width="8"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+              <div #target title="{{
+                  dataItem?.sstatus == 'Unprocess'
+                    ? clsPermission.fileunprocesslogs
+                      ? dataItem.serrormsg
+                      : ''
+                    : ''
+                }}">
+                <span
+                  class="badge badge-warning"
+                  *ngIf="dataItem?.sstatus == 'Inprocess'"
+                  >In-process</span
+                >
+                <span
+                  class="badge badge-success"
+                  *ngIf="dataItem?.sstatus == 'Process'"
+                  >Processed</span
+                >
+                <span
+                  class="badge badge-danger"
+                  *ngIf="dataItem?.sstatus == 'Unprocess'"                 
+                  >Un-processed</span
+                >
+              </div>          
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+          field="username"
+          title="Matched By"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.username }}">
+              {{ dataItem.username }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+        
+          <kendo-grid-column
+            field="mapped_date"
+            title="Matched Date"
+            width="13"
+            [headerStyle]="{ 'font-weight': '600' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="">Matched Date</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.mapped_date | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </ng-template>
+          </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" (click)="OnClose()">
+      Close
+    </button>   
+  </div>
+</div>
+

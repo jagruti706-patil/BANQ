@@ -1,0 +1,156 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLabel">
+      {{ formtitle }}
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="OnClose()"     
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="frmreporting">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Division</label>
+            <kendo-dropdownlist
+              class="form-control form-control-sm"
+              formControlName="fcDivision"
+              id="ddDivision"     
+              [defaultItem]="defaultItemdivision"             
+              [data]="sAllDivision"
+              [textField]="'subclientdivisioncode'"
+              [valueField]="'subclientdivisioncode'"
+              [(ngModel)]="sSelectedDivisionID"
+              [valuePrimitive]="true"
+              (valueChange)="onDivisionChange($event)"
+              [filterable]="true"                  
+              (filterChange)="handleDivisionFilter($event)"
+            >
+            </kendo-dropdownlist>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Practice</label>
+            <kendo-dropdownlist
+              class="w-100"        
+              [defaultItem]="defaultItemsubClient"      
+              [data]="subClientList"
+              [valuePrimitive]="true"
+              [filterable]="true"
+              [textField]="'subclientname'"
+              [valueField]="'subclientid'"
+              [(ngModel)]="selectedsubclientid"
+              formControlName="fcSubClient"
+              (filterChange)="handleFilter($event)"
+              (valueChange)="OnchangePractice($event)"
+              [disabled]="disablesubclient"
+            >
+            </kendo-dropdownlist>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Split Parameter Name</label>
+            <kendo-dropdownlist
+              class="w-100"   
+              [defaultItem]="defaultItemsplitparametername"          
+              [data]="ssplitparamtername"
+              [valuePrimitive]="true"              
+              [textField]="'text'"
+              [valueField]="'value'"
+              [(ngModel)]="selectedsplitparameter"
+              formControlName="fcSplitparametername"             
+              (valueChange)="OnchangeSplitParameter($event)"
+              [disabled]="disablesplitparametername"
+            >
+            </kendo-dropdownlist>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Split Parameter Value</label>
+            <kendo-dropdownlist
+              class="w-100"              
+              [data]="arrSplitParameter"
+              [defaultItem]="defaultItemsplitparametervalue"
+              [valuePrimitive]="true"
+              [filterable]="true"
+              [textField]="'splitparametervalue'"
+              [valueField]="'splitparameterid'"
+              [(ngModel)]="selectedsplitparametervalue"
+              formControlName="fcSplitparametervalue"
+              (filterChange)="handleFilterSplitParametervalue($event)"
+              (valueChange)="OnchangeSplitParametervalue($event)"
+              [disabled]="disablesplitparametervalue"
+            >
+            </kendo-dropdownlist>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Reporting Group</label>
+            <input
+              kendoTextBox
+              formControlName="fcGroup"
+              type="text"
+              id="Groupid"
+              class="w-100"           
+              #fcGroup
+            />
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Reporting Group Name</label>
+            <input
+              kendoTextBox
+              formControlName="fcGroupName"
+              type="text"
+              id="GroupNameid"
+              class="w-100"        
+              #fcGroupName
+            />
+          </div>
+        </div>        
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-dismiss="modal"
+      (click)="OnClose()"      
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="Adduserclientmapping"
+      (click)="onSaveorUpdateClick()"      
+      [disabled]="!validatePracticeReporting() || disablesavebutton"
+    >
+      Save
+    </button>
+  </div>
+</div>
+
+

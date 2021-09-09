@@ -1,0 +1,484 @@
+<div class="card-header pl-4 mb-3">
+  <h3 class="card-title">
+    <i class="fe fe-menu mr-1 pointer" (click)="togglesidebar()"></i
+    >{{ formtitle }}
+  </h3>
+  <button
+    class="ml-auto"
+    kendoButton
+    [primary]="true"
+    routerLink="/Configuration/clientlist"
+  >
+    <i class="fe fe-x ml-auto"></i>
+  </button>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div class="card-body p-3">
+      <form [formGroup]="frmclient">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>Group Code</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcClientCode"
+              type="text"
+              [(ngModel)]="objclient.clientcode"
+              #fcClientCode
+              class="w-100"
+              readonly
+            />
+            <div
+              *ngIf="
+                frmclient.controls.fcClientCode.touched &&
+                frmclient.controls.fcClientCode.errors
+              "
+            >
+              <small class="text-danger">Code is required</small>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>Group Name</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcClientName"
+              type="text"
+              [(ngModel)]="objclient.clientname"
+              #fcClientName
+              class="w-100"
+            />
+            <div
+              *ngIf="
+                frmclient.controls.fcClientName.touched &&
+                frmclient.controls.fcClientName.errors
+              "
+            >
+              <small
+                *ngIf="frmclient.controls.fcClientName.errors.required"
+                class="text-danger"
+                >Group Name is required</small
+              >
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>Contact Name</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcContactName"
+              type="text"
+              [(ngModel)]="objclient.clientcontactname"
+              #fcContactName
+              class="w-100"
+            />
+            <div
+              *ngIf="
+                frmclient.controls.fcContactName.touched &&
+                frmclient.controls.fcContactName.errors
+              "
+            >
+              <small class="text-danger">Contact Name is required</small>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>Contact Email</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcContactEmail"
+              type="text"
+              [(ngModel)]="objclient.clientcontactemail"
+              #fcContactEmail
+              class="w-100"
+            />
+            <div
+              *ngIf="
+                frmclient.controls.fcContactEmail.touched &&
+                frmclient.controls.fcContactEmail.errors
+              "
+            >
+              <small
+                *ngIf="frmclient.controls.fcContactEmail.errors.required"
+                class="text-danger"
+                >Contact Email is required</small
+              >
+              <small
+                *ngIf="frmclient.controls.fcContactEmail.errors.email"
+                class="text-danger"
+                >Email is not valid</small
+              >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label">
+                <strong class="text-danger">* </strong>Contact Phone</label
+              >
+              <kendo-maskedtextbox
+                [mask]="mask"
+                formControlName="fcContactPhone"
+                type="text"
+                id="ContactPhone"
+                class="w-100"
+                [(ngModel)]="objclient.clientcontactphone"
+                #fcContactPhone
+              >
+              </kendo-maskedtextbox>
+
+              <div
+                *ngIf="
+                  frmclient.controls.fcContactPhone.touched &&
+                  frmclient.controls.fcContactPhone.errors
+                "
+              >
+                <small
+                  *ngIf="frmclient.controls.fcContactPhone.errors?.required"
+                  class="text-danger"
+                  >Contact Phone is required</small
+                >
+                <small
+                  *ngIf="frmclient.controls.fcContactPhone.errors?.pattern"
+                  class="text-danger"
+                  >Only number is allowed</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group mb-0">
+              <label class="form-label">ERA ANALYSIS</label>
+              <label class="custom-switch">
+                <input
+                  type="checkbox"
+                  name="custom-switch-checkbox"
+                  class="custom-switch-input"
+                  formControlName="fcAnalysis"
+                  [(ngModel)]="objclient.clienteraanalysis"
+                  #fcAnalysis
+                />
+                <span class="custom-switch-indicator"></span>
+                <span class="custom-switch-description">{{
+                  frmclient.controls.fcAnalysis.value === true
+                    ? "Active"
+                    : frmclient.controls.fcAnalysis.value === false
+                    ? "Inactive"
+                    : ""
+                }}</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group mb-0">
+              <label class="form-label">ERA HUB</label>
+              <label class="custom-switch">
+                <input
+                  type="checkbox"
+                  name="custom-switch-checkbox"
+                  class="custom-switch-input"
+                  formControlName="fcHub"
+                  [(ngModel)]="objclient.clienterahub"
+                  #fcHub
+                />
+                <span class="custom-switch-indicator"></span>
+                <span class="custom-switch-description">{{
+                  frmclient.controls.fcHub.value === true
+                    ? "Active"
+                    : frmclient.controls.fcHub.value === false
+                    ? "Inactive"
+                    : ""
+                }}</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-2" *ngIf="!isnewclient">
+            <div class="form-group mb-0">
+              <label class="form-label">Group Status</label>
+              <label class="custom-switch">
+                <input
+                  type="checkbox"
+                  name="custom-switch-checkbox"
+                  class="custom-switch-input"
+                  formControlName="fcClientStatus"
+                  [(ngModel)]="objclient.clientstatus"
+                  #fcClientStatus
+                />
+                <span class="custom-switch-indicator"></span>
+                <span class="custom-switch-description">{{
+                  frmclient.controls.fcClientStatus.value === true
+                    ? "Active"
+                    : frmclient.controls.fcClientStatus.value === false
+                    ? "Inactive"
+                    : ""
+                }}</span>
+              </label>
+              <div
+                *ngIf="
+                  frmclient.controls.fcClientStatus.touched &&
+                  frmclient.controls.fcClientStatus.errors
+                "
+              >
+                <small class="text-danger">Group Status is required</small>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="clsPermission.overridecontexterroraccess">
+            <div class="form-group col-md-6">
+              <label class="form-label">
+                Override Context Error</label
+              >
+              <input
+                kendoTextBox
+                formControlName="fcoverridecontexterror"
+                type="text"
+                [(ngModel)]="objclient.overridecontexterror"
+                #fcoverridecontexterror
+                class="w-100"              
+              />
+              <small class="text-muted">Add multiple values separated by semicolon</small>
+            </div>
+
+            <div class="form-group col-md-6 mt-2">           
+            </div>
+        </ng-container>
+
+          <div class="form-group col-md-6 mt-2">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="customCheck1" formControlName="fcStopduplicatecheckpayment" #fcStopduplicatecheckpayment [(ngModel)]="objclient.stopduplicatecheckpayment">
+              <label class="custom-control-label form-label" for="customCheck1">Stop Duplicate Check Payment</label>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <div class="card-footer pr-3">
+      <div class="float-right">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          [disabled]="!frmclient.valid || disableOnClick"
+          (click)="addupdateclient()"
+        >
+          {{ buttonCaption }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="card" *ngIf="!isaddmode">
+    <div class="card-header pl-4">
+      <h3 class="card-title">Group FTPs Information</h3>
+      <div class="card-options">
+        <div class="card-options">
+          <!-- <a class="btn btn-secondary btn-sm" [routerLink]="['/clientftp/new/', objclient.clientid]" routerLinkActive="router-link-active"  >Add FTP</a> -->
+          <a class="btn btn-secondary btn-sm" (click)="addnewftp()">
+            <i class="fe fe-plus-circle"></i> Add FTP</a
+          >
+          <!-- <a class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a> -->
+        </div>
+      </div>
+    </div>
+    <div class="card-body p-3">
+      <kendo-grid
+        [data]="gridView"
+        [pageSize]="state.take"
+        [skip]="state.skip"
+        [sort]="state.sort"
+        [filter]="state.filter"
+        [sortable]="true"
+        [pageable]="true"
+        [filterable]="false"
+        (dataStateChange)="dataStateChange($event)"
+      >
+        <kendo-grid-column
+          field="ftpcode"
+          title="Code"
+          width="30"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="ftpname"
+          title="FTP Name"
+          width="50"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="ftpurl"
+          title="FTP Url"
+          width="110"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="ftpusername" title="FTP User Name" width="70"
+                [headerStyle]="{'font-weight': '600'}">
+              </kendo-grid-column> -->
+        <kendo-grid-column
+          field="ftptype"
+          title="Type"
+          width="40"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="ftpport" title="FTP Port" width="40" [headerStyle]="{'font-weight': '600'}">
+              </kendo-grid-column> -->
+        <kendo-grid-column
+          field="status"
+          title="Status"
+          width="40"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <!-- {{dataItem.status ? "Active" : "Inactive" }} -->
+            <div *ngIf="dataItem.status == true" class="text-success">
+              Active
+            </div>
+            <div *ngIf="dataItem.status == false" class="text-danger">
+              Inactive
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="ftp835inboundfolder"
+          title="835 Ftp Folder"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="ftp837inboundfolder" title="837 Ftp Folder" width="60"
+          [headerStyle]="{'font-weight': '600'}">
+        </kendo-grid-column> -->
+
+        <kendo-grid-command-column
+          title="Action"
+          width="50"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <!-- <button kendoGridEditCommand [primary]="true" title="Edit" data-toggle="modal"
+                  [routerLink]="[{outlets: {'modal': ['clientftp',dataItem.ftpid,objclient.clientid]}}]"
+                
+                   >
+                  <i class="fe fe-edit-2"></i>
+                </button> -->
+
+            <button
+              kendoGridEditCommand
+              [primary]="true"
+              title="Edit"
+              data-toggle="modal"
+              (click)="
+                openftpmodal2(
+                  dataItem.ftpid,
+                  objclient.clientid,
+                  objclient.clientcode
+                )
+              "
+            >
+              <i class="fe fe-edit-2"></i>
+            </button>
+            <button
+              kendoGridRemoveCommand
+              data-toggle="modal"
+              (click)="deleteConfiratmion(dataItem)"
+            >
+              <!-- <i class="fe fe-x"></i> -->
+              <i
+                class="fe fe-check-circle"
+                style="cursor: pointer;"
+                title="Click to Activate FTP"
+                *ngIf="dataItem.status == ''"
+              ></i>
+
+              <i
+                class="fe fe-slash"
+                style="cursor: pointer;"
+                title="Click to Deactivate FTP"
+                *ngIf="dataItem.status == true"
+              ></i>
+            </button>
+
+            <!-- <button kendoGridEditCommand [primary]="true" title="Edit" data-toggle="modal"
+                    data-target="#editftpconfirmationModal">
+                    <i class="fe fe-edit-2"></i>
+                  </button> -->
+            <!-- <button kendoGridRemoveCommand title="Delete" data-toggle="modal"
+                    data-target="#deleteftpconfirmationModal">
+                    <i class="fe fe-x"></i>
+                  </button> -->
+          </ng-template>
+        </kendo-grid-command-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade bd-example-modal-lg"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="deferredModal"
+  role="dialog"
+  aria-labelledby="buttonLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <app-clientftpmaster></app-clientftpmaster>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="deletemodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ deletemessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteftp()"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

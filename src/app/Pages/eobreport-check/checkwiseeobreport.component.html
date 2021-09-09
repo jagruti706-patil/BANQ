@@ -1,0 +1,557 @@
+<ngx-loading
+  [show]="reportloading"
+  [config]="{
+    backdropBorderRadius: '1px',
+    fullScreenBackdrop: true,
+    primaryColour: '#EEA127',
+    secondaryColour: '#EEA127',
+    tertiaryColour: '#EEA127',
+    backdropBackgroundColour: 'rgba(255, 255, 255, 0)'
+  }"
+></ngx-loading>
+
+<div class="modal-content">
+  <!-- <ngx-loading
+    [show]="exportloading"
+    [config]="{
+      backdropBorderRadius: '1px',
+      fullScreenBackdrop: true,
+      primaryColour: '#EEA127',
+      secondaryColour: '#EEA127',
+      tertiaryColour: '#EEA127',
+      backdropBackgroundColour: 'rgba(255, 255, 255, 0.5)'
+    }"
+  ></ngx-loading> -->
+
+  <div class="modal-header" style="padding: 0.6rem; background-color: #5179a2; color: #fff;">
+    <div class="col-md-7">
+      <h3 class="text-dark text-uppercase float-right" style="margin-bottom: 0px; color: #fff !important;">
+        ERA EOB Report
+      </h3>
+      <!-- <h6 class="text-center mb-3 text-uppercase">
+        <span style="font-size: 18px;">
+          {{ InputCheckFilename }}
+        </span>       
+      </h6> -->
+    </div>
+    <div class="col-md-5">
+      <!-- <button
+        type="button"
+        kendoButton
+        [primary]="true"
+        class="btn"
+        data-dismiss="modal"
+        class="float-right ml-2"
+        (click)="onCloseClick()"
+      >
+        Close
+      </button> -->      
+      <button
+        type="button"
+        class="float-right"
+        data-dismiss="modal"
+        aria-label="Close"
+        title="Close"        
+        (click)="onCloseClick()"
+        kendoButton 
+        [look]="'flat'"
+      >
+        <i class="fe fe-x"></i>
+      </button>      
+      <!-- <button
+        type="button"
+        kendoButton
+        [primary]="true"
+        (click)="downloadpdf()"
+        class="float-right"
+        [disabled]="disabledbutton"
+        style="cursor: pointer;"
+      >
+        Export to PDF
+      </button> -->
+      <button
+        *ngIf="clsPermission.exporttopdfcheckvieweob"
+        id="btnPrintSplit"
+        class="k-button"        
+        title="Download"
+        (click)="downloadpdf()"
+        class="float-right"
+        [disabled]="disabledbutton"
+        kendoButton 
+        [look]="'flat'"        
+      >
+        <i class="fe fe-download"></i>
+      </button>
+    </div>
+    <!-- <div class="col-md-2">
+      <button
+      type="button"
+      kendoButton
+      class="btn btn-secondary "
+      data-dismiss="modal"
+      class="float-right ml-2"
+      (click)="onCloseClick()"
+    >
+      Close
+    </button>
+    <button type="button" kendoButton (click)="downloadpdf()" class="float-right" [disabled]="disabledbutton" style="cursor: pointer;">Export to PDF</button>
+    </div>   -->
+  </div>
+
+  <!-- <div class="modal-header" *ngFor="let checkinfo of EOBDetails.payerandcheck">      
+      <div class="col-md-4">
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody >
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.payername }}
+                </td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.address }}
+                </td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.address1 }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+      </div>           
+      <div class="col-md-4">          
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody>
+              <tr>
+                <td class="p-0 text-muted">Check Date:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.checkdate | date: "MM/dd/yyyy" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Check #:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.checknumber }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Payment Method:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.paymentmethod }}
+                </td>
+              </tr>              
+            </tbody>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">          
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody>
+              <tr>
+                <td class="p-0 text-muted">Check Amount:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.checkamount }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Claim Total Paid:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.claimpaidamount }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">PLB Total Amount:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.plbamount }}
+                </td>
+              </tr>             
+            </tbody>
+          </div>
+        </div>
+      </div>   
+</div> -->
+
+  <!-- <div class="modal-header">
+    <div class="col-md-12">
+      <button
+        type="button"
+        kendoButton
+        [primary]="true"
+        class="btn"
+        data-dismiss="modal"
+        class="float-right ml-2"
+        (click)="onCloseClick()"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        kendoButton
+        [primary]="true"
+        (click)="downloadpdf()"
+        class="float-right"
+        [disabled]="disabledbutton"
+        style="cursor: pointer;"
+      >
+        Export to PDF
+      </button>
+    </div>
+  </div> -->
+
+  <div class="modal-body" style="width: 1250px; padding: 0.6rem;">
+    <div class="card-body p-0">
+      <!-- <div *ngIf="loadingPDF">
+      <div class="k-i-loading"></div>
+    </div> -->
+      <div style="height: 110.4vh;">
+        <ng2-pdfjs-viewer
+          #pdfViewerAutoLoad
+          id="pdfViewerAutoLoad"
+          [viewBookmark]="false"
+          [showSpinner]="false"
+          [openFile]="false"
+          [download]="false"
+          [downloadFileName]="exportfilename"
+          [zoom]="100"
+        ></ng2-pdfjs-viewer>
+      </div>
+    </div>
+
+    <!-- <kendo-grid
+  id="EOBReportGrid"
+  class="alt-grid" 
+  [data]="patientinfo"
+  style="max-height: 550px;"  
+  #EOBReportGrid 
+>  
+
+  <ng-template kendoGridToolbarTemplate>    
+    <button type="button" class="k-button float-right" kendoButton (click)="generatePdf()" [disabled]="disabledbutton">Export to PDF</button>
+  </ng-template> -->
+
+    <!-- <kendo-grid-column
+    field="description"
+    [headerStyle]="{ display: 'none' }"
+    width="250"
+    class="bg-white"
+  >
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <form [formGroup]="IncompleteInfoGroup">          
+        <div class="d-box">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="flex-g">
+                <div class="table table-borderless mb-2 customtablerow">
+                  <tbody>
+                    <tr>
+                      <td class="p-0 text-muted">Index No:</td>
+                      <td class="font-weight-bold p-0 pl-3">
+                        {{ dataItem.arrayindex }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Patient:</td>
+                      <td class="font-weight-bold p-0 text-uppercase pl-3">
+                        {{ dataItem.patient }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Patient Identifier:</td>
+                      <td class="font-weight-bold p-0 pl-3">
+                        {{ dataItem.patientmember }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Patient Group:</td>
+                      <td class="font-weight-bold p-0 pl-3"></td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Claim Level Adjs:</td>
+                      <td class="font-weight-bold p-0 pl-3">
+                        {{ dataItem.claimleveladjstment }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="flex-g">
+                <div class="table table-borderless mb-0 customtablerow">
+                  <tbody>
+                    <tr>
+                      <td class="p-0 text-muted">Claim #:</td>
+                      <td class="font-weight-bold p-0 pl-3">
+                        {{ dataItem.claimno }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Claim Remit Ref.#:</td>
+                      <td class="font-weight-bold p-0 pl-3">
+                        {{ dataItem.claimremittancerefnumber }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Insured:</td>
+                      <td class="font-weight-bold p-0 pl-3">
+                        {{ dataItem.insured }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Rendered Provider:</td>
+                      <td class="font-weight-bold p-0 text-uppercase pl-3">
+                        {{ dataItem.renderringprovider }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+            </div>  
+            <div class="col-md-4">
+               <div class="flex-g">
+                <div class="table table-borderless mb-0 customtablerow">
+                  <tbody>
+                    <tr>
+                      <td class="p-0 text-muted">Claim Billed:</td>
+                      <td class="font-weight-bold p-0 pl-3 float-right">
+                        {{ dataItem.claimbilledamount }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Claim Paid:</td>
+                      <td class="font-weight-bold p-0 pl-3 float-right">
+                        {{ dataItem.claimpaidamount }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Total Claim Adjs:</td>
+                      <td class="font-weight-bold p-0 pl-3 float-right">
+                        {{ dataItem.totalclaimleveladjstment }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-0 text-muted">Patient Responsibility Amount:</td>
+                      <td class="font-weight-bold p-0 pl-3 float-right">
+                        {{ dataItem.patientres }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <div class="row">
+            <div class="col-md-12  d-flex justify-content-end">
+              <h6 class="text-primary mb-2 mt-2" style="color: blue !important;">
+                {{ dataItem.status }}
+              </h6>
+            </div>
+          </div>
+    
+          <div class="row mb-5">
+              <div class="col-md-12">
+                
+                <div class="table-responsive-sm">
+                  <table class="table card-table table-sm table-striped table-vcenter customtable">
+                    <thead>
+                      <tr>
+                        <th>DOS</th>
+                        <th>Unit</th>
+                        <th>Proc/Mod</th>
+                        <th>Billed</th>
+                        <th>Allowed</th>
+                        <th>Deduct</th>
+                        <th>Co-Ins</th>
+                        <th>Copay</th>
+                        <th>Paid</th>
+                        <th>Adjustment</th>
+                        <th>Reason</th>
+                        <th>Remark</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of dataItem.charges">
+                        <td>{{ item.dos }}</td>
+                        <td>{{ item.unit }}</td>
+                        <td title="{{ item.cptcode }} {{ item.modifier1 }}
+                            {{ item.modifier2 }} {{ item.modifier3 }}
+                            {{ item.modifier4 }}">{{ item.cptcode }} {{ item.modifier1 }}
+                          {{ item.modifier2 }} {{ item.modifier3 }}
+                          {{ item.modifier4 }}</td>
+                        <td>{{ item.billedamount }}</td>
+                        <td>{{ item.allowed }}</td>
+                        <td>{{ item.deduct }}</td>
+                        <td>{{ item.coins }}</td>
+                        <td>{{ item.copay }}</td>
+                        <td>{{ item.payment }}</td>
+                        <td>{{ item.adjustment }}</td>
+                        <td title="{{ item.reasoncodes }}">{{ item.reasoncodes }}</td>
+                        <td>{{ item.remark }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+          </div>
+    
+          <hr />
+        </div>
+      </form>
+    </ng-template>
+  </kendo-grid-column> -->
+    <!-- <kendo-grid-pdf
+    fileName="{{exportfilename}}"
+    [allPages]="true"
+    paperSize="A4"
+    [landscape]="true"
+    [repeatHeaders]="true"
+    [scale]="0.7"
+  >
+    <kendo-grid-pdf-margin
+      top="5.5cm"
+      left="1cm"
+      right="1cm"
+      bottom="2cm"
+    ></kendo-grid-pdf-margin>
+
+    <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+      <div class="page-template">
+       <ng-container *ngFor="let EOBDetails of EOBReportItems">
+        <div class="header" >  
+            <div class="col-md-11">
+              <h3 class="text-center text-dark text-uppercase ">
+                ERA EOB Report
+              </h3>
+              <h3 class="text-center mb-3 text-dark text-uppercase">                
+                  {{ EOBDetails.clientname }}                               
+              </h3>
+            </div>  
+        <div class="row" *ngFor="let checkinfo of EOBDetails.payerandcheck">  
+              <div class="col-md-6">
+                <div class="flex-g">
+                  <div class="table text-dark table-borderless mb-0">
+                    <tbody >
+                      <tr>
+                        <td class="font-weight-bold text-uppercase p-0">
+                          {{ checkinfo.payername }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-weight-bold text-uppercase p-0">
+                          {{ checkinfo.address }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="font-weight-bold text-uppercase p-0">
+                          {{ checkinfo.address1 }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                </div>
+              </div>           
+              <div class="col-md-6">          
+                <div class="flex-g">
+                  <div class="table table-borderless mb-0">
+                    <tbody>
+                      <tr>
+                        <td class="p-0 text-muted">Check Date:</td>
+                        <td class="font-weight-bold p-0 pl-3">
+                          {{ checkinfo.checkdate | date: "MM/dd/yyyy" }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-0 text-muted">Check #:</td>
+                        <td class="font-weight-bold p-0 pl-3">
+                          {{ checkinfo.checknumber }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="p-0 text-muted">Payment Method:</td>
+                        <td class="font-weight-bold p-0 pl-3">
+                          {{ checkinfo.paymentmethod }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                </div>
+              </div>          
+        </div>
+        <hr>
+      </div>
+        </ng-container>
+      </div>
+     </ng-template>
+
+  </kendo-grid-pdf> -->
+
+    <!-- <kendo-grid-excel fileName="test.xlsx"></kendo-grid-excel> -->
+    <!-- </kendo-grid> -->
+  </div>
+  <!-- <hr /> -->
+  <!-- <div class="modal-footer">  
+  <button
+    type="button"
+    kendoButton
+    class="btn btn-secondary "
+    data-dismiss="modal"
+    (click)="onCloseClick()"
+  >
+    Close
+  </button>
+  <button type="button" kendoButton (click)="downloadpdf()" [disabled]="disabledbutton" style="cursor: pointer;">Export to PDF</button>
+</div> -->
+</div>
+<!--Export PDF Confirmation Model -->
+<!-- <div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="ExportExcelClaimconfirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lgc" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onExportPDFCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ ExportPDFDownloadConfirmationMessage }}
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onExportPDFCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="onExportExcelYesConfirmationClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!--Export PDF Confirmation Model -->

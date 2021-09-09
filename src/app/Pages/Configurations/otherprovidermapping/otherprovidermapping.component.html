@@ -1,0 +1,265 @@
+<div class="card border-0">
+  <div class="card-header">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i>Provider
+      Other Mapping
+    </h4>
+    <div class="row ml-auto">
+      <button
+        *ngIf="clsPermission.addproviderothermapping"
+        class="ml-auto"
+        kendoButton
+        [primary]="true"
+        data-toggle="modal"
+        data-target="#addotherprovidermappingModal"
+        (click)="AddProvidermapping()"
+      >
+        Add Provider Other Mapping
+      </button>
+    </div>
+  </div>
+  <div class="card-body o-auto p-3" style="height: 78vh;">
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridProvidermapping"
+        [data]="ProvidermappinggridView"
+        [pageSize]="state.take"
+        [skip]="state.skip"
+        [sort]="state.sort"
+        [filter]="state.filter"
+        [sortable]="true"
+        [selectable]="true"
+        [filterable]="true"
+        [loading]="loadingProvidermappingGrid"
+        [pageable]="true"
+        style="width: 100%;"
+        (dataStateChange)="dataStateChange($event)"
+        (edit)="EditProvidermapping($event)"
+        [height]="660"
+      >
+        <kendo-grid-column
+          field="subclientname"
+          title="Practice"
+          width="30"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.subclientname }}">
+              {{ dataItem.subclientname }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="npi"
+          title="NPI"
+          width="25"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.npi }}">
+              {{ dataItem.npi }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="sname"
+          title="Provider Name"
+          width="35"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.sname }}">
+              {{ dataItem.sname }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="idtype"
+          title="Type"
+          width="27"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.idtype }}">
+              {{ dataItem.idtype }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="idvalue"
+          title="Value"
+          width="30"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.idvalue }}">
+              {{ dataItem.idvalue }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="status"
+          title="Status"
+          width="25"
+          [filterable]="true"
+          filter="boolean"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.status == true" class="text-success">
+              Active
+            </div>
+            <div *ngIf="dataItem.status == false" class="text-danger">
+              Inactive
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-command-column
+          title="Action"
+          width="22"
+          [headerStyle]="{ 'font-weight': 'bold' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button
+              *ngIf="clsPermission.editproviderothermapping"
+              kendoGridEditCommand
+              [primary]="true"
+              title="Edit"
+              data-toggle="modal"
+              data-target="#editprovidermappingconfirmationModal"
+            >
+              <i class="fe fe-edit-2"></i>
+            </button>
+            <button
+              *ngIf="clsPermission.statusofproviderothermapping"
+              class="k-button"
+              data-toggle="modal"
+              data-target="#statusModal"
+              (click)="updateStatusConfirmation(dataItem)"
+            >
+              <i
+                class="fa fa-toggle-off"
+                title="Click here to Activate provider other mapping"
+                *ngIf="dataItem.status == false"
+              ></i>
+              <i
+                class="fa fa-toggle-on"
+                title="Click here to Deactivate provider other mapping"
+                *ngIf="dataItem.status != false"
+              ></i>
+            </button>
+
+            <button
+              *ngIf="dataItem.bisactive == false"
+              data-toggle="modal"
+              data-target=".bd-example-modal-lg"
+              class="k-button"
+              (click)="
+                OnProvidermappingStatus(dataItem.nprovidermappingid, true)
+              "
+              title="Activate"
+            >
+              <i class="fe fe-zap"></i>
+            </button>
+            <button
+              *ngIf="dataItem.bisactive == true"
+              class="k-button"
+              data-toggle="modal"
+              data-target=".bd-example-modal-lg"
+              (click)="
+                OnProvidermappingStatus(dataItem.additionalmappingid, false)
+              "
+              title="Deactivate"
+            >
+              <i class="fe fe-zap-off"></i>
+            </button>
+          </ng-template>
+        </kendo-grid-command-column>
+        <ng-template kendoGridNoRecordsTemplate>
+          No records available.
+        </ng-template>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<!-- Add Providermapping -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="addotherprovidermappingModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <app-addotherprovidermapping
+      [InputProvidermappingEditid]="EditProvidermappingid"
+      (OutputProvidermappingEditResult)="
+        OutputProvidermappingEditResult($event)
+      "
+      #AddOtherProvidermappingChild
+    ></app-addotherprovidermapping>
+  </div>
+</div>
+<!-- Add Providermapping -->
+
+<!--Edit Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="editprovidermappingconfirmationModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <app-editconfirmation
+      [InputEditMessage]="InputEditMessage"
+      (OutputEditResult)="OutputEditResult($event)"
+    >
+    </app-editconfirmation>
+  </div>
+</div>
+<!--Edit Confirmation Model -->
+
+<div
+  class="modal fade"
+  id="statusModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="statusModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ updateMappingMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateStatusMapping()"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,669 @@
+<ngx-loading
+  [show]="emailloading"
+  [config]="{
+    backdropBorderRadius: '1px',
+    fullScreenBackdrop: true,
+    primaryColour: '#EEA127',
+    secondaryColour: '#EEA127',
+    tertiaryColour: '#EEA127',
+    backdropBackgroundColour: 'rgba(255, 255, 255, 0.5)'
+  }"
+></ngx-loading>
+
+<div class="card">
+  <div class="card-body">
+    <div class="panelSep">
+      <div class="row">
+        <div class="col-md-12">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <div class="d-flex">
+                  <div class="mr-3">
+                    <div class="form-group">
+                      <label class="form-label">Matched Start Date</label>
+                      <kendo-datepicker
+                        id="dtstartDate"
+                        [(value)]="startDate"
+                        (valueChange)="onDateChange($event, 'start date')"
+                        class="w-100"
+                        [max]="endDate"
+                        [disabled]="disabledstartdate"
+                      >
+                      </kendo-datepicker>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="form-group">
+                      <label class="form-label">Matched End Date</label>
+                      <kendo-datepicker
+                        id="dtendDate"
+                        [(value)]="endDate"
+                        (valueChange)="onDateChange($event, 'end date')"
+                        class="w-100"
+                        [min]="startDate"
+                        [disabled]="disabledenddate"
+                      ></kendo-datepicker>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Group</label>
+                  <kendo-dropdownlist
+                    class="form-control form-control-sm"
+                    formControlName="fcClientName"
+                    id="ddClients"
+                    [class.is-invalid]="
+                      ClientName.invalid && ClientName.touched
+                    "
+                    [data]="sAllClients"
+                    [textField]="'clientname'"
+                    [valueField]="'clientid'"
+                    [(ngModel)]="sSelectedClientID"
+                    [valuePrimitive]="true"
+                    (valueChange)="onClientChange($event)"
+                    [filterable]="true"
+                    [disabled]="disabledclient"
+                    (filterChange)="handleClientFilter($event)"
+                  >
+                  </kendo-dropdownlist>              
+                </div>
+              </div>              
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="" class="form-label">Practice</label>
+                  <kendo-dropdownlist
+                    class="w-100"
+                    formControlName="fcSubClientName"
+                    id="ddSubClients"
+                    [class.is-invalid]="
+                      SubClientName.invalid && SubClientName.touched
+                    "
+                    [data]="sSubClients"
+                    [textField]="'subclientname'"
+                    [valueField]="'subclientid'"
+                    [(ngModel)]="sSelectedSubClientCode"
+                    [valuePrimitive]="true"
+                    (valueChange)="onSubClientChange($event)"
+                    [filterable]="true"
+                    [disabled]="disabledsubclient"
+                    (filterChange)="handleSubclientFilter($event)"
+                  >
+                  </kendo-dropdownlist>                 
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Users Name</label>
+                  <kendo-dropdownlist
+                    class="form-control form-control-sm"
+                    formControlName="fcmappedusers"
+                    id="ddmappedusers"                    
+                    [data]="sAllmappedusers"
+                    [textField]="'username'"
+                    [valueField]="'userid'"
+                    [(ngModel)]="sSelectedmappeduserid"
+                    [valuePrimitive]="true"                  
+                    [filterable]="true"   
+                    [disabled]="disabledusers"
+                    (valueChange)="onMappeduserChange($event)"   
+                    (filterChange)="handleMappeduserFilter($event)"                    
+                  >
+                  </kendo-dropdownlist>                
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="form-group">
+                    <label for="" class="form-label">Search By</label>
+                    <kendo-dropdownlist
+                      formControlName="fcDivisionalSplitSearchBy"
+                      id="ddDivisionalSplitSearchBy"
+                      [class.is-invalid]="
+                        DivisionalSplitSearchBy.invalid &&
+                        DivisionalSplitSearchBy.touched
+                      "
+                      [data]="sDivisionalSplitSearchBy"
+                      [textField]="'text'"
+                      [valueField]="'value'"
+                      [(ngModel)]="sSelectedDivisionalSplitSearchBy"
+                      [valuePrimitive]="true"
+                      [disabled]="disabledsearchBy"
+                      (valueChange)="onDivisionalSplitSearchByChange($event)"
+                    >
+                    </kendo-dropdownlist>
+                    <div
+                      *ngIf="
+                        DivisionalSplitSearchBy.invalid &&
+                        DivisionalSplitSearchBy.touched
+                      "
+                    >
+                      <small
+                        *ngIf="DivisionalSplitSearchBy.errors?.required"
+                        class="text-danger"
+                        >SearchBy is required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group mr-3 ml-3 flex-fill">
+                    <label for="" class="form-label">Search</label>
+                    <div class="d-flex">
+                      <input
+                        kendoTextBox
+                        formControlName="fcSplitSearch"
+                        type="text"
+                        id="Search"
+                        [ngClass]="{ disabled: disabledsplitsearch }"
+                        class="w-100"
+                        title="Search by {{ sSelectedDivisionalSplitSearchBy }}"
+                        placeholder="Search by {{
+                          sSelectedDivisionalSplitSearchBy
+                        }}"
+                        [disabled]="disabledsplitsearch"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="ml-auto">
+                    <div class="form-group">
+                      <label for="" class="form-label">&nbsp;</label>
+                      <button
+                        kendoButton
+                        type="button"
+                        [primary]="true"
+                        class="mr-3"
+                        (click)="applySplitFilters()"
+                        title="Apply filters"
+                        [disabled]="disabledapplybtn"
+                      >
+                        Apply
+                      </button>
+                      <button
+                        kendoButton
+                        type="button"
+                        (click)="clearSplitFilters()"
+                        title="Default filters set"
+                        [disabled]="disabledclearbtn"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <h4>Manually Matched Claim Details</h4>
+      <div class="ml-auto">
+        <span class="text-muted"
+          >{{ SplitFilesdisplaytotalrecordscount }} records found</span
+        >
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        #grid="kendoGrid"
+        id="gridSplitrematched"        
+        [data]="SplitFilesGridView"                 
+        [pageSize]="SplitFilesPageSize"
+        [pageable]="true"
+        [skip]="SplitFilesSkip"
+        (pageChange)="pageChangeSplit($event)"
+        [sortable]="true"
+        [sort]="sortSplit"
+        (sortChange)="sortSplitChange($event)"        
+        [loading]="loadingSplitFilesGrid"
+        class="w-100 master"
+        [height]="555"    
+        [selectable]="{ enabled: true, checkboxOnly: true }"
+        (selectedKeysChange)="onSelectedKeysChange($event)"
+        [kendoGridSelectBy]="selectedCallback"
+        [selectedKeys]="mySelection"
+        (excelExport)="onExcelExport($event)"    
+      >     
+        <ng-template *ngIf="clsPermission.manuallymatchedclaimexporttoexcel || clsPermission.manuallymatchedclaimrematchedclaim"   
+            kendoGridToolbarTemplate            
+          >
+          <button    
+            hidden      
+            id="hbtnExportExcel"
+            [primary]="true"
+            kendoButton
+            kendoGridExcelCommand 
+            class="pull-right mr-1"
+            type="button"
+            style="float: right;"                     
+          >         
+          </button> 
+          <button   
+            *ngIf="clsPermission.manuallymatchedclaimexporttoexcel"          
+            [primary]="true"
+            kendoButton             
+            class="pull-right mr-1"
+            type="button"
+            style="float: right;"            
+            title="Export Excel"    
+            (click)="onClaimExcelExportClick()"  
+            [disabled]="SplitFilesdisplaytotalrecordscount <= 0"      
+          >
+            Export Excel
+          </button> 
+          <button  
+            *ngIf="clsPermission.manuallymatchedclaimrematchedclaim && sSelectedClientID != '0'"    
+            [primary]="true"
+            kendoButton             
+            class="pull-right mr-1"
+            type="button"
+            style="float: right;"           
+            title="Rematched Claim"             
+            (click)="onrematchedclick()"
+            [disabled]="mySelection.length <= 0"          
+          >
+            Re-Matched Claim
+          </button> 
+        </ng-template>
+
+        <kendo-grid-checkbox-column width="5" showSelectAll="true" 
+        *ngIf="clsPermission.manuallymatchedclaimrematchedclaim && SplitFilesdisplaytotalrecordscount > 0 && sSelectedClientID != '0'">
+          <ng-template kendoGridCellTemplate let-idx="rowIndex">
+            <input [kendoGridSelectionCheckbox]="idx" />
+          </ng-template>
+        </kendo-grid-checkbox-column>
+
+        <!-- <kendo-grid-checkbox-column *ngIf="clsPermission.manuallymatchedclaimrematchedclaim && SplitFilesdisplaytotalrecordscount > 0 && sSelectedClientID != '0'"          
+          width="5"
+        > -->
+          <!-- <ng-template kendoGridHeaderTemplate>
+            <input
+              class="k-checkbox"
+              id="selectAllCheckboxId"
+              kendoGridSelectAllCheckbox
+              [state]="selectAllState"
+              (selectAllChange)="onSelectAllChange($event)"
+            />
+            <label
+              class="k-checkbox-label"
+              for="selectAllCheckboxId"
+              title="Select all rows on all pages to send email"
+            ></label>
+          </ng-template> -->
+        <!-- </kendo-grid-checkbox-column> -->
+
+        <kendo-grid-column
+          field="masterfilename"
+          title="File Name"
+          width="14"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.masterfilename }}">
+              {{ dataItem.masterfilename }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="splitfilename"
+          title="Practice File Name"
+          width="29"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.splitfilename }}">
+              {{ dataItem.splitfilename }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="practicename"
+          title="Practice Name"
+          width="18"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.practicename }}">
+              {{ dataItem.practicename }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="claimnumber"
+          title="Claim #"
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.claimnumber }}">
+              {{ dataItem.claimnumber }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checknumber"
+          title="Check #"
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.checknumber }}">
+              {{ dataItem.checknumber }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <!-- <kendo-grid-column
+          field="payername"
+          title="Payer"
+          width="18"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.payername }}">
+              {{ dataItem.payername }}
+            </span>
+          </ng-template>
+        </kendo-grid-column> -->
+
+        <kendo-grid-column
+        field="matchedby"
+        title="Matched By"
+        width="12"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <span title="{{ dataItem.matchedby }}">
+            {{ dataItem.matchedby }}
+          </span>
+        </ng-template>
+      </kendo-grid-column>
+       
+        <kendo-grid-column
+          field="matcheddate"
+          title="Matched Date"
+          width="15"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Matched Date</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.matcheddate | date: "MM-dd-yyyy hh:mm:ss a" }}
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column [headerStyle]="{ 'font-weight': 'bold' }" width="9">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <p
+              class="pointer fb-600 text-primary"
+              data-toggle="modal"
+              data-target="#viewEOBReportModal"
+              (click)="onViewEOBClick(dataItem)"
+            >
+              View EOB
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-command-column  *ngIf="clsPermission.manuallymatchedclaimviewhistory"
+          title=""
+          width="6"
+          [headerStyle]="{ 'font-weight': '600' }"
+          media="(min-width: 1025px)"
+        >
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button
+              type="button"             
+              data-toggle="modal"
+              data-target="#historyInfoModal"
+              title="View Claim History"
+              class="k-button"
+              (click)="onhistoryinfoclick(dataItem)"
+            >
+            <i class="fe fe-info"></i>
+            </button>
+          </ng-template>
+        </kendo-grid-command-column>
+
+        <kendo-grid-excel fileName="{{ exportFilename }}.xlsx" [fetchData]="allData" >
+
+          <kendo-excelexport-column
+            field="masterfilename"
+            title="File Name"
+            [width]="400"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="splitfilename"
+            title="Practice File Name"
+            [width]="500"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="practicename"
+            title="Practice Name"
+            [width]="300"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="claimnumber"
+            title="Claim #"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="checknumber"
+            title="Check #"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="matchedby"
+            title="Matched By"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="matcheddate"
+            title="Matched Date"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+
+        </kendo-grid-excel>
+
+      </kendo-grid>
+    </div>
+
+  </div>
+</div>
+
+<!-- View EOB Report Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="viewEOBReportModal"
+  role="dialog"
+  aria-labelledby="viewEOBReportModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <app-eobreport
+      [InputMastererafileid]="inputmastererafileid"
+      [InputTsid]="inputtsid"
+      [InputClpid]="inputclpid"
+      [InputSplitfileid]="inputsplitfileid"
+      [InputComponentname]="inputcomponentname"
+      (OutputViewEobReportResult)="OutputResult($event)"
+      #EobreportChild
+    ></app-eobreport>
+  </div>
+</div>
+<!-- View EOB Report Model -->
+
+<!--Export Excel Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="ExportExcelClaimconfirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lgc" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onExportExcelCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ ExportExcelDownloadConfirmationMessage }}
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onExportExcelCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="onExportExcelYesConfirmationClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Export Excel Confirmation Model -->
+
+<!-- Select Subclient Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="selectsubclientModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true" 
+>
+  <div class="modal-dialog modal-lg">
+    <app-selectsubclient
+      [Inputclientid]="Inputclientid"
+      [InputGenerateUnmatchedClaim]="InputGenerateUnmatchedClaim"
+      [InputAllClaimno]="InputAllClaimno"
+      [Inputcomponent]="Inputcomponent"
+      (OutputSelectSubclientResult)="OutputSelectSubclientResult($event)"
+      #SelectsubclientChild
+    ></app-selectsubclient>
+  </div>
+</div>
+<!-- Select Subclient Model -->
+
+<!--Re-mathced history Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="historyInfoModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"  
+>
+  <div class="modal-dialog modal-lg" style="max-width: 1200px;">
+    <app-manuallymatchedclaimhistory 
+      [InputMastererafileid]="InputhMastererafileid"
+      [InputTs835id]="InputhTs835id"
+      [InputClpid]="InputhClpid"  
+      [InputClaimnumber]="InputClaimnumber" 
+      [InputChecknumber]="InputChecknumber"         
+      (OutputSelectHistoryResult)="OutputSelectHistoryResult($event)"
+      #SelecthistoryChild
+    ></app-manuallymatchedclaimhistory>
+  </div>
+</div>
+<!--Re-mathced history Model -->
+
+<!-- Re-mathced Confirmation Model -->
+<!-- <div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="rematchedconfirmationModal"  
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lgc" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"          
+          (click)="onselectedCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ DownloadConfirmationMessage }}
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"          
+          (click)="onselectedCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"        
+          (click)="onselectedYesConfirmationClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<kendo-dialog class="customdialog" title="Confirmation" *ngIf="opened" (close)="close('No')" [minWidth]="250" [width]="450">
+  <p style="font-size: 16px;">{{ DownloadConfirmationMessage }}</p>
+  <div class="d-flex border-top pt-2">
+    <div class="ml-auto">
+      <button class="mr-2" kendoButton (click)="close('No')">No</button>
+      <button kendoButton (click)="close('Yes')" primary="true">Yes</button>
+    </div>      
+  </div>
+</kendo-dialog>
+<!-- Re-mathced Confirmation Model -->

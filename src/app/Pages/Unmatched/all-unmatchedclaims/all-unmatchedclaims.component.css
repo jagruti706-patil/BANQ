@@ -1,0 +1,90 @@
+.grid-wrapper {
+  position: relative;
+}
+
+.k-i-loading {
+  position: initial;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  bottom: 30;
+  font-size: 64px;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #ff6757;
+}
+.collapse-overlay {
+  position: absolute;
+  top: 11.5%;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+/* Grid style default for advance grid  */
+
+.k-grid {
+  font-family: "Source Sans Pro";
+  font-size: 14px;
+}
+
+.k-grid tbody tr {
+  line-height: 15px;
+}
+
+.k-grid tbody td {
+  padding: 5px;
+}
+
+@media (min-width: 372px) {
+  .d-box {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-dialog {
+    max-width: 92%;
+  }
+  .d-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 1900px) {
+  .modal-dialog {
+    max-width: 70%;
+  }
+  .d-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.flex-g {
+  display: inline-block;
+  flex: 1;
+  /* min-width: 25%; */
+}
+
+.w-30 {
+  width: 30%;
+}
+
+.w-40 {
+  width: 40%;
+}
+.fb-600 {
+  font-weight: 600;
+  font-size: 13px;
+}
+@media (min-width: 992px) {
+  .modal-lgc,
+  .modal-xl {
+    max-width: 500px;
+  }
+}

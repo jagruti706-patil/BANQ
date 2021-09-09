@@ -1,0 +1,86 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Histroy View For Check: {{ InputCheckno }}
+    </h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridhistorycheck"  
+        #gridhistorycheck
+        class="w-100"      
+        [data]="SelectsubclientGridView"
+        [sort]="historysort"
+        [sortable]="true"
+        class="master customhistorygrid"
+        [loading]="SelectsubclientLoading"   
+      >
+
+        <kendo-grid-column
+          field="sfilename"
+          title="File Name"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.sfilename }}">
+              {{ dataItem.sfilename }}
+            </span>
+          </ng-template>            
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checknumber"
+          title="Check #"
+          width="15"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.checknumber }}">
+              {{ dataItem.checknumber }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkamount"
+          title="Check Amount"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.checkamount }}">
+              {{ dataItem.checkamount }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+        
+        <kendo-grid-column
+          field="dtimportdate"
+          title="Import Date"
+          width="13"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Import Date</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.dtimportdate | date: "MM-dd-yyyy hh:mm:ss a" }}
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" (click)="OnClose()">
+      Close
+    </button>   
+  </div>
+</div>
+

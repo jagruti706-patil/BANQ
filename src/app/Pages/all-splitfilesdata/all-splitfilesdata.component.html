@@ -1,0 +1,371 @@
+<div class="card">
+  <div class="card-body">
+    <div class="panelSep">
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <div class="d-flex">
+            <div class="mr-3">
+              <div class="form-group">
+                <label class="form-label">Processed Start Date</label>
+                <kendo-datepicker
+                  id="dtstartDate"
+                  [(value)]="startDate"
+                  (valueChange)="onDateChange($event, 'start date')"
+                  [max]="endDate"
+                  class="w-100"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label class="form-label">Processed End Date</label>
+                <kendo-datepicker
+                  id="dtendDate"
+                  [(value)]="endDate"
+                  (valueChange)="onDateChange($event, 'end date')"
+                  [min]="startDate"
+                  class="w-100"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 mb-2">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="d-flex">
+              <div
+                class="form-group mr-3"
+                *ngIf="clsPermission.claimsearchsplitparameterfilter"
+              >
+                <label for="" class="form-label">Split Parameter Name</label>
+                <kendo-dropdownlist
+                  formControlName="fcsplitparamtername"
+                  id="ddSplitParametersName"
+                  [class.is-invalid]="
+                    SplitParameterName.invalid && SplitParameterName.touched
+                  "
+                  [data]="ssplitparamtername"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedSplitParameter"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledsplitparameter"
+                  (valueChange)="onSplitParameterNameChange($event)"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="
+                    SplitParameterName.invalid && SplitParameterName.touched
+                  "
+                >
+                  <small
+                    *ngIf="SplitParameterName.errors?.required"
+                    class="text-danger"
+                    >SearchBy is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group mr-3">
+                <label for="" class="form-label">Search By</label>
+                <kendo-dropdownlist
+                  formControlName="fcsplitfilesSearchBy"
+                  id="ddSplitFilesSearchBy"
+                  [class.is-invalid]="
+                    SplitFilesSearchBy.invalid && SplitFilesSearchBy.touched
+                  "
+                  [data]="ssplitfilesSearchBy"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedSearchBy"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledsearchBy"
+                  (valueChange)="onSearchByChange($event)"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="
+                    SplitFilesSearchBy.invalid && SplitFilesSearchBy.touched
+                  "
+                >
+                  <small
+                    *ngIf="SplitFilesSearchBy.errors?.required"
+                    class="text-danger"
+                    >SearchBy is required</small
+                  >
+                </div>
+              </div>
+              <div
+                class="form-group flex-fill mr-3"
+                *ngIf="showpracticedropdown == false"
+              >
+                <label for="" class="form-label"
+                  ><strong class="text-danger">* </strong> Search</label
+                >
+                <div class="d-flex">
+                  <input
+                    kendoTextBox
+                    formControlName="fcSearch"
+                    [class.is-invalid]="
+                      fbcFilterSearch.invalid && fbcFilterSearch.touched
+                    "
+                    type="text"
+                    id="Search"
+                    class="w-100"
+                    title="Search by {{ sSelectedSearchBy }}"
+                    placeholder="Search by {{ sSelectedSearchBy }}"
+                  />
+                </div>
+                <div *ngIf="fbcFilterSearch.invalid && fbcFilterSearch.touched">
+                  <small
+                    *ngIf="fbcFilterSearch.errors?.required"
+                    class="text-danger"
+                    >Search is required</small
+                  >
+                </div>
+              </div>
+
+              <div
+                class="form-group flex-fill mr-3"
+                *ngIf="showpracticedropdown == true"
+              >
+                <label for="" class="form-label">
+                  <strong class="text-danger">* </strong>Practice</label
+                >
+                <kendo-dropdownlist
+                  formControlName="fcSubClientName"
+                  id="ddSubClients"
+                  [class.is-invalid]="
+                    SubClientName.invalid && SubClientName.touched
+                  "
+                  [data]="sSubClients"
+                  [textField]="'subclientname'"
+                  [valueField]="'subclientid'"
+                  [(ngModel)]="sSelectedSubClientCode"
+                  [valuePrimitive]="true"
+                  (valueChange)="onSubClientChange($event)"
+                  [filterable]="true"
+                  (filterChange)="handleSubclientFilter($event)"
+                  style="width: 247px;"
+                >
+                </kendo-dropdownlist>
+                <div *ngIf="SubClientName.invalid && SubClientName.touched">
+                  <small
+                    *ngIf="SubClientName.errors?.required"
+                    class="text-danger"
+                    >Practice is required</small
+                  >
+                </div>
+              </div>
+
+              <div class="ml-auto">
+                <div class="form-group">
+                  <label for="" class="form-label">&nbsp;</label>
+                  <button
+                    kendoButton
+                    type="button"
+                    [primary]="true"
+                    (click)="applyFilters()"
+                    title="Apply filters"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    kendoButton
+                    type="button"
+                    class="ml-3"
+                    (click)="clearFilters()"
+                    title="Default filters set"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <h4>All Claims</h4>
+      <div class="ml-auto">
+        <div class="text-muted">
+          {{ SplitFilesdisplaytotalrecordscount }} records found
+        </div>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridAllSplitFiles"
+        [data]="SplitFilesGridView"
+        [skip]="SplitFilesSkip"
+        [pageSize]="SplitFilesPageSize"
+        [pageable]="true"
+        (pageChange)="pageChangeevent($event)"
+        [sortable]="true"
+        [sort]="sort"
+        (sortChange)="sortChangeevent($event)"
+        [selectable]="true"
+        [loading]="loadingSplitFilesGrid"
+        class="w-100 master"
+        [height]="555"
+      >
+        <!-- [pageSize]="SplitFilesPageSize"
+        [pageable]="true" -->
+        <kendo-grid-column
+          field="filename"
+          title="Master File Name"
+          width="75"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.filename }}">
+              {{ dataItem.filename }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="subclientname"
+          title="Practice Name"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.subclientname }}">
+              {{ dataItem.subclientname }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+        field="divisionalsplitfilename"
+        title="Practice Split File Name"
+        width="100"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div title="{{ dataItem.divisionalsplitfilename }}">
+            {{ dataItem.divisionalsplitfilename }}
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+
+        <kendo-grid-column
+          field="createdon"
+          title="Process Date"
+          width="85"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              title="{{ dataItem.createdon | date: 'MM-dd-yyyy hh:mm:ss a' }}"
+            >
+              {{ dataItem.createdon | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="matcheddate"
+          title="Matched Date"
+          width="85"
+          [headerStyle]="{ 'font-weight': '600' }"
+          >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              title="{{ dataItem.matcheddate | date: 'MM-dd-yyyy hh:mm:ss a' }}"
+            >
+              {{ dataItem.matcheddate | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="claimnumber"
+          title="Claim #"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.claimnumber }}">
+              {{ dataItem.claimnumber }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="splitparametername"
+          title="Split Parameter Name"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Split Parameter Name</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.splitparametername }}">
+              {{ dataItem.splitparametername }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="splitparametervalue"
+          title="Split Parameter Value"
+          width="55"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Split Parameter Value</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.splitparametervalue }}">
+              {{ dataItem.splitparametervalue }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column [headerStyle]="{ 'font-weight': 'bold' }" width="50">
+          <ng-template kendoGridCellTemplate let-dataItem >
+            <p
+              class="pointer fb-600 text-primary"
+              data-toggle="modal"
+              data-target="#viewEOBReportModal"
+              (click)="onViewEOBClick(dataItem)"
+              *ngIf="dataItem.nerafileid!=null"
+            >
+              View EOB
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<!-- View EOB Report Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="viewEOBReportModal"
+  role="dialog"
+  aria-labelledby="viewEOBReportModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <app-eobreport
+      [InputMastererafileid]="inputmastererafileid"
+      [InputTsid]="inputtsid"
+      [InputClpid]="inputclpid"
+      [InputSplitfileid]="inputsplitfileid"
+      [InputComponentname]="inputcomponentname"
+      (OutputViewEobReportResult)="OutputResult($event)"
+      #EobreportChild
+    ></app-eobreport>
+  </div>
+</div>
+<!-- View EOB Report Model -->

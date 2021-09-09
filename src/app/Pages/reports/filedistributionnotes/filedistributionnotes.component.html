@@ -1,0 +1,86 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      Histroy View
+    </h5>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridhistorycheck"  
+        #gridhistorycheck
+        class="w-100"      
+        [data]="SelectsubclientGridView"
+        [sort]="historysort"
+        [sortable]="true"
+        class="master customhistorygrid"
+        [loading]="SelectsubclientLoading"   
+      >
+
+          <kendo-grid-column
+            field="status"
+            title="Status"
+            width="10"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.status }}">
+                {{ dataItem.status }}
+              </span>
+            </ng-template>            
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            field="createdon"
+            title="Created On"
+            width="15"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.createdon | date: 'MM-dd-yyyy' }}">
+                {{ dataItem.createdon | date: "MM-dd-yyyy hh:mm:ss a" }}
+              </span>
+            </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="scomment"
+          title="Comment"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.scomment }}">
+              {{ dataItem.scomment }}
+            </span>
+          </ng-template>            
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="username"
+          title="User Name"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.username }}">
+              {{ dataItem.username }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+      </kendo-grid>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" (click)="OnClose()">
+      Close
+    </button>   
+  </div>
+</div>

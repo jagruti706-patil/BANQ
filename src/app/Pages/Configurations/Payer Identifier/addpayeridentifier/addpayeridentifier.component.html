@@ -1,0 +1,209 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="newPayeridentifier">
+      Add PLB Config
+    </h4>
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="!newPayeridentifier">
+      Update PLB Config
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="PayerGroup">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label"
+              ><strong class="text-danger">*</strong>Payer Id
+            </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="PayerId.invalid && PayerId.touched"
+              formControlName="fcPayerId"
+              type="text"
+              id="txtpayer"
+              class="form-control form-control-sm"
+            />
+            <div *ngIf="submitted || (PayerId.invalid && PayerId.touched)">
+              <small *ngIf="PayerId.errors?.required" class="text-danger"
+                >PayerId is required</small
+              >
+              <small *ngIf="PayerId.errors?.maxlength" class="text-danger"
+                >PayerId allows 50 characters</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label"
+              ><strong class="text-danger">*</strong>Payer
+            </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="PayerName.invalid && PayerName.touched"
+              formControlName="fcPayerName"
+              type="text"
+              id="txtpayer"
+              class="form-control form-control-sm"
+            />
+            <div *ngIf="submitted || (PayerName.invalid && PayerName.touched)">
+              <small *ngIf="PayerName.errors?.required" class="text-danger"
+                >Payer is required</small
+              >
+              <small *ngIf="PayerName.errors?.maxlength" class="text-danger"
+                >Payer allows 200 characters</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label"
+              ><strong class="text-danger">*</strong>Reason Code
+            </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="ReasonCode.invalid && ReasonCode.touched"
+              formControlName="fcReasonCode"
+              type="text"
+              id="txtReasonCode"
+              class="form-control form-control-sm"
+            />
+            <div
+              *ngIf="submitted || (ReasonCode.invalid && ReasonCode.touched)"
+            >
+              <small *ngIf="ReasonCode.errors?.required" class="text-danger"
+                >ReasonCode is required</small
+              >
+              <small *ngIf="ReasonCode.errors?.maxlength" class="text-danger"
+                >ReasonCode allows 5 characters</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label"
+              ><strong class="text-danger">*</strong>Seperator
+            </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="Seperator.invalid && Seperator.touched"
+              formControlName="fcSeperator"
+              type="text"
+              id="txtseperator"
+              class="form-control form-control-sm"
+            />
+            <div *ngIf="submitted || (Seperator.invalid && Seperator.touched)">
+              <small *ngIf="Seperator.errors?.required" class="text-danger"
+                >Seperator is required</small
+              >
+              <small *ngIf="Seperator.errors?.maxlength" class="text-danger"
+                >Seperator allows 100 characters</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Identifier 1 </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="Identifier1.invalid && Identifier1.touched"
+              formControlName="fcIdentifier1"
+              type="text"
+              id="txtIdentifier1"
+              class="form-control form-control-sm"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Identifier 2 </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="Identifier2.invalid && Identifier2.touched"
+              formControlName="fcIdentifier2"
+              type="text"
+              id="txtIdentifier2"
+              class="form-control form-control-sm"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Identifier 3 </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="Identifier3.invalid && Identifier3.touched"
+              formControlName="fcIdentifier3"
+              type="text"
+              id="txtIdentifier3"
+              class="form-control form-control-sm"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Identifier 4 </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="Identifier4.invalid && Identifier4.touched"
+              formControlName="fcIdentifier4"
+              type="text"
+              id="txtIdentifier4"
+              class="form-control form-control-sm"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Identifier 5 </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="Identifier5.invalid && Identifier5.touched"
+              formControlName="fcIdentifier5"
+              type="text"
+              id="txtIdentifier5"
+              class="form-control form-control-sm"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row"></div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-dismiss="modal"
+      (click)="OnClose()"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="AddPayer"
+      (click)="savePayeridentifier()"
+    >
+      Save
+    </button>
+  </div>
+</div>

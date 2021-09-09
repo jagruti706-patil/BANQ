@@ -1,0 +1,493 @@
+<!-- selected id : {{SelectedClientID}}
+selected client : {{SelectedClient.clientjson|json}}
+clsClient: {{clsClient.clientcode|json}} -->
+
+<div class="modal-content">
+  <div class="modal-header p-3">
+    <h4 class="modal-title mb-0" id="exampleModalCenterTitle">Client Status</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="ResetComponents()"
+      data-dismiss="modal"
+    >
+      <span aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header pl-3">
+            <h5 class="mb-0">Contact Details</h5>
+          </div>
+          <div class="card-body p-3">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="table table-borderless mb-0">
+                  <tbody>
+                    <tr>
+                      <td class="font-weight-bold">Client Code</td>
+                      <td>{{ clsClient.clientcode }}</td>
+                    </tr>
+                    <tr>
+                      <td class="font-weight-bold">Client Name</td>
+                      <td>{{ clsClient.clientname }}</td>
+                    </tr>
+                    <tr>
+                      <td class="font-weight-bold">Contact Name</td>
+                      <td>{{ clsClient.clientcontactname }}</td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="table table-borderless mb-0">
+                  <tbody>
+                    <tr>
+                      <td class="font-weight-bold">Contact Phone</td>
+                      <td>{{ clsClient.clientcontactphone | phone }}</td>
+                    </tr>
+                    <tr>
+                      <td class="font-weight-bold">Contact Email</td>
+                      <td>{{ clsClient.clientcontactemail }}</td>
+                    </tr>
+                    <tr>
+                      <td class="font-weight-bold">Client Status</td>
+                      <td>
+                        <form [formGroup]="form">
+                          <div class="form-group mb-0">
+                            <label class="custom-switch">
+                              <input
+                                type="checkbox"
+                                name="custom-switch-checkbox"
+                                class="custom-switch-input"
+                                formControlName="fcClientStatus"
+                              />
+                              <span class="custom-switch-indicator"></span>
+                              <span class="custom-switch-description">{{
+                                ClientStatus.value === true
+                                  ? "Active"
+                                  : ClientStatus.value === null
+                                  ? ""
+                                  : "Inactive"
+                              }}</span>
+                            </label>
+                          </div>
+                        </form>
+                      </td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <h4 class="mt-2">Inboubd FTP Details</h4>
+        <kendo-grid
+          [data]="InboundFtpgridView"
+          style="width:100%"
+          [pageSize]="InboundFtppageSize"
+          [pageable]="true"
+          [skip]="InboundFtpskip"
+          (pageChange)="pageChangeInboundFtp($event)"
+          [sortable]="true"
+          [sort]="InboundFtpsort"
+          (sortChange)="sortInboundFtpChange($event)"
+        >
+          <kendo-grid-column
+            field="ftpcode"
+            title="Code"
+            width="30"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpname"
+            title="FTP Name"
+            width="50"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpurl"
+            title="FTP Url"
+            width="130"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpusername"
+            title="FTP User Name"
+            width="80"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftptype"
+            title="FTP Type"
+            width="40"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpport"
+            title="FTP Port"
+            width="40"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftp835inboundfolder"
+            title="835 Ftp Folder"
+            width="50"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftp837inboundfolder"
+            title="837 Ftp Folder"
+            width="50"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            title="Status"
+            width="30"
+            [headerStyle]="{ 'font-weight': 'bold' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div *ngIf="dataItem.status == true">
+                <div class="form-group mb-0">
+                  <label class="custom-switch">
+                    <input
+                      type="checkbox"
+                      name="custom-switch-checkbox"
+                      class="custom-switch-input"
+                      checked
+                      (change)="
+                        onInboundFTPSwitchChange(dataItem.ftpcode, $event)
+                      "
+                    />
+                    <span class="custom-switch-indicator"></span>
+                  </label>
+                </div>
+              </div>
+              <div *ngIf="dataItem.status == false">
+                <div class="form-group">
+                  <label class="custom-switch">
+                    <input
+                      type="checkbox"
+                      name="custom-switch-checkbox"
+                      class="custom-switch-input"
+                      value="0"
+                      (change)="
+                        onInboundFTPSwitchChange(dataItem.ftpcode, $event)
+                      "
+                    />
+                    <span class="custom-switch-indicator"></span>
+                  </label>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+
+      <div class="col-md-12">
+        <span *ngIf="subClientCount > 0">
+          <h4 class="mt-2">Subclient Details</h4>
+          <kendo-grid
+            [data]="SubClientgridView"
+            [pageSize]="SubClientpageSize"
+            [pageable]="true"
+            [skip]="SubClientskip"
+            (pageChange)="pageChangeSubclient($event)"
+            [sortable]="true"
+            [sort]="SubClientsort"
+            (sortChange)="sortsubClientChange($event)"
+          >
+            <kendo-grid-column
+              field="subclientcode"
+              title="Code"
+              width="60"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientdivisioncode"
+              title="Division"
+              width="50"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientname"
+              title="Name"
+              width="90"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientcontactname"
+              title="Contact Name"
+              width="80"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientcontactemail"
+              title="Contact Email"
+              width="100"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="subclientcontactphone"
+              title="Contact Phone"
+              width="50"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.subclientcontactphone | phone }}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="splitparametername"
+              title="Split Parameter"
+              width="80"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              title="Status"
+              width="30"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.subclientstatus == 'true'">
+                  <div class="form-group mb-0">
+                    <label class="custom-switch">
+                      <input
+                        type="checkbox"
+                        name="custom-switch-checkbox"
+                        class="custom-switch-input"
+                        checked
+                        (change)="
+                          onSwitchChange(dataItem.subclientcode, $event)
+                        "
+                      />
+                      <span class="custom-switch-indicator"></span>
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="dataItem.subclientstatus == 'false'">
+                  <div class="form-group">
+                    <label class="custom-switch">
+                      <input
+                        type="checkbox"
+                        name="custom-switch-checkbox"
+                        class="custom-switch-input"
+                        value="0"
+                        (change)="
+                          onSwitchChange(dataItem.subclientcode, $event)
+                        "
+                      />
+                      <span class="custom-switch-indicator"></span>
+                    </label>
+                  </div>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer p-2 pr-4">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      (click)="ResetComponents()"
+      data-dismiss="modal"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      id="SaveStatus"
+      (click)="onSaveStatus()"
+      data-dismiss="modal"
+      class="btn btn-primary btn-sm"
+    >
+      Save
+    </button>
+    <!-- <button class="ml-auto" id="SaveStatus" kendoButton [primary]="true" (click)="onSaveStatus()">Save</button> -->
+  </div>
+</div>
+
+<!-- 
+<div class="col-md-12">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <h5 class="card-header  k-bg-primary text-light">
+              Basic Details
+            </h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Code : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsClient.clientcode}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Name : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsClient.clientname}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Contact Name : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsClient.clientcontactname}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Contact Phone : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsClient.clientcontactphone | phone}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Contact Email : </label></div>
+                <div class="col-md-9 float-right"><label>{{clsClient.clientcontactemail}}</label></div>
+              </div>
+              <div class="row">
+                <div class="col-md-3"><label class="font-weight-bold">Status : </label></div>
+                <div class="col-md-9">
+                  <form [formGroup]="form">
+                    <kendo-switch class="col-md-2 form-control" [onLabel]="' '" [offLabel]="' '"
+                      formControlName="fcClientStatus" (click)="ClientStatusChanged()"></kendo-switch>
+                    <label id="lblClientStatus"
+                      class="form-check-label">{{ClientStatus.value === true  ? "Active" : ClientStatus.value === null? "": "Inactive" }}</label>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr *ngIf="subClientCount>0">
+      <div *ngIf="subClientCount>0" class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header k-bg-primary text-light">
+              Subclient Details
+            </div>
+            <div class="card body">
+              <kendo-grid [data]="gridView" [pageSize]="pageSize" [pageable]="true" [skip]="skip" (pageChange)="pageChange($event)" [sortable]="true" [sort]="sort" (sortChange)="sortChange($event)">
+                <kendo-grid-column field="subclientcode" title="Code" width="40"
+                  [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientdivisioncode" title="Division" width="50" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientname" title="Name" width="90"
+                  [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientcontactname" title="Contact Name" width="100"
+                  [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientcontactemail" title="Contact Email" width="100"
+                  [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>                
+                <kendo-grid-column field="subclientcontactphone" title="Contact Phone" width="80"
+                  [headerStyle]="{'font-weight': 'bold'}">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.subclientcontactphone | phone }}
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="splitparametername" title="Split Parameter" width="80"
+                  [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column title="Status" width="50" [headerStyle]="{'font-weight': 'bold'}">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <div *ngIf="dataItem.subclientstatus=='true'">
+                      <kendo-switch [onLabel]="' '" [offLabel]="' '" [checked]="true"
+                        (valueChange)="onSwitchChange(dataItem.subclientcode,$event)"></kendo-switch>
+                    </div>
+                    <div *ngIf="dataItem.subclientstatus=='false'">
+                      <kendo-switch [onLabel]="' '" [offLabel]="' '" [checked]="false"
+                        (valueChange)="onSwitchChange(dataItem.subclientcode,$event)"></kendo-switch>
+                    </div>
+                  </ng-template>
+                </kendo-grid-column>
+              
+              </kendo-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row ml-auto">
+  <button class="ml-auto" id="SaveStatus" kendoButton [primary]="true" (click)="onSaveStatus()">Save</button>
+</div> -->
+<div class="black-box" *ngIf="loadingStatus">
+  <div class="k-i-loading"></div>
+</div>
+
+<!-- <ng-template kendoGridDetailTemplate let-dataItem>
+                <section>
+                  <div class="row h5"><label>Split Parameter Details:</label></div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Parameter Name: </div>
+                        <div class="col-md-6">{{dataItem.subclientsplitparameters[0]?.splitparametername}}</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 font-weight-bold">Parameter Value: </div>
+                            <div class="col-md-6">{{dataItem.subclientsplitparameters[0]?.splitparametervalue}}</div>
+                          </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row h5"><label>Outbound FTP Details</label></div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6 font-weight-bold">Name: </div>
+                        <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpname}}</div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6 font-weight-bold">Url: </div>
+                          <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpurl}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 font-weight-bold">Type: </div>
+                            <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftptype}}</div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6 font-weight-bold">835 Outbound Folder: </div>
+                              <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftp835outboundfolder}}</div>
+                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 font-weight-bold">User Name: </div>
+                            <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpusername}}</div>
+                          </div>
+                        <div class="row">
+                            <div class="col-md-6 font-weight-bold">Port: </div>
+                            <div class="col-md-6">{{dataItem.subclientoutboundftp?.ftpport}}</div>
+                          </div>
+                          <div class="row">
+                              <div class="col-md-6 font-weight-bold">Status: </div>
+                              <div class="col-md-6">{{dataItem.subclientoutboundftp?.status ? "Active" : "Inactive" }}</div>
+                            </div>
+                    </div>
+                  </div>
+                </section>
+              </ng-template> -->

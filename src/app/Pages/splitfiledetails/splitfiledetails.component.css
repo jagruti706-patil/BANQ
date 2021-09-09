@@ -1,0 +1,31 @@
+.grid-wrapper {
+  position: relative;
+}
+
+.k-i-loading {
+  position: initial;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  bottom: 30;
+  font-size: 64px;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #ff6757;
+}
+.collapse-overlay {
+  position: absolute;
+  top: 11.5%;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.k-textbox.disabled, .k-textbox[disabled]{
+  outline: none;
+  cursor: default;
+  opacity: .6;
+  -webkit-filter: grayscale(0.1);
+  filter: grayscale(0.1);
+  pointer-events: none;
+  box-shadow: none;
+}

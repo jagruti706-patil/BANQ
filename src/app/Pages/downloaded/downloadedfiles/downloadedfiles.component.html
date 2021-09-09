@@ -1,0 +1,700 @@
+<div class="card">
+  <div class="card-body">
+    <div class="panelSep">
+      <div class="row">
+        <div class="col-md-12">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <div class="d-flex">
+                  <div class="mr-3">
+                    <div class="form-group">
+                      <label class="form-label">Download Start Date</label>
+                      <kendo-datepicker
+                        id="dtstartDate"
+                        [(value)]="startDate"
+                        (valueChange)="onDateChange($event, 'start date')"
+                        class="w-100"
+                        [max]="endDate"
+                        [disabled]="disabledstartdate"
+                      >
+                      </kendo-datepicker>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="form-group">
+                      <label class="form-label">Download End Date</label>
+                      <kendo-datepicker
+                        id="dtendDate"
+                        [(value)]="endDate"
+                        (valueChange)="onDateChange($event, 'end date')"
+                        class="w-100"
+                        [min]="startDate"
+                        [disabled]="disabledenddate"
+                      ></kendo-datepicker>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Clients</label>
+                  <kendo-dropdownlist
+                    class="form-control form-control-sm"
+                    formControlName="fcClientName"
+                    id="ddClients"
+                    [class.is-invalid]="
+                      ClientName.invalid && ClientName.touched
+                    "
+                    [data]="sAllClients"
+                    [textField]="'clientname'"
+                    [valueField]="'clientid'"
+                    [(ngModel)]="sSelectedClientID"
+                    [valuePrimitive]="true"
+                    (valueChange)="onClientChange($event)"
+                    [filterable]="true"
+                    [disabled]="disabledclient"
+                    (filterChange)="handleClientFilter($event)"
+                  >
+                  </kendo-dropdownlist>
+                  <div *ngIf="ClientName.invalid && ClientName.touched">
+                    <small
+                      *ngIf="ClientName.errors?.required"
+                      class="text-danger"
+                      >Client is required</small
+                    >
+                  </div>
+                </div>
+              </div> -->
+              <!-- <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Division</label>
+                  <kendo-dropdownlist
+                    class="form-control form-control-sm"
+                    formControlName="fcDivision"
+                    id="ddDivision"
+                    [class.is-invalid]="Division.invalid && Division.touched"
+                    [data]="sAllDivision"
+                    [textField]="'subclientdivisioncode'"
+                    [valueField]="'subclientdivisioncode'"
+                    [(ngModel)]="sSelectedDivisionID"
+                    [valuePrimitive]="true"
+                    (valueChange)="onDivisionChange($event)"
+                    [filterable]="true"
+                    [disabled]="disableddivision"
+                    (filterChange)="handleDivisionFilter($event)"
+                  >
+                  </kendo-dropdownlist>
+                  <div *ngIf="Division.invalid && Division.touched">
+                    <small *ngIf="Division.errors?.required" class="text-danger"
+                      >Division is required</small
+                    >
+                  </div>
+                </div>
+              </div> -->
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="" class="form-label">Practice</label>
+                  <kendo-dropdownlist
+                    class="w-100"
+                    formControlName="fcSubClientName"
+                    id="ddSubClients"
+                    [class.is-invalid]="
+                      SubClientName.invalid && SubClientName.touched
+                    "
+                    [data]="sSubClients"
+                    [textField]="'subclientname'"
+                    [valueField]="'subclientid'"
+                    [(ngModel)]="sSelectedSubClientCode"
+                    [valuePrimitive]="true"
+                    (valueChange)="onSubClientChange($event)"
+                    [filterable]="true"
+                    [disabled]="disabledsubclient"
+                    (filterChange)="handleSubclientFilter($event)"
+                  >
+                  </kendo-dropdownlist>
+                  <div *ngIf="SubClientName.invalid && SubClientName.touched">
+                    <small
+                      *ngIf="SubClientName.errors?.required"
+                      class="text-danger"
+                      >Practice is required</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <!-- <div class="form-group">
+                    <label for="" class="form-label">Download Status</label>
+                    <kendo-dropdownlist
+                      formControlName="fcDownloadFilter"
+                      id="ddDivisionaldownloadfilter"
+                      [class.is-invalid]="
+                        DownloadFilter.invalid &&
+                        DownloadFilter.touched
+                      "
+                      [data]="sDownloadFilter"
+                      [textField]="'text'"
+                      [valueField]="'value'"
+                      [(ngModel)]="sSelectedDownloadfilter"
+                      [valuePrimitive]="true"                      
+                      (valueChange)="onDownloadFilterChange($event)"
+                    >
+                    </kendo-dropdownlist>
+                    <div
+                      *ngIf="
+                        DownloadFilter.invalid &&
+                        DownloadFilter.touched
+                      "
+                    >
+                      <small
+                        *ngIf="DownloadFilter.errors?.required"
+                        class="text-danger"
+                        >Download Filter is required</small
+                      >
+                    </div>
+                  </div> -->
+
+                  <div class="form-group">
+                    <label for="" class="form-label">Search By</label>
+                    <kendo-dropdownlist
+                      formControlName="fcDivisionalSplitSearchBy"
+                      id="ddDivisionalSplitSearchBy"
+                      [class.is-invalid]="
+                        DivisionalSplitSearchBy.invalid &&
+                        DivisionalSplitSearchBy.touched
+                      "
+                      [data]="sDivisionalSplitSearchBy"
+                      [textField]="'text'"
+                      [valueField]="'value'"
+                      [(ngModel)]="sSelectedDivisionalSplitSearchBy"
+                      [valuePrimitive]="true"
+                      [disabled]="disabledsearchBy"
+                      (valueChange)="onDivisionalSplitSearchByChange($event)"
+                    >
+                    </kendo-dropdownlist>
+                    <div
+                      *ngIf="
+                        DivisionalSplitSearchBy.invalid &&
+                        DivisionalSplitSearchBy.touched
+                      "
+                    >
+                      <small
+                        *ngIf="DivisionalSplitSearchBy.errors?.required"
+                        class="text-danger"
+                        >SearchBy is required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group mr-3 ml-3 flex-fill">
+                    <label for="" class="form-label">Search</label>
+                    <div class="d-flex">
+                      <input
+                        kendoTextBox
+                        formControlName="fcSplitSearch"
+                        type="text"
+                        id="Search"
+                        [ngClass]="{ disabled: disabledsplitsearch }"
+                        class="w-100"
+                        title="Search by {{ sSelectedDivisionalSplitSearchBy }}"
+                        placeholder="Search by {{
+                          sSelectedDivisionalSplitSearchBy
+                        }}"
+                        [disabled]="disabledsplitsearch"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="ml-auto">
+                    <div class="form-group">
+                      <label for="" class="form-label">&nbsp;</label>
+                      <button
+                        kendoButton
+                        type="button"
+                        [primary]="true"
+                        class="mr-3"
+                        (click)="applySplitFilters()"
+                        title="Apply filters"
+                        [disabled]="disabledapplybtn"
+                      >
+                        Apply
+                      </button>
+                      <button
+                        kendoButton
+                        type="button"
+                        (click)="clearSplitFilters()"
+                        title="Default filters set"
+                        [disabled]="disabledclearbtn"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <h4>Downloaded Files</h4>
+      <div class="ml-auto">
+        <span class="text-muted"
+          >{{ SplitFilesdisplaytotalrecordscount }} records found</span
+        >
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridSplit"
+        class="w-100"
+        [data]="SplitFilesGridView"
+        [selectable]="{ enabled: true, checkboxOnly: true }"
+        [kendoGridSelectBy]="selectedCallback"
+        [selectedKeys]="mySelection"
+        [pageSize]="SplitFilesPageSize"
+        [pageable]="true"
+        [skip]="SplitFilesSkip"
+        (pageChange)="pageChangeSplit($event)"
+        [sortable]="true"
+        [sort]="sortSplit"
+        (sortChange)="sortSplitChange($event)"        
+        [loading]="loadingSplitFilesGrid"
+        [height]="493"
+        class="master"
+        (selectedKeysChange)="onSelectedKeysChange($event)"
+      >
+        <ng-template
+          kendoGridToolbarTemplate
+          *ngIf="clsPermission.downloadeddownloadselected"
+        >
+          <button
+            *ngIf="clsPermission.downloadeddownloadselected"
+            [primary]="true"
+            kendoButton
+            class="float-right mr-1"
+            type="button"
+            title="Download Selected"
+            data-target="#downloadselectedconfirmationModal"
+            (click)="DownloadSelectedClick()"
+            [disabled]="disableddownload"
+          >
+            Download Selected
+          </button>
+        </ng-template>
+
+        <kendo-grid-checkbox-column width="2" showSelectAll="true" *ngIf="clsPermission.downloadeddownloadselected">
+          <ng-template kendoGridHeaderTemplate let-idx="rowIndex">
+            <input [kendoGridSelectAllCheckbox]="true" />
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-idx="rowIndex">
+            <input [kendoGridSelectionCheckbox]="idx" />
+          </ng-template>
+        </kendo-grid-checkbox-column>
+
+        <!-- <kendo-grid-checkbox-column
+          *ngIf="clsPermission.downloadeddownloadselected"
+          showSelectAll="true"
+          width="3"
+        ></kendo-grid-checkbox-column> -->
+
+        <!-- <kendo-grid-column
+          field="masterfilename"
+          title="Master File Name"
+          width="20"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.masterfilename }}">
+              {{ dataItem.masterfilename }}
+            </span>
+          </ng-template>
+        </kendo-grid-column> -->
+
+        <!-- <kendo-grid-column
+          field="subclientdivisioncode"
+          title="Division Code"
+          width="4"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Division Code">Division Code</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.subclientdivisioncode }}">
+              {{ dataItem.subclientdivisioncode }}
+            </span>
+          </ng-template>
+        </kendo-grid-column> -->
+
+        <kendo-grid-column
+          field="subclientname"
+          title="Practice"
+          width="8"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.subclientname }}">
+              {{ dataItem.subclientname }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="splitfilename"
+          title="File Name"
+          width="13"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.splitfilename }}">
+              {{ dataItem.splitfilename }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkno"
+          title="Check #"
+          width="8"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <!-- <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Check#">Check#</span>
+          </ng-template> -->
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.checkno }}">
+              {{ dataItem.checkno }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkamt"
+          title="Check Amount"
+          width="5"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Check Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.checkamt | currency }}">
+              {{ dataItem.checkamt | currency }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkdate"
+          title="Check Date"
+          width="5"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <!-- <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Check Date">Check Date</span>
+          </ng-template> -->
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.checkdate | date: 'MM-dd-yyyy' }}">
+              {{ dataItem.checkdate | date: "MM-dd-yyyy" }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="downloaddate"
+          title="Downloaded Date"
+          width="5"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Downloaded Date</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.downloaddate | date: 'MM-dd-yyyy' }}">
+              {{ dataItem.downloaddate | date: "MM-dd-yyyy" }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="username"
+          title="Downloaded By"
+          width="5"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Downloaded By</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.username }}">
+              {{ dataItem.username }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <!-- <kendo-grid-command-column
+          title="Action"
+          width="3"
+          [headerStyle]="{ 'font-weight': '600' }"
+          media="(min-width: 1025px)"
+        >
+          <ng-template kendoGridCellTemplate let-gridView>
+            <div *ngIf="gridView?.sfilename == 'No File generated'">
+              <span
+                title="Split not generated,file cannot be viewed or downloaded"
+              >
+                <button
+                  id="btnViewSplit"
+                  class="k-button k-primary"
+                  title="View"
+                  disabled
+                >
+                  <i class=" fe fe-file"></i>
+                </button>
+                <button
+                  id="btnPrintSplit"
+                  class="k-button k-primary"
+                  title="Download"
+                  disabled
+                >
+                  <i class=" fe fe-download"></i>
+                </button>
+              </span>
+            </div>
+
+            <div *ngIf="gridView?.sfilename != 'No File generated'">
+              <button
+                id="btnPrintSplit"
+                class="k-button k-primary"
+                (click)="
+                  RetriveSplit835File(
+                    gridView.masterfileid,
+                    gridView.nerafileid,
+                    gridView.splitfilename
+                  )
+                "
+                title="Download"
+              >
+                <i class=" fe fe-download"></i>
+              </button>
+            </div>
+          </ng-template>
+        </kendo-grid-command-column> -->
+        <kendo-grid-command-column
+        title=""
+        width="3"
+        [headerStyle]="{ 'font-weight': '600' }"
+        media="(min-width: 1025px)"
+        *ngIf="clsPermission.downloadeddownloadviewcheckwiseeob"
+        >
+        <ng-template kendoGridCellTemplate let-gridView>   
+          <div>           
+            <button
+              id="btnPrintSplit"
+              class="k-button k-primary"
+              data-toggle="modal"
+              data-target="#viewCheckEOBReportModal"
+              (click)="onViewEOBClick(gridView)"
+              title="View EOB"
+              *ngIf="clsPermission.downloadeddownloadviewcheckwiseeob"
+            >
+              <i class="fe fe-layers"></i>
+            </button>
+          </div>
+        </ng-template>
+        </kendo-grid-command-column>
+      
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<div class="progress-box" *ngIf="isFilesProcessing">
+  <div class="col-md-2 mx-auto" style="top:30%">
+    <circle-progress
+      [percent]="percentage"
+      [startFromZero]="false"
+      [animation]="true"
+      [animationDuration]="200"
+      subtitleColor="#000"
+      titleColor="#000"
+      unitsColor="#000"
+      innerStrokeColor="#fd9644"
+      outerStrokeColor="#e76800"
+      subtitleFontSize="12"
+      [subtitle]="'Please wait...'"
+    ></circle-progress>
+    <!-- [subtitle]="fileInProgress" -->
+  </div>
+</div>
+
+<!--Download Selected Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="downloadselectedconfirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document" style="max-width: 500px;">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onDownloadselectedCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ DownloadConfirmationMessage }}
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onDownloadselectedCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="onDownloadselectedYesConfirmationClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Download Selected Confirmation Model -->
+
+<!-- Status Modal start -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="downloadstatusModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" style="max-width: 800px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Download Files Status 
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="clickclose()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="border mb-4 rounded">
+          <div class="row p-3">
+            <div class="col-md-3">
+              <strong>Total: </strong>{{ downloadcountObj.total }}
+            </div>
+            <div class="col-md-3">
+              <strong>ERROR: </strong>{{ downloadcountObj.error }}
+            </div>
+            <div class="col-md-3">
+              <strong>SUCCESS: </strong>{{ downloadcountObj.success }}
+            </div>
+          </div>
+        </div>
+        <p>
+          <kendo-grid
+            [data]="downloadedStatusGridView"
+            class="w-100"
+            style="height:60vh"
+            [sortable]="true"            
+            [pageable]="true"
+            [pageSize]="state.take"
+            [skip]="state.skip"
+            [sort]="state.sort"
+            (dataStateChange)="dataStateChange($event)"
+          >
+            <kendo-grid-column
+              field="sfilename"
+              title="Split File Name"
+              width="40"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div title="{{ dataItem.sfilename }}">
+                  {{ dataItem.sfilename }}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="downloadstatus"
+              title="Status"
+              width="20"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <strong *ngIf="dataItem.downloadstatus == false" class="text-danger"
+                  >ERROR</strong
+                >
+                <strong *ngIf="dataItem.downloadstatus == true" class="text-green"
+                  >SUCCESS</strong
+                >
+              </ng-template>
+            </kendo-grid-column>
+            <!-- <kendo-grid-column
+              field="description"
+              title="Description"
+              width="40"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column> -->
+          </kendo-grid>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="clickclose()">
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Status Modal end -->
+
+<!-- View EOB Report Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="viewCheckEOBReportModal"
+  role="dialog"
+  aria-labelledby="viewCheckEOBReportModalLabel"
+  aria-hidden="true"
+>
+<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document" style="width: 1250px !important;">
+    <app-checkwiseeobreport      
+      [InputCheckSplitfileid]="inputsplitfileid" 
+      [InputCheckComponentname]="inputcomponentname"
+      [InputCheckERAfileid]="inputerafileid"
+      [InputCheckFilename]="inputfilename"
+      (OutputViewEobReportResultCheck)="
+        OutputResult($event)
+      "   
+      #EobreportChild
+    ></app-checkwiseeobreport>
+  </div>
+</div>
+<!-- View EOB Report Model -->

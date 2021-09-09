@@ -1,0 +1,43 @@
+.bg-header {
+  background-color: #445f7b;
+}
+#cardid {
+  border-radius: 10px;
+  border-color: #00274e;
+}
+
+/* Nav Tab Design Changes start*/
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  background: rgba(70, 127, 207, 0.06);
+  font-weight: 600;
+  color: #445f7b;
+  padding: 0.5rem 1rem;
+  border-left: 3px solid #445f7b;
+}
+
+.nav-link:hover {
+  background: rgba(70, 127, 207, 0.06);
+  color: #445f7b;
+  padding: 0.5rem 1rem;
+}
+
+.nav-link {
+  border-left: 3px solid transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 0 !important;
+}
+/* Nav Tab Design Changes End */
+
+@media only screen and (max-width: 480px) {
+  .page-title {
+    margin-right: 100%;
+  }
+  .page-options {
+    margin-left: 0;
+    margin-bottom: 5px;
+  }
+  .leftmargin {
+    margin-left: 0;
+  }
+}

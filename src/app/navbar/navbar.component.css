@@ -1,0 +1,33 @@
+/* Animated Pulse Button */
+.badge {
+  padding: 5px 17px !important;
+  font-size: 13px;
+}
+.pulse-btn {
+  animation: glowing 1500ms infinite;
+}
+
+@keyframes glowing {
+  0% {
+    background-color: #fd9644;
+    box-shadow: 0 0 3px #fd9644;
+  }
+  50% {
+    background-color: #e76800;
+    box-shadow: 0 0 20px #e76800;
+  }
+  100% {
+    background-color: #fd9644;
+    box-shadow: 0 0 3px #fd9644;
+  }
+}
+/* End */
+.name {
+  display: inline-block;
+  height: 44px;
+  position: absolute;
+  background-color: #00274e;
+  color: white;
+  left: 155px;
+  top: 19px;
+}

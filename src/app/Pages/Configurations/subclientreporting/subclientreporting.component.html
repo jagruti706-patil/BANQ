@@ -1,0 +1,190 @@
+<div class="card border-0">
+  <div class="card-header pl-4">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i>Practice Reporting
+    </h4>
+    <button     
+      class="ml-auto"
+      kendoButton
+      [primary]="true"  
+      data-toggle="modal"
+      data-target="#addsubclientreportingModal" 
+      (click)="Addpracticereporting()"
+      *ngIf="clsPermission.addpracticereporting"
+    >
+      Add New Reporting
+    </button>
+  </div>
+  <div class="card-body o-auto p-3" style=" height: 78vh">
+    <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [filterable]="true"
+      [loading]="loading"
+      (dataStateChange)="dataStateChange($event)"
+      [height]="660"
+      class="w-100 master"
+      (remove)="DeletePracticeReporting($event)"
+    >
+      <kendo-grid-column
+        field="groupname"
+        title="Group Name"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="practicename"
+        title="Practice Name"
+        width="70"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientcode"
+        title="Practice Code"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="divisioncode"
+        title="Division Code"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="splitparametername"
+        title="Parameter Type"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="splitparametervalue"
+        title="Parameter Value"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="reportinggroup"
+        title="Reporting Group"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="reportinggroupname"
+        title="Reporting Group Name"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <!-- <kendo-grid-column
+        field="dtmdate"
+        title="Modified On"
+        width="70"
+        [filterable]="true"
+        filter="date"
+        format="{0:d}"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+          <kendo-grid-date-filter-cell
+            [showOperators]="true"
+            [column]="column"
+            placeholder=""
+            [filter]="filter"
+          >
+          </kendo-grid-date-filter-cell>
+        </ng-template>
+      </kendo-grid-column> -->
+
+      <!-- <kendo-grid-column
+        field="createdbyusername"
+        title="Created By"
+        width="50"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column> -->
+
+      <kendo-grid-command-column
+      title=""
+      width="28"
+      [headerStyle]="{ 'font-weight': 'bold' }"
+    >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button        
+          *ngIf="clsPermission.deletepracticereporting" 
+          kendoGridRemoveCommand
+          title="Delete"
+          data-toggle="modal"
+          data-target="#deletepracticereportingconfirmationModal"
+        >
+          <i class="fe fe-x"></i>
+        </button>
+      </ng-template>
+    </kendo-grid-command-column>
+
+    </kendo-grid>
+  </div>
+</div>
+
+
+<!-- Add userclientmapping -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="addsubclientreportingModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <app-addsubclientreporting
+      [InputPracticeReportingid]="Editpracticereportingid"
+      (OutputPracticeReportingEditResult)="
+        OutputPracticeReportingEditResult($event)
+      "
+      #AddusubclientreportingChild
+    ></app-addsubclientreporting>
+  </div>
+</div>
+<!-- Add userclientmapping -->
+
+
+<!--Delete Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="deletepracticereportingconfirmationModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <app-deleteconfirmation
+      [InputDeleteMessage]="InputDeleteMessage"
+      (OutputDeleteResult)="OutputDeleteResult($event)"
+    >
+    </app-deleteconfirmation>
+  </div>
+</div>
+<!--Delete Confirmation Model -->

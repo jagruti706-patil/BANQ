@@ -1,0 +1,221 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="newProvidermapping">
+      Add Provider Mapping
+    </h4>
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="!newProvidermapping">
+      Update Provider Mapping
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="ProvidermappingGroup">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="d-flex">
+            <div class="form-group mr-4">
+              <input
+                type="radio"
+                name="fcType"
+                id="StatusIndividual"
+                class="k-radio"
+                value="Individual"
+                (click)="setStatus('Individual')"
+                checked
+              />
+              <label for="StatusIndividual" class="k-radio-label">
+                Individual
+              </label>
+            </div>
+            <div class="form-group">
+              <input
+                type="radio"
+                name="fcType"
+                id="StatusOrganizational"
+                class="k-radio"
+                value="Organizational"
+                (click)="setStatus('Organizational')"
+              />
+              <label for="StatusOrganizational" class="k-radio-label">
+                Organizational
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex">
+            <input
+              kendoTextBox
+              formControlName="fcSearch"
+              type="text"
+              id="Search"
+              class="form-control form-control-sm flex-fill"
+              title="Search NPI"
+              placeholder="Search NPI"
+              (keyup.enter)="onSearchNPI()"
+            />
+            <button type="button" class="k-button" (click)="onSearchNPI()">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <kendo-combobox
+            style="width:100%"
+            [data]="clientList"
+            [textField]="'clientname'"
+            [valuePrimitive]="true"
+            [valueField]="'clientid'"
+            [filterable]="true"
+            formControlName="fcclient"
+            [valuePrimitive]="true"
+            [(ngModel)]="selectedclients"
+            [placeholder]="'Select Group Name'"
+            (valueChange)="cmbclientchange()"
+            (filterChange)="handleClientFilter($event)"
+          >
+          </kendo-combobox>
+        </div>
+        <div class="col-md-4">
+          <kendo-combobox
+            style="width:100%"
+            [data]="SubclientList"
+            [textField]="'subclientname'"
+            [valuePrimitive]="true"
+            [valueField]="'id'"
+            [filterable]="true"
+            formControlName="fcsubclient"
+            [valuePrimitive]="true"
+            [(ngModel)]="selectedsubclients"
+            [placeholder]="'Select Practice Name'"
+            (valueChange)="cmbsubclientchange()"
+            (filterChange)="handlesubClientFilter($event)"
+            [disabled]="disablesubclient"
+          >
+          </kendo-combobox>
+        </div>
+        <div class="col-md-12">
+          <kendo-grid
+            id="gridAddprovidermapping"
+            class="mt-4"
+            [data]="AddprovidermappinggridView"
+            [selectable]="selectableSettings"
+            [kendoGridSelectBy]="selectedCallback"
+            [selectedKeys]="NPISelected"
+            [loading]="loadingProvidermappingDetails"
+            [pageable]="true"
+            [pageSize]="AddprovidermappingpageSize"
+            [skip]="Addprovidermappingskip"
+            (pageChange)="pageChangeAddprovidermapping($event)"
+            style="width:100%; max-height: 68vh;"
+          >
+
+            <kendo-grid-checkbox-column width="7" showSelectAll="true">
+              <ng-template kendoGridHeaderTemplate let-idx="rowIndex">
+                <input [kendoGridSelectAllCheckbox]="true" />
+              </ng-template>
+              <ng-template kendoGridCellTemplate let-idx="rowIndex">
+                <input [kendoGridSelectionCheckbox]="idx" />
+              </ng-template>
+            </kendo-grid-checkbox-column>
+
+            <!-- <kendo-grid-checkbox-column width="7" showSelectAll="true">
+            </kendo-grid-checkbox-column> -->
+
+            <kendo-grid-column
+              field="npi"
+              title="NPI"
+              width="15"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="fullname"
+              title="Provider Name"
+              width="30"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="mailingaddress"
+              title="Address"
+              width="50"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+            >
+            </kendo-grid-column>
+            <ng-template kendoGridNoRecordsTemplate>
+              No records available.
+            </ng-template>
+          </kendo-grid>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-dismiss="modal"
+      (click)="OnClose()"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="AddProvidermapping"
+      (click)="btnsave()"
+      [disabled]="!validateProvidermapping() || disabledsave"
+    >
+      Save
+    </button>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="confirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="confirmationModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          (click)="StatusConfirmation(false)"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ confirmationMappingMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="StatusConfirmation(false)"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="StatusConfirmation(true)"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

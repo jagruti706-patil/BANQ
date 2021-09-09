@@ -1,0 +1,154 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="newProvidermapping">
+      Add Provider Other Mapping
+    </h4>
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="!newProvidermapping">
+      Update Provider Other Mapping
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="ProvidermappingGroup">
+      <div class="row">
+        <div class="col-md-4" *ngIf="!newProvidermapping">
+          <div class="form-group">
+            <h4 for="">NPI : {{ displaynpi }}</h4>
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="!newProvidermapping">
+          <div class="form-group">
+            <h4 for="">Name: {{ displayprovidername }}</h4>
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="newProvidermapping">
+          <div class="form-group">
+            <label for="" class="form-label">Group Name</label>
+            <kendo-combobox
+              class="w-100"
+              [data]="clientList"
+              [textField]="'clientname'"
+              [valuePrimitive]="true"
+              [valueField]="'clientid'"
+              [filterable]="true"
+              formControlName="fcclient"
+              [valuePrimitive]="true"
+              [(ngModel)]="selectedclients"
+              [placeholder]="'Select Group Name'"
+              (valueChange)="cmbclientchange()"
+              (filterChange)="handleClientFilter($event)"
+            >
+            </kendo-combobox>
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="newProvidermapping">
+          <div class="form-group">
+            <label for="" class="form-label">Practice Name</label>
+            <kendo-combobox
+              class="w-100"
+              [data]="SubclientList"
+              [textField]="'subclientname'"
+              [valuePrimitive]="true"
+              [valueField]="'id'"
+              [filterable]="true"
+              formControlName="fcsubclient"
+              [valuePrimitive]="true"
+              [(ngModel)]="selectedsubclients"
+              [placeholder]="'Select Practice Name'"
+              (valueChange)="cmbsubclientchange()"
+              (filterChange)="handlesubClientFilter($event)"
+              [disabled]="disablesubclient"
+            >
+            </kendo-combobox>
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="newProvidermapping">
+          <div class="form-group">
+            <label for="" class="form-label">Provider NPI</label>
+            <kendo-combobox
+              class="w-100"
+              [data]="providernpiList"
+              [textField]="'providerdisplayname'"
+              [valuePrimitive]="true"
+              [valueField]="'providernpi'"
+              [filterable]="true"
+              formControlName="fcprovidernpi"
+              [valuePrimitive]="true"
+              title="{{ displaynpititle }}"
+              [(ngModel)]="selectedprovidernpi"
+              [placeholder]="'Select Provider NPI'"
+              (filterChange)="handleproviderNPIFilter($event)"
+              (valueChange)="cmbprovidernpichange()"
+              [disabled]="disableprovidernpi"
+            >
+            </kendo-combobox>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="newProvidermapping">
+          <div class="form-group">
+            <label class="form-label"> Provider Name</label>
+            <input
+              kendoTextBox
+              type="text"
+              formControlName="fcprovidername"
+              type="text"
+              class="w-100"
+              [ngClass]="{ disabled: disableprovidername }"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label"> ID Type</label>
+            <input
+              kendoTextBox
+              type="text"
+              formControlName="fcidtype"
+              type="text"
+              #fcidtype
+              class="w-100"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label"> Value</label>
+            <input
+              kendoTextBox
+              type="text"
+              formControlName="fcidvalue"
+              type="text"
+              #fcidvalue
+              class="w-100"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-dismiss="modal"
+      (click)="OnClose()"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="AddProvidermapping"
+      (click)="saveProvidermapping()"
+      [disabled]="!validateProvidermapping() || disabledsave"
+    >
+      Save
+    </button>
+  </div>
+</div>

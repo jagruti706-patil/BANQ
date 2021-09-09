@@ -1,0 +1,13 @@
+.eye-icon{
+    position: absolute;
+    top: 6px;
+    right: 13px;
+    font-size: 12px;
+}
+
+.custom-padding{
+    padding-right: 1.9rem !important
+}
+.modal-title{
+    font-size: 19px;
+}

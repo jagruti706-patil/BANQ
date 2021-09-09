@@ -1,0 +1,434 @@
+<!-- Side  Panel TOP -->
+<div class="side-panel">
+  <div class="side-panel-wrapper right-side-panel shadow">
+    <div class="card mb-0">
+      <div class="card-header p-2 d-flex border-bottom-0">
+        <i
+          class="fa fa-times pointer ml-auto"
+          title="Close"
+          appToggleSidePanel
+        ></i>
+      </div>
+      <div class="card-body pt-0">
+        <form [formGroup]="FTPDropDownGroup">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mb-0">
+                <label class="form-label">Group </label>
+                <kendo-dropdownlist
+                  class="form-control"
+                  formControlName="fcFTPClientName"
+                  id="ddClients"
+                  [class.is-invalid]="
+                    fbcFTPClientName.invalid && fbcFTPClientName.touched
+                  "
+                  [data]="FTPlstClients"
+                  [(ngModel)]="FTPselectedClientID"
+                  [textField]="'clientname'"
+                  [valueField]="'clientid'"
+                  [valuePrimitive]="true"
+                  [filterable]="true"
+                  (valueChange)="onFTPClientChange($event)"
+                  (filterChange)="handleFTPClientFilter($event)"
+                  [disabled]="FTPdisablegroup"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="fbcFTPClientName.invalid && fbcFTPClientName.touched"
+                >
+                  <small
+                    *ngIf="!!fbcFTPClientName.errors?.required"
+                    class="text-danger"
+                    >Group is required</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mb-0">
+                <label class="form-label">Practice </label>
+                <kendo-dropdownlist
+                  class="form-control"
+                  formControlName="fcFTPSubClientName"
+                  id="ddClients"
+                  [class.is-invalid]="
+                    fbcFTPSubClientName.invalid && fbcFTPSubClientName.touched
+                  "
+                  [data]="FTPlstSubClients"
+                  [textField]="'subclientname'"
+                  [valueField]="'subclientid'"
+                  [(ngModel)]="FTPselectedSubClientID"
+                  [valuePrimitive]="true"
+                  [filterable]="true"
+                  (filterChange)="handleFTPSubclientFilter($event)"
+                  (valueChange)="onFTPSubClientChange($event)"
+                  [disabled]="FTPdisablepractice"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="
+                    fbcFTPSubClientName.invalid && fbcFTPSubClientName.touched
+                  "
+                >
+                  <small
+                    *ngIf="!!fbcFTPSubClientName.errors?.required"
+                    class="text-danger"
+                    >Practice is required</small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="card-footer">
+        <div class="float-right">
+          <button
+            appToggleSidePanel
+            kendoButton
+            type="button"
+            [primary]="true"
+            (click)="applyFTPFilters()"
+            title="Apply filters"
+            [disabled]="this.FTPDropDownGroup.invalid || FTPdisablebtn"
+          >
+            Apply
+          </button>
+          <button
+            appToggleSidePanel
+            kendoButton
+            type="button"
+            class="ml-3"
+            (click)="clearFTPFilters()"
+            title="Default filters set"
+            [disabled]="this.FTPDropDownGroup.invalid || FTPdisablebtn"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Side Panel TOP -->
+
+<div class="card">
+  <div class="card-body" style="height: 690px;">
+    <div class="mb-5 pb-3">
+      <div class="d-flex">
+        <h4>FTP Pending File Details</h4>
+        <div class="ml-auto">
+          <span class="text-muted">
+            {{ FTPPendingFiletotalrecordscount }}
+            records found</span
+          >
+        </div>
+      </div>
+      <div class="grid-wrapper">
+        <kendo-grid
+          #grid="kendoGrid"
+          id="gridFTPPendingFileDetail"
+          [sortable]="true"
+          [sort]="sortFTPPendingFile"
+          (sortChange)="sortFTPPendingFileChange($event)"
+          class="w-100 master light-blue-header light-blue-footer k-state-hover pendinggrid"
+          style="max-height: 620px;"
+          [data]="FTPPendingFileGridView"
+          [loading]="loadingFTPPendingFile"
+        >
+          <ng-template kendoGridToolbarTemplate>
+            <div class="d-flex align-items-center">
+              <h4 class="mb-0">Aging Bucket</h4>
+              <div class="ml-auto">
+                <button
+                  *ngIf="clsPermission.downloadsummaryexportexcel"
+                  [primary]="true"
+                  class="ml-2"
+                  type="button"
+                  kendoGridExcelCommand
+                  title="Export Excel"
+                  [disabled]="FTPPendingFiletotalrecordscount <= 0"
+                  (click)="onFTPExportClick()"
+                >
+                  Export Excel
+                </button>
+                <button
+                  appToggleSidePanel
+                  kendoButton
+                  [primary]="true"
+                  [icon]="'filter'"
+                  title="Filter"
+                  [disabled]="loadingFTPPendingFile"
+                ></button>
+              </div>
+            </div>
+          </ng-template>
+          <kendo-grid-column
+            field="subclientname"
+            title="Practice Name"
+            width="130"
+            [headerStyle]="{ 'font-weight': '600' }"
+            [style]="{
+              'background-color': '#f0eff5',
+              color: 'black',
+              'font-weight': 'bold'
+            }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Practice Name">Practice Name</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.subclientname }}">
+                {{ dataItem.subclientname }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              Total
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage0_15"
+            title="0 - 15"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="0 - 15">0 - 15</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage0_15 }}">
+                {{ dataItem.bucketage0_15 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.FTP_total_0_15 }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage16_30"
+            title="16 - 30"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="16 - 30">16 - 30</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage16_30 }}">
+                {{ dataItem.bucketage16_30 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">{{ this.FTP_total_16_30 }}</div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage31_60"
+            title="31 - 60"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="31 - 60">31 - 60</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage31_60 }}">
+                {{ dataItem.bucketage31_60 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">{{ this.FTP_total_31_60 }}</div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage61_90"
+            title="61 - 90"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="61 - 90">61 - 90</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage61_90 }}">
+                {{ dataItem.bucketage61_90 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">{{ this.FTP_total_61_90 }}</div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage91_120"
+            title="91 - 120"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="91 - 120">91 - 120</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage91_120 }}">
+                {{ dataItem.bucketage91_120 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">{{ this.FTP_total_91_120 }}</div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage121"
+            title="120+"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="120+">120+</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage121 }}">
+                {{ dataItem.bucketage121 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">{{ this.FTP_total_121 }}</div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="subclientfilecount"
+            title="Total"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Total">Total</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.subclientfilecount }}">
+                {{ dataItem.subclientfilecount }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">{{ this.FTP_total_total }}</div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-excel
+            fileName="{{ FTPExportFilename }}.xlsx"
+            #excelexport
+          >
+            <kendo-excelexport-column
+              field="subclientname"
+              title="Practice Name"
+              [width]="200"
+            >
+              <ng-template kendoExcelExportFooterTemplate>
+                Total
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage0_15"
+              title="0-15"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.FTP_total_0_15"
+              >
+                {{ this.FTP_total_0_15 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage16_30"
+              title="16-30"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.FTP_total_16_30"
+              >
+                {{ this.FTP_total_16_30 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage31_60"
+              title="31-60"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+              ><ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.FTP_total_31_60"
+              >
+                {{ this.FTP_total_31_60 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage61_90"
+              title="61-90"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+              ><ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.FTP_total_61_90"
+              >
+                {{ this.FTP_total_61_90 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage91_120"
+              title="91-120"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+              ><ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.FTP_total_91_120"
+              >
+                {{ this.FTP_total_91_120 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage121"
+              title="120+"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+              ><ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.FTP_total_121"
+              >
+                {{ this.FTP_total_121 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="subclientfilecount"
+              title="Total"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+              ><ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.FTP_total_total"
+              >
+                {{ this.FTP_total_total }}
+              </ng-template>
+            </kendo-excelexport-column>
+          </kendo-grid-excel>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

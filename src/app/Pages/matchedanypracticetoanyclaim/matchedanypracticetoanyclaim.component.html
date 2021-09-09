@@ -1,0 +1,448 @@
+<div class="card">
+  <div class="card-body">
+    <div class="panelSep">
+      <div class="row">
+        <div class="col-md-12">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <div class="d-flex">
+                  <div class="mr-3">
+                    <div class="form-group">
+                      <label class="form-label">Processed Start Date</label>
+                      <kendo-datepicker
+                        id="dtstartDate"
+                        [(value)]="startDate"
+                        (valueChange)="onDateChange($event, 'start date')"
+                        [max]="endDate"
+                        class="w-100"
+                      >
+                      </kendo-datepicker>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="form-group">
+                      <label class="form-label">Processed End Date</label>
+                      <kendo-datepicker
+                        id="dtendDate"
+                        [(value)]="endDate"
+                        (valueChange)="onDateChange($event, 'end date')"
+                        [min]="startDate"
+                        class="w-100"
+                      >
+                      </kendo-datepicker>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Group</label>
+                  <kendo-dropdownlist
+                    class="form-control form-control-sm"
+                    formControlName="fcClientName"
+                    id="ddClients"                   
+                    [data]="sAllClients"
+                    [textField]="'clientname'"
+                    [valueField]="'clientid'"
+                    [(ngModel)]="sSelectedClientID"
+                    [valuePrimitive]="true"
+                    (valueChange)="onClientChange($event)"
+                    [filterable]="true"                    
+                    (filterChange)="handleClientFilter($event)"
+                  >
+                  </kendo-dropdownlist> 
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="" class="form-label">Practice</label>
+                  <kendo-dropdownlist
+                    class="w-100"
+                    formControlName="fcSubClientName"
+                    id="ddSubClients"
+                    [class.is-invalid]="
+                      SubClientName.invalid && SubClientName.touched
+                    "
+                    [data]="sSubClients"
+                    [textField]="'subclientname'"
+                    [valueField]="'subclientid'"
+                    [(ngModel)]="sSelectedSubClientCode"
+                    [valuePrimitive]="true"
+                    (valueChange)="onSubClientChange($event)"
+                    [filterable]="true"
+                    [disabled]="disabledsubclient"
+                    (filterChange)="handleSubclientFilter($event)"
+                  >
+                  </kendo-dropdownlist>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="" class="form-label">Split Parameter Name</label>
+                  <kendo-dropdownlist
+                    class="w-100"
+                    formControlName="fcsplitparamtername"
+                    id="ddSplitParametersName"
+                    [data]="ssplitparamtername"
+                    [textField]="'text'"
+                    [valueField]="'value'"
+                    [(ngModel)]="sSelectedSplitParameter"
+                    [valuePrimitive]="true"
+                    [disabled]="disabledsplitparameter"
+                    (valueChange)="onSplitParameterNameChange($event)"
+                  >
+                  </kendo-dropdownlist>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="form-group">
+                    <label for="" class="form-label">Search By</label>
+                    <kendo-dropdownlist
+                      formControlName="fcsplitfilesSearchBy"
+                      id="ddSplitFilesSearchBy"
+                      [class.is-invalid]="
+                        SplitFilesSearchBy.invalid && SplitFilesSearchBy.touched
+                      "
+                      [data]="ssplitfilesSearchBy"
+                      [textField]="'text'"
+                      [valueField]="'value'"
+                      [(ngModel)]="sSelectedSearchBy"
+                      [valuePrimitive]="true"
+                      [disabled]="disabledsearchBy"
+                      (valueChange)="onSearchByChange($event)"
+                    >
+                    </kendo-dropdownlist>
+                    <div
+                      *ngIf="
+                        SplitFilesSearchBy.invalid && SplitFilesSearchBy.touched
+                      "
+                    >
+                      <small
+                        *ngIf="SplitFilesSearchBy.errors?.required"
+                        class="text-danger"
+                        >SearchBy is required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group mr-3 ml-3 flex-fill">
+                    <label for="" class="form-label"><strong class="text-danger">* </strong> Search</label
+                    >
+                    <div class="d-flex">
+                      <input
+                        kendoTextBox
+                        formControlName="fcSearch"
+                        [class.is-invalid]="
+                          fbcFilterSearch.invalid && fbcFilterSearch.touched
+                        "
+                        type="text"
+                        id="Search"
+                        class="w-100"
+                        title="Search by {{ sSelectedSearchBy }}"
+                        placeholder="Search by {{ sSelectedSearchBy }}"
+                      />
+                    </div>
+                  </div>
+
+                <div class="ml-auto">
+                  <div class="form-group">
+                    <label for="" class="form-label">&nbsp;</label>
+                    <button
+                      kendoButton
+                      type="button"
+                      [primary]="true"
+                      (click)="applyFilters()"
+                      title="Apply filters"
+                    >
+                      Apply
+                    </button>
+                    <button
+                      kendoButton
+                      type="button"
+                      class="ml-3"
+                      (click)="clearFilters()"
+                      title="Default filters set"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <h4>Re-Match Claim</h4>
+      <div class="ml-auto">
+        <div class="text-muted">
+          {{ SplitFilesdisplaytotalrecordscount }} records found
+        </div>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridAllSplitdata"
+        [data]="SplitFilesGridView"
+        [skip]="SplitFilesSkip"
+        [pageSize]="SplitFilesPageSize"
+        [pageable]="true"
+        (pageChange)="pageChangeevent($event)"
+        [sortable]="true"
+        [sort]="sort"
+        (sortChange)="sortChangeevent($event)"        
+        [loading]="loadingSplitFilesGrid"
+        class="w-100 master"
+        [selectable]="{ enabled: true, checkboxOnly: true }"
+        (selectedKeysChange)="onSelectedKeysChange($event)"
+        [kendoGridSelectBy]="selectedCallback"
+        [selectedKeys]="mySelection"
+        [height]="555"
+      >
+      <ng-template
+          kendoGridToolbarTemplate  *ngIf="clsPermission.rematchclaimrematchedclaim && SplitFilesdisplaytotalrecordscount > 0 && sSelectedClientID != '0'"         
+        >
+        <button  
+          *ngIf="clsPermission.rematchclaimrematchedclaim && SplitFilesdisplaytotalrecordscount > 0 && sSelectedClientID != '0'"    
+          [primary]="true"
+          kendoButton             
+          class="pull-right mr-1"
+          type="button"
+          style="float: right;"           
+          title="Re-Match Claim"  
+          (click)="onrematchedclick()"
+          [disabled]="mySelection.length <= 0"          
+        >
+          Re-Match Claim
+        </button> 
+      </ng-template>
+
+        <kendo-grid-checkbox-column *ngIf="SplitFilesdisplaytotalrecordscount > 0 && sSelectedClientID != '0'"          
+          width="19"
+        >        
+        </kendo-grid-checkbox-column>
+
+        <kendo-grid-column
+          field="filename"
+          title="Master File Name"
+          width="90"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.filename }}">
+              {{ dataItem.filename }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="divisionalsplitfilename"
+          title="Practice Split File Name"
+          width="100"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.divisionalsplitfilename }}">
+              {{ dataItem.divisionalsplitfilename }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checknumber"
+          title="Check #"
+          width="65"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.checknumber }}">
+              {{ dataItem.checknumber }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="claimnumber"
+          title="Claim #"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.claimnumber }}">
+              {{ dataItem.claimnumber }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="createdon"
+          title="Process Date"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              title="{{ dataItem.createdon | date: 'MM-dd-yyyy hh:mm:ss a' }}"
+            >
+              {{ dataItem.createdon | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="matcheddate"
+          title="Matched Date"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+          >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              title="{{ dataItem.matcheddate | date: 'MM-dd-yyyy hh:mm:ss a' }}"
+            >
+              {{ dataItem.matcheddate | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        
+        <kendo-grid-column
+          field="matchedstatus"
+          title="Matched Status"
+          width="70"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Matched Status</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.matchedstatus }}">
+              {{ dataItem.matchedstatus }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column [headerStyle]="{ 'font-weight': 'bold' }" width="50">
+          <ng-template kendoGridCellTemplate let-dataItem >
+            <p
+              class="pointer fb-600 text-primary"
+              data-toggle="modal"
+              data-target="#viewEOBReportModal"
+              (click)="onViewEOBClick(dataItem)"
+              *ngIf="dataItem.nerafileid!=null"
+            >
+              View EOB
+            </p>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-command-column *ngIf="clsPermission.rematchclaimviewhistory"
+          title=""
+          width="40"
+          [headerStyle]="{ 'font-weight': '600' }"
+          media="(min-width: 1025px)"
+        >
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button
+              type="button"  
+              data-toggle="modal"
+              data-target="#historyInfoModal"
+              title="View Claim History"
+              class="k-button"     
+              (click)="onhistoryinfoclick(dataItem)"       
+            >
+            <i class="fe fe-info"></i>
+            </button>
+          </ng-template>
+        </kendo-grid-command-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<!-- View EOB Report Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="viewEOBReportModal"
+  role="dialog"
+  aria-labelledby="viewEOBReportModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <app-eobreport
+      [InputMastererafileid]="inputmastererafileid"
+      [InputTsid]="inputtsid"
+      [InputClpid]="inputclpid"
+      [InputSplitfileid]="inputsplitfileid"
+      [InputComponentname]="inputcomponentname"
+      (OutputViewEobReportResult)="OutputResult($event)"
+      #EobreportChild
+    ></app-eobreport>
+  </div>
+</div>
+<!-- View EOB Report Model -->
+
+<!-- Select Subclient Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="selectsubclientModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true" 
+>
+  <div class="modal-dialog modal-lg">
+    <app-selectsubclient
+      [Inputclientid]="Inputclientid"
+      [InputGenerateUnmatchedClaim]="InputGenerateUnmatchedClaim"
+      [InputAllClaimno]="InputAllClaimno"
+      [Inputcomponent]="Inputcomponent"
+      (OutputSelectSubclientResult)="OutputSelectSubclientResult($event)"
+      #SelectsubclientChild
+    ></app-selectsubclient>
+  </div>
+</div>
+<!-- Select Subclient Model -->
+
+<!-- Re-mathced Confirmation Model -->
+<kendo-dialog class="customdialog" title="Confirmation" *ngIf="opened" (close)="close('No')" [minWidth]="250" [width]="450">
+  <p style="font-size: 16px;">{{ DownloadConfirmationMessage }}</p>
+  <div class="d-flex border-top pt-2">
+    <div class="ml-auto">
+      <button class="mr-2" kendoButton (click)="close('No')">No</button>
+      <button kendoButton (click)="close('Yes')" primary="true">Yes</button>
+    </div>      
+  </div>
+</kendo-dialog>
+<!-- Re-mathced Confirmation Model -->
+
+<!--Re-mathced history Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="historyInfoModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"  
+>
+  <div class="modal-dialog modal-lg" style="max-width: 1200px;">
+    <app-manuallymatchedclaimhistory 
+      [InputMastererafileid]="InputhMastererafileid"
+      [InputTs835id]="InputhTs835id"
+      [InputClpid]="InputhClpid"  
+      [InputClaimnumber]="InputClaimnumber" 
+      [InputChecknumber]="InputChecknumber"
+      [InputComponentName]="Inputcomponentname"
+      (OutputSelectHistoryResult)="OutputSelectHistoryResult($event)"
+      #SelecthistoryChild
+    ></app-manuallymatchedclaimhistory>
+  </div>
+</div>
+<!--Re-mathced history Model -->

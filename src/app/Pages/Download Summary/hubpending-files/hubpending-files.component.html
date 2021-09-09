@@ -1,0 +1,485 @@
+<!-- Side  Panel TOP -->
+<div class="side-panel">
+  <div class="side-panel-wrapper right-side-panel shadow">
+    <div class="card mb-0">
+      <div class="card-header p-2 d-flex border-bottom-0">
+        <i
+          class="fa fa-times pointer ml-auto"
+          title="Close"
+          appToggleSidePanel
+        ></i>
+      </div>
+      <div class="card-body pt-0">
+        <form [formGroup]="HUBDropDownGroup">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group mb-0">
+                <label class="form-label">Group </label>
+                <kendo-dropdownlist
+                  class="form-control"
+                  formControlName="fcHUBClientName"
+                  id="ddClients"
+                  [class.is-invalid]="
+                    fbcHUBClientName.invalid && fbcHUBClientName.touched
+                  "
+                  [data]="HUBlstClients"
+                  [(ngModel)]="HUBselectedClientID"
+                  [textField]="'clientname'"
+                  [valueField]="'clientid'"
+                  [valuePrimitive]="true"
+                  [filterable]="true"
+                  (valueChange)="onHUBClientChange($event)"
+                  (filterChange)="handleHUBClientFilter($event)"
+                  [disabled]="HUBdisablegroup"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="fbcHUBClientName.invalid && fbcHUBClientName.touched"
+                >
+                  <small
+                    *ngIf="!!fbcHUBClientName.errors?.required"
+                    class="text-danger"
+                    >Group is required</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mb-0">
+                <label class="form-label">Practice </label>
+                <kendo-dropdownlist
+                  class="form-control"
+                  formControlName="fcHUBSubClientName"
+                  id="ddClients"
+                  [class.is-invalid]="
+                    fbcHUBSubClientName.invalid && fbcHUBSubClientName.touched
+                  "
+                  [data]="HUBlstSubClients"
+                  [textField]="'subclientname'"
+                  [valueField]="'subclientid'"
+                  [(ngModel)]="HUBselectedSubClientID"
+                  [valuePrimitive]="true"
+                  [filterable]="true"
+                  (filterChange)="handleHUBSubclientFilter($event)"
+                  (valueChange)="onHUBSubClientChange($event)"
+                  [disabled]="HUBdisablepractice"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="
+                    fbcHUBSubClientName.invalid && fbcHUBSubClientName.touched
+                  "
+                >
+                  <small
+                    *ngIf="!!fbcHUBSubClientName.errors?.required"
+                    class="text-danger"
+                    >Practice is required</small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="card-footer">
+        <div class="float-right">
+          <button
+            appToggleSidePanel
+            kendoButton
+            type="button"
+            [primary]="true"
+            (click)="applyHUBFilters()"
+            title="Apply filters"
+            [disabled]="this.HUBDropDownGroup.invalid || HUBdisablebtn"
+          >
+            Apply
+          </button>
+          <button
+            appToggleSidePanel
+            kendoButton
+            type="button"
+            class="ml-3"
+            (click)="clearHUBFilters()"
+            title="Default filters set"
+            [disabled]="this.HUBDropDownGroup.invalid || HUBdisablebtn"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Side Panel TOP -->
+
+<div class="card">
+  <div class="card-body" style="height: 690px;">
+    <div class="mb-5 pb-3">
+      <div class="d-flex">
+        <h4>HUB Pending File Details</h4>
+        <div class="ml-auto">
+          <span class="text-muted">
+            {{ HUBPendingFiletotalrecordscount }}
+            records found</span
+          >
+        </div>
+      </div>
+      <div class="grid-wrapper">
+        <kendo-grid
+          #grid="kendoGrid"
+          id="gridHubPendingFileDetail"
+          [sortable]="true"
+          [sort]="sortHUBPendingFile"
+          (sortChange)="sortHUBPendingFileChange($event)"
+          class="w-100 master light-blue-header light-blue-footer pendinggrid"
+          style="max-height: 620px;"
+          [data]="HUBPendingFileGridView"
+          [loading]="loadingHUBPendingFile"
+        >
+          <ng-template kendoGridToolbarTemplate>
+            <div class="d-flex align-items-center">
+              <h4 class="mb-0">Aging Bucket</h4>
+              <div class="ml-auto">
+                <button
+                  *ngIf="clsPermission.downloadsummaryexportexcel"
+                  [primary]="true"
+                  class="ml-2"
+                  type="button"
+                  kendoGridExcelCommand
+                  title="Export Excel"
+                  [disabled]="HUBPendingFiletotalrecordscount <= 0"
+                  (click)="onHUBExportClick()"
+                >
+                  Export Excel
+                </button>
+                <button
+                  appToggleSidePanel
+                  kendoButton
+                  [primary]="true"
+                  [icon]="'filter'"
+                  title="Filter"
+                  [disabled]="loadingHUBPendingFile"
+                ></button>
+              </div>
+            </div>
+          </ng-template>
+          <kendo-grid-column
+            field="subclientname"
+            title="Practice Name"
+            width="130"
+            [headerStyle]="{ 'font-weight': '600' }"
+            [style]="{
+              'background-color': '#f0eff5',
+              color: 'black',
+              'font-weight': 'bold'
+            }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Practice Name">Practice Name</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.subclientname }}">
+                {{ dataItem.subclientname }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              Total
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage0_15"
+            title="0 - 15"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="0 - 15">0 - 15</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage0_15 }}">
+                {{ dataItem.bucketage0_15 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.HUB_total_0_15 }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage16_30"
+            title="16 - 30"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="16 - 30">16 - 30</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage16_30 }}">
+                {{ dataItem.bucketage16_30 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.HUB_total_16_30 }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage31_60"
+            title="31 - 60"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="31 - 60">31 - 60</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage31_60 }}">
+                {{ dataItem.bucketage31_60 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.HUB_total_31_60 }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage61_90"
+            title="61 - 90"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="61 - 90">61 - 90</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage61_90 }}">
+                {{ dataItem.bucketage61_90 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.HUB_total_61_90 }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage91_120"
+            title="91 - 120"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="91 - 120">91 - 120</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage91_120 }}">
+                {{ dataItem.bucketage91_120 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.HUB_total_91_120 }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="bucketage121"
+            title="120+"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="120+">120+</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.bucketage121 }}">
+                {{ dataItem.bucketage121 }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.HUB_total_121 }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            class="text-center"
+            field="subclientfilecount"
+            title="Total"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600', 'text-align': 'center' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Total">Total</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.subclientfilecount }}">
+                {{ dataItem.subclientfilecount }}
+              </span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              <div class="text-center">
+                {{ this.HUB_total_total }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column            
+            field="lastdownloadeddate"
+            title="Last Download Date"
+            width="70"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Last Download Date">Last Download Date</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.lastdownloadeddate | date: 'MM-dd-yyyy hh:mm:ss a'}}">
+                {{ dataItem.lastdownloadeddate | date: "MM-dd-yyyy hh:mm:ss a" }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-excel
+            fileName="{{ HUBExportFilename }}.xlsx"
+            #excelexport
+          >
+            <kendo-excelexport-column
+              field="subclientname"
+              title="Practice Name"
+              [width]="200"
+            >
+              <ng-template kendoExcelExportFooterTemplate>
+                Total
+              </ng-template>
+            </kendo-excelexport-column>
+
+            <kendo-excelexport-column
+              field="bucketage0_15"
+              title="0-15"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.HUB_total_0_15"
+              >
+                {{ this.HUB_total_0_15 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage16_30"
+              title="16-30"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.HUB_total_16_30"
+              >
+                {{ this.HUB_total_16_30 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage31_60"
+              title="31-60"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.HUB_total_31_60"
+              >
+                {{ this.HUB_total_31_60 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage61_90"
+              title="61-90"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.HUB_total_61_90"
+              >
+                {{ this.HUB_total_61_90 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage91_120"
+              title="91-120"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.HUB_total_91_120"
+              >
+                {{ this.HUB_total_91_120 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="bucketage121"
+              title="120+"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.HUB_total_121"
+              >
+                {{ this.HUB_total_121 }}
+              </ng-template>
+            </kendo-excelexport-column>
+            <kendo-excelexport-column
+              field="subclientfilecount"
+              title="Total"
+              [width]="100"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.HUB_total_total"
+              >
+                {{ this.HUB_total_total }}
+              </ng-template>
+            </kendo-excelexport-column>
+
+            <kendo-excelexport-column
+              field="lastdownloadeddate"
+              title="Last Download Date"
+              [width]="220"
+              [footerCellOptions]="{ wrap: true, textAlign: 'right' }"
+            >
+              >
+              <ng-template
+                kendoExcelExportFooterTemplate
+                let-value="this.lastdownloadeddate | date: 'MM-dd-yyyy hh:mm:ss a'"
+              >
+                {{ this.lastdownloadeddate | date: "MM-dd-yyyy hh:mm:ss a" }}
+              </ng-template>
+            </kendo-excelexport-column>
+          </kendo-grid-excel>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

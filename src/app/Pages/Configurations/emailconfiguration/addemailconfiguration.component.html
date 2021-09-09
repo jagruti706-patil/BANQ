@@ -1,0 +1,284 @@
+<div class="card">
+  <div class="card-header pl-4">
+    <h3 class="card-title">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i
+      >{{ formtitle }}
+    </h3>
+    <button
+      class="ml-auto"
+      kendoButton
+      [primary]="true"
+      routerLink="/Configuration/emailconfigurationlist"
+    >
+      <i class="fe fe-x ml-auto"></i>
+    </button>
+  </div>
+  <div class="card-body p-3">
+    <form [formGroup]="frmemail">
+      <div class="row">
+        <!-- <div class="col-md-4">
+          <div class="form-group"><label class="form-label">
+            <span class="text-danger">* </span>Username
+          </label>
+              <input
+                kendoTextBox
+                formControlName="fcemailfrom"
+                type="text"
+                class="form-control form-control-sm w-100"
+                [(ngModel)]="objemail.emailfrom"
+                [disabled]="false"
+                class="disabled"
+                #fcemailfrom
+              />
+              <div
+                *ngIf="
+                  frmemail.controls.fcemailfrom.touched &&
+                  frmemail.controls.fcemailfrom.errors
+                "
+              >
+                <small
+                  *ngIf="
+                    frmemail.controls.fcemailfrom.errors
+                      .required
+                  "
+                  class="text-danger"
+                  >Username is required</small
+                >
+                <small
+                  *ngIf="
+                    !frmemail.controls.fcemailfrom.errors
+                      .required &&
+                    frmemail.controls.fcemailfrom.errors
+                      .whitespace
+                  "
+                  class="text-danger"
+                  >Please enter valid username</small
+                >
+            </div>
+        </div>
+        </div> -->
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="" class="form-label"
+              ><span class="text-danger">* </span>Title</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcTitle"
+              type="text"
+              class="form-control form-control-sm w-100"
+              [(ngModel)]="objemail.title"
+              #fcTitle
+            />
+
+            <div
+              *ngIf="
+                frmemail.controls.fcTitle.touched &&
+                frmemail.controls.fcTitle.errors
+              "
+            >
+              <small
+                *ngIf="frmemail.controls.fcTitle.errors.required"
+                class="text-danger"
+                >Title is required</small
+              >
+              <small
+                *ngIf="
+                  !frmemail.controls.fcTitle.errors.required &&
+                  frmemail.controls.fcTitle.errors.whitespace
+                "
+                class="text-danger"
+                >Please enter valid title</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label"
+              ><span class="text-danger">* </span>Subject</label
+            >
+            <div class="">
+              <input
+                kendoTextBox
+                formControlName="fcsubject"
+                type="text"
+                class="form-control form-control-sm w-100"
+                [(ngModel)]="objemail.emailsubject"
+                #fcsubject
+              />
+
+              <div
+                *ngIf="
+                  frmemail.controls.fcsubject.touched &&
+                  frmemail.controls.fcsubject.errors
+                "
+              >
+                <small
+                  *ngIf="frmemail.controls.fcsubject.errors.required"
+                  class="text-danger"
+                  >Subject is required</small
+                >
+                <small
+                  *ngIf="
+                    !frmemail.controls.fcsubject.errors.required &&
+                    frmemail.controls.fcsubject.errors.whitespace
+                  "
+                  class="text-danger"
+                  >Please enter valid subject</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label"
+              ><span class="text-danger">* </span>To</label
+            >
+            <div class="">
+              <!-- <kendo-multiselect
+                id="cmbAgent"
+                formControlName="fcTo"
+                [data]="userslist"
+                [textField]="'displayname'"
+                [valueField]="'email'"
+                [valuePrimitive]="true"
+                [autoClose]="false"
+                [(ngModel)]="objemail.emailtoreceive"
+                [filterable]="true"
+                (filterChange)="handleFilter($event)"
+                #fcTo
+              > -->
+              <kendo-multiselect
+                formControlName="fcTo"
+                [allowCustom]="true"
+                [data]="userslist"
+                [textField]="'email'"
+                [valueField]="'email'"
+                [autoClose]="false"
+                [valueNormalizer]="fcToValueNormalizer"
+                [(ngModel)]="objemail.emailtoreceive"
+                [filterable]="true"
+                (filterChange)="handleFilter($event)"
+              >
+              </kendo-multiselect>
+              <div
+                *ngIf="
+                  frmemail.controls.fcTo.touched &&
+                  frmemail.controls.fcTo.errors
+                "
+              >
+                <small class="text-danger">To is required</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label">Cc</label>
+            <div class="">
+              <!-- <kendo-multiselect
+                id="cmbReasonCode"
+                formControlName="fcCC"
+                [data]="userslist"
+                [textField]="'displayname'"
+                [valueField]="'email'"
+                [valuePrimitive]="true"
+                [autoClose]="false"
+                [(ngModel)]="objemail.emailccreceive"
+                [filterable]="true"
+                (filterChange)="handleFilter($event)"
+                #fcCC
+              > -->
+              <kendo-multiselect
+                formControlName="fcCC"
+                [allowCustom]="true"
+                [data]="userslist"
+                [textField]="'email'"
+                [valueField]="'email'"
+                [autoClose]="false"
+                [valueNormalizer]="fcCCValueNormalizer"
+                [(ngModel)]="objemail.emailccreceive"
+                [filterable]="true"
+                (filterChange)="handleFilter($event)"
+              >
+              </kendo-multiselect>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label"
+              ><span class="text-danger">* </span>Body</label
+            >
+            <div class="">
+              <!-- <input
+              kendoTextBox
+              formControlName="fcbody"
+              type="text"
+              class="form-control form-control-sm w-100"
+              [(ngModel)]="objemail.emailbody"
+              #fcbody
+            /> -->
+
+              <kendo-editor
+                formControlName="fcbody"
+                [(ngModel)]="objemail.emailbody"
+                #fcbody
+                style="height: 400px;"
+              ></kendo-editor>
+
+              <div
+                *ngIf="
+                  frmemail.controls.fcbody.touched &&
+                  frmemail.controls.fcbody.errors
+                "
+              >
+                <small
+                  *ngIf="frmemail.controls.fcbody.errors.required"
+                  class="text-danger"
+                  >Body is required</small
+                >
+                <small
+                  *ngIf="
+                    !frmemail.controls.fcbody.errors.required &&
+                    frmemail.controls.fcbody.errors.whitespace
+                  "
+                  class="text-danger"
+                  >Please enter valid body</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <div class="text-right">
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        (click)="sendemail()"
+        [disabled]="!frmemail.valid"
+        style="margin-right: 5px;"
+      >
+        Send Email
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-sm"
+        (click)="saveMailConfiguration()"
+        [disabled]="!frmemail.valid"
+      >
+        {{ buttonCaption }}
+      </button>
+    </div>
+  </div>
+</div>

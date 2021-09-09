@@ -1,0 +1,90 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="DropDownGroup">
+      <div class="card">
+        <div class="card-body" style="padding: 0.5rem 1.5rem !important;">
+          <div class="row">
+            <div class="col-md-1">
+              <div class="font-weight-bold">Services</div>
+            </div>
+            <div class="col-md-5">
+              <kendo-dropdownlist class="form-control form-control-sm" formControlName="fcServices" id="ddServices"
+                [class.is-invalid]="ServiceName.invalid && ServiceName.touched" [data]="sAllServices"
+                [textField]="'servicevalue'" [valueField]="'servicekey'" [(ngModel)]="selectedServicesID"
+                [valuePrimitive]="true" (ngModelChange)='onServiceChange($event)'>
+              </kendo-dropdownlist>
+              <div *ngIf="ServiceName.invalid && ServiceName.touched">
+                <small *ngIf="ServiceName.errors?.required" class="text-danger">Service is required</small>
+              </div>
+            </div>
+            <div class="col-md-1">
+                <div class="font-weight-bold float-right">Type</div>
+            </div>
+            <div class="col-md-5">
+              <kendo-dropdownlist class="form-control form-control-sm" formControlName="fcLevel" id="ddLevel"
+                [class.is-invalid]="LevelName.invalid && LevelName.touched" [data]="sAllLevels"
+                [textField]="'logentrytypename'" [valueField]="'logentrytypeid'" [(ngModel)]="nSelectedLevelID"
+                [valuePrimitive]="true" (ngModelChange)='onLevelChange($event)'>
+              </kendo-dropdownlist>
+              <div *ngIf="LevelName.invalid && LevelName.touched">
+                <small *ngIf="LevelName.errors?.required" class="text-danger">Type is required</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <h4 class="text-left mt-4"> Logs </h4>
+    <div class="grid-wrapper">
+      <kendo-grid id="gridLogs" [data]="gridViewLogs" style="width:100%" [height]="650" [pageSize]="pageSizeLogs"
+        [pageable]="true" [skip]="skipLogs" (pageChange)="pageChangeLogs($event)" [sortable]="true" [sort]="sortLogs"
+        (sortChange)="sortLogsChange($event)" [selectable]="true">
+        <kendo-grid-column field="appname" title="Service" width="10" [headerStyle]="{'font-weight': 'bold'}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.appname=='BANQERAUTIL'">Util Service</div>
+            <div *ngIf="dataItem.appname=='BANQQ835Parser'">Parser Service</div>
+            <div *ngIf="dataItem.appname=='BANQQ835RIVEN'">Riven Service</div>
+            <div *ngIf="dataItem.appname=='BANQRegistrationService'">Registration Service</div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="level" title="Type" width="4" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="methodname" title="Method Name" width="10" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="message" title="Message" width="10" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="details" title="Details" width="20" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="createdon" title="Date" width="10" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+      </kendo-grid>
+      <div *ngIf="!this.gridViewLogs" class="k-icon k-i-loading" style="font-size: 64px; ">
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- <h4 class="text-center text-success"> Riven Logs </h4>
+    <div class="grid-wrapper">
+      <kendo-grid id="gridRivenLogs" [data]="gridViewRivenLogs" style="width:100%" [height]="450"
+        [pageSize]="pageSizeRivenLogs" [pageable]="true" [skip]="skipRivenLogs"
+        (pageChange)="pageChangeRivenLogs($event)" [sortable]="true" [sort]="sortRivenLogs"
+        (sortChange)="sortRivenLogsChange($event)" [selectable]="true">
+        <kendo-grid-column field="appname" title="App Name" width="10" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="level" title="Level" width="4" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="methodname" title="Method Name" width="10" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="message" title="Message" width="10" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="details" title="Details" width="20" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+        <kendo-grid-column field="createdon" title="Date" width="10" [headerStyle]="{'font-weight': 'bold'}">
+        </kendo-grid-column>
+      </kendo-grid>
+    </div> -->
+
+  </div>
+</div>

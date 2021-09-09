@@ -1,0 +1,74 @@
+<div class="card-header ">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i>User Client Mapping</h4>
+    <button class="ml-auto" kendoButton [primary]="true" routerLink="/Configuration/userclientmappingold">
+      Add New Mapping
+    </button>
+  </div>
+  <div class="card border-0">
+    <div class="card-body o-auto p-3" style=" height: 75vh">
+      <kendo-grid [data]="gridView" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort"
+        [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true" [loading]="loading"
+        (dataStateChange)="dataStateChange($event)" [height]="636" class="w-100">
+  
+        <kendo-grid-column field="clientname" title="Client" width="120" [headerStyle]="{ 'font-weight': '600' }">
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="subclientname" title="Sub Client" [headerStyle]="{ 'font-weight': '600' }">
+          </kendo-grid-column> -->
+        <!-- <kendo-grid-column field="subclientcode" title="Subclient code" width="80" [headerStyle]="{ 'font-weight': '600' }">
+          </kendo-grid-column> -->
+  
+        <kendo-grid-column field="subclientcode" title="Subclient code" width="80" [filterable]="true"
+          [headerStyle]="{ 'font-weight': '600' }">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.subclientcode == 0">
+  
+            </div>
+            <div *ngIf="dataItem.subclientcode != 0">
+              {{dataItem.subclientcode}}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+  
+  
+  
+        <kendo-grid-column field="firstname" title="First Name" width="90" [headerStyle]="{ 'font-weight': '600' }">
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="lastname" title="Last Name" [headerStyle]="{ 'font-weight': '600' }">
+          </kendo-grid-column> -->
+        <kendo-grid-column field="username" title="Email" width="150" [headerStyle]="{ 'font-weight': '600' }">
+        </kendo-grid-column>
+  
+        <kendo-grid-command-column title="Action" width="40" [headerStyle]="{ 'font-weight': '600' }">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button kendoGridRemoveCommand title="Delete" data-toggle="modal" (click)="deleteConfiratmion(dataItem)">
+              <i class="fe fe-x"></i> </button>
+          </ng-template>
+        </kendo-grid-command-column>
+  
+      </kendo-grid>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="signup" aria-hidden="true">
+    <div class="modal-dialog">
+  
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Confirmation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{deletemessage}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-primary" (click)="deleteusermapping()" data-dismiss="modal">
+            Yes</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>

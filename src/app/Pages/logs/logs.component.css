@@ -1,0 +1,14 @@
+.grid-wrapper {
+    position: relative;
+  }
+   
+  .k-i-loading {
+      position: initial;
+      top: 0;
+      left: 10px;
+      right:10px;
+      bottom: 30;
+      font-size: 64px;
+      background-color: rgba(255,255,255,.3);
+      color: #ff6757;
+    }

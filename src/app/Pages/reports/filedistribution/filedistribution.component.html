@@ -1,0 +1,520 @@
+<div class="card">
+  <div class="card-body" style="height: 690px;">
+    <div class="mb-5 pb-3">
+      <div class="d-flex">
+        <h4>File Distribution</h4>
+        <div class="ml-auto">
+          <span class="text-muted">{{ globalmessage }} </span>
+        </div>
+      </div>
+      <div class="grid-wrapper">
+        <kendo-grid
+          #grid="kendoGrid"
+          id="gridFileDetail"          
+          class="w-100 master light-blue-header light-blue-footer"
+          [pageSize]="state.take"
+          [skip]="state.skip"
+          [sort]="state.sort"
+          [filter]="state.filter"
+          [sortable]="true"
+          [pageable]="true"
+          [filterable]="true"          
+          [loading]="loadingMasterFilesGrid"
+          [data]="MasterFilesGridView" 
+          style="max-height: 620px;"
+          (dataStateChange)="dataStateChange($event)"  
+          [height]="665"  
+          [selectable]="selectableSettings"
+          [kendoGridSelectBy]="selectedCallback"
+          [selectedKeys]="mySelection"
+          (selectionChange)="onselectionchange($event)"
+        >
+          <ng-template kendoGridToolbarTemplate>
+            <div class="row mb-3">
+              <!-- <div class="col-md-3">                
+                <div class="form-group">
+                  <label class="form-label">Show All ERA Files Processed on This Date</label>
+                  <kendo-datepicker
+                    id="dtstartDate"
+                    [(value)]="processDate"
+                    (valueChange)="onDateChange($event, 'start date')"                       
+                    class="w-100"                        
+                  >
+                  </kendo-datepicker>
+                </div> 
+              </div> -->
+              <div class="col-md-4">
+                <div class="d-flex">
+                  <div class="mr-3">
+                    <div class="form-group">
+                      <label class="form-label">Processed Start Date</label>
+                      <kendo-datepicker
+                        id="dtstartDate"
+                        [(value)]="startDate"
+                        (valueChange)="onDateChange($event, 'start date')"
+                        class="w-100"
+                        [max]="endDate"                      
+                      >
+                      </kendo-datepicker>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="form-group">
+                      <label class="form-label">Processed End Date</label>
+                      <kendo-datepicker
+                        id="dtendDate"
+                        [(value)]="endDate"
+                        (valueChange)="onDateChange($event, 'end date')"
+                        class="w-100"
+                        [min]="startDate"                        
+                      ></kendo-datepicker>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 pl-0">
+                <form [formGroup]="DropDownGroup" autocomplete="off">
+                  <!-- <div class="d-flex"> -->
+                    <div class="form-group">
+                      <label class="form-label">Group</label>
+                      <kendo-dropdownlist        
+                        class="form-control form-control-sm"  
+                        class="w-100"              
+                        formControlName="fcClientName"
+                        id="ddClients"                      
+                        [data]="sAllClients"
+                        [textField]="'clientname'"
+                        [valueField]="'clientid'"
+                        [(ngModel)]="nSelectedClientID"
+                        [valuePrimitive]="true"
+                        [filterable]="true"                        
+                        (filterChange)="handleClientFilter($event)"
+                        (valueChange)="onClientChange($event)"
+                      >
+                      </kendo-dropdownlist>
+                    </div>
+                  <!-- </div> -->
+                </form>
+              </div>
+              <div class="col-md-1 pl-0">
+                <form [formGroup]="DropDownGroup" autocomplete="off">
+                  <div class="form-group">
+                    <label for="" class="form-label">Status</label>
+                    <kendo-dropdownlist
+                      formControlName="fcFileStatus"
+                      id="ddStatus"                      
+                      [data]="sFileStatus"
+                      [textField]="'text'"
+                      [valueField]="'value'"
+                      [(ngModel)]="sSelectedStatus"
+                      [valuePrimitive]="true"                      
+                      (valueChange)="onStatusChange($event)"
+                      style="max-width: 7rem;"
+                    >
+                    </kendo-dropdownlist>
+                    <!-- <kendo-multiselect
+                      formControlName="fcFileStatus"
+                      id="ddStatus"                      
+                      [data]="sFileStatus"
+                      [textField]="'text'"
+                      [valueField]="'value'"    
+                      (valueChange)="onStatusChange($event)"
+                      class="w-100"
+                  ></kendo-multiselect> -->
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-1 pl-0">
+                <div class="ml-auto">
+                  <div class="form-group">
+                    <label for="" class="form-label">&nbsp;</label>
+                      <button
+                      kendoButton    
+                      [primary]='true' 
+                      class="ml-1"
+                      type="button"                  
+                      title="Apply"  
+                      (click)="applyfilter()"
+                      style="float: right;"
+                    >
+                    Apply                         
+                  </button>
+                  </div>
+                </div>
+              </div>              
+              <div class="col-md-3 pl-0">
+                <div class="d-flex" *ngIf="clsPermission.filedistributionstatuschange">
+                  <div class="ml-auto">
+                    <div class="form-group">
+                      <label for="" class="form-label">&nbsp;</label>
+                      <button
+                        kendoButton    
+                        [primary]='true' 
+                        class="ml-1"
+                        type="button"                  
+                        title="Pending"  
+                        (click)="opendialogcomment('0')"
+                        [disabled]="mySelection==0 || selectionstatus=='0'"
+                      >
+                      Pending 
+                        <i class="fe fe-minus-circle ml-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ml-auto">
+                    <div class="form-group">
+                      <label for="" class="form-label">&nbsp;</label>
+                      <button
+                        kendoButton
+                        [primary]='true'
+                        class="ml-1"
+                        type="button"                  
+                        title="Inprocess"  
+                        (click)="opendialogcomment('1')"
+                        [disabled]="mySelection==0 || selectionstatus=='1'"
+                      >
+                      Inprocess 
+                        <i class="fe fe-clock ml-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="ml-auto">
+                    <div class="form-group">
+                      <label for="" class="form-label">&nbsp;</label>
+                      <button
+                        kendoButton 
+                        [primary]='true' 
+                        class="ml-1"
+                        type="button"                  
+                        title="Complete"  
+                        (click)="opendialogcomment('2')"
+                        [disabled]="mySelection==0 || selectionstatus=='2'"
+                      >
+                        Complete 
+                        <i class="fe fe-check-circle ml-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+
+          <kendo-grid-checkbox-column width="14">
+            <ng-template kendoGridCellTemplate let-idx="rowIndex">
+              <input [kendoGridSelectionCheckbox]="idx" />
+            </ng-template>
+          </kendo-grid-checkbox-column>
+
+          <!-- <kendo-grid-checkbox-column 
+            width="12"
+          ></kendo-grid-checkbox-column> -->
+
+          <kendo-grid-column
+            field="filename"
+            title="File Name"
+            width="55"            
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="File Name">File Name</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.filename }}">
+                {{ dataItem.displayfilename }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column          
+            field="fileshareid"
+            title="File Share ID"
+            width="75"
+            [headerStyle]="{ 'font-weight': '600' }"
+            [style]="{
+              'font-weight': '600',
+              color: '#467fd0',
+              cursor: 'Pointer',
+              'text-align': 'center'
+            }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="File Share ID">File Share ID</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div title="{{ dataItem.fileshareid }}"               
+                    data-toggle="modal"
+                    data-target="#viewDivisionPayerReportModal"
+                    (click)="onViewReportClick(dataItem)"
+                  >
+                {{ dataItem.fileshareid }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          
+          <kendo-grid-column         
+            field="eftmonthyear"
+            title="EFT Month Year"
+            width="48"
+            [headerStyle]="{ 'font-weight': '600' }"            
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="EFT Month Year">EFT Month Year</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div>
+                {{ dataItem.eftmonthyear }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column            
+            field="payername"
+            title="Payer"
+            width="58"            
+            [headerStyle]="{ 'font-weight': '600' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="Payer">Payer</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.payername }}">
+                {{ dataItem.displaypayername }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column         
+            field="paymentmethodcode"
+            title="Pay Method"
+            width="28"
+            [filterable]="false"
+            [headerStyle]="{ 'font-weight': '600' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="Pay Method">Pay Method</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.paymentmethodcode }}">
+                {{ dataItem.paymentmethodcode }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column          
+            field="totalpaidamt"
+            title="Remitted"
+            width="50"
+            [filterable]="false"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Remitted">Remitted</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.totalpaidamt }}">
+                {{ dataItem.totalpaidamt }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column           
+            field="totalpayment"
+            title="Paid Amount"
+            width="50"
+            [filterable]="false"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Paid Amount">Paid Amount</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.totalpayment}}">
+                {{ dataItem.totalpayment }}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+              field="nstatus"
+              title="Status"
+              width="25"
+              [filterable]="false"          
+              [headerStyle]="{ 'font-weight': '600' }"
+              media="(min-width: 1025px)"              
+              >
+              <ng-template kendoGridCellTemplate let-dataItem>   
+                <div class="text-center" *ngIf="dataItem?.nstatus === 0">           
+                  <!-- <button
+                    kendoButton
+                    id="btnpending"
+                    class="k-button"                                 
+                    title="Pending" 
+                    [primary]='true'
+                  >
+                    <i class="fe fe-minus-circle"></i>
+                  </button> -->
+                  <span
+                    class="badge badge-danger pt-1"                    
+                    title="Pending"
+                  >
+                    <i class="fe fe-minus-circle"></i></span
+                  >
+                </div>
+                <div class="text-center" *ngIf="dataItem?.nstatus === 1" >
+                  <!-- <button
+                    kendoButton
+                    id="btninprocess"
+                    class="k-button"                                 
+                    title="Inprocess"
+                    [primary]='true'
+                  >
+                    <i class="fe fe-clock"></i>
+                  </button> -->
+                  <span
+                    class="badge badge-warning pt-1"                    
+                    title="Inprocess"
+                  >
+                    <i class="fe fe-clock"></i></span
+                  >
+                </div>
+                <div class="text-center" *ngIf="dataItem?.nstatus === 2"  >
+                  <!-- <button
+                    kendoButton
+                    id="btncomplete"
+                    class="k-button"                                 
+                    title="Complete" 
+                    [primary]='true' 
+                  >
+                    <i class="fe fe-check-circle"></i>
+                  </button> -->
+                  <span
+                    class="badge badge-success pt-1"                    
+                    title="Complete"
+                  >
+                    <i class="fe fe-check-circle"></i></span
+                  >
+                </div>
+              </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-command-column            
+              title="Notes"
+              width="25"
+              [headerStyle]="{ 'font-weight': '600' }"
+              media="(min-width: 1025px)"  
+              *ngIf="clsPermission.filedistributionviewnotes"            
+              >
+              <ng-template kendoGridCellTemplate let-dataItem>   
+                <div *ngIf="dataItem?.notescount==0">           
+                  <button
+                    kendoButton
+                    id="btnpending"
+                    class="k-button"                                 
+                    title="Notes not available"
+                    [primary]='true' 
+                  >
+                    <i class="fe fe-file-text"></i>
+                  </button>
+                </div>
+                <div *ngIf="dataItem?.notescount!=0">           
+                  <button
+                    kendoButton
+                    id="btnpending"
+                    class="k-button"                                 
+                    title="View Notes History"
+                    [primary]='true'  
+                    data-toggle="modal"
+                    data-target="#filehistoryInfoModal"
+                    (click)="onfilehistoryinfoclick(dataItem)"
+                  >
+                    <i class="fe fe-file-text"></i>
+                  </button>
+                </div>
+              </ng-template>
+          </kendo-grid-command-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View File Distribution (viewDivisionPayerReportModal) Report Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="viewDivisionPayerReportModal"
+  role="dialog"
+  aria-labelledby="viewDivisionPayerReportModalLabel"
+  aria-hidden="true"
+>
+
+<!-- style="width: 1250px !important; margin: 20px 35px;" -->
+<div class="modal-dialog modal-lg" role="document">
+    <app-divisionandpayerwise      
+      [InputFileid]="inputfileid" 
+      [InputPayerid]="inputpayerid"
+      [InputPayername]="inputpayername"
+      [InputFileshareid]="inputfileshareid"
+      [InputPaymentmethodcode]="inputpaymentmethodcode"   
+      [InputEFTMonth]="inputeftmonth"  
+      [InputEFTYear]="inputeftyear"     
+      (OutputViewDivisionPayerResult)="
+        OutputResult($event)
+      "   
+      #DivisionPayerChild
+    ></app-divisionandpayerwise>
+  </div>
+</div>
+<!-- View File Distribution (viewDivisionPayerReportModal) Report Model -->
+
+<!-- Notes dailog box -->
+<kendo-dialog title="Update File Share" *ngIf="openednotes" (close)="close('No')" [minWidth]="250" [width]="750">  
+    <form class="k-form" [formGroup]="frmnotes">
+      <span style="margin-top: 10px;">File Share status will be updated as {{sstatus}}</span>
+        <fieldset style="margin-top: 10px;">                       
+            <label class="k-form-field">
+                <span>Comment</span>  
+                <textarea class="k-textbox" rows="8" cols="50" name="comment" 
+                formControlName="fcComment" #fcComment [(ngModel)]="scomment" [mention]="items" [mentionConfig]="{triggerChar:'@',labelKey:'name'}"></textarea>                       
+            </label>            
+        </fieldset>
+  
+        <div class="text-right">
+            <button type="button" class="k-button mr-2" (click)="close('No')">Cancel</button>
+            <button type="button" [disabled]="disablesavebutton"  class="k-button k-primary" (click)="close('Yes')">Save & Close</button>
+        </div>
+    </form>    
+</kendo-dialog>
+
+<kendo-dialog class="customdialog" title="Confirmation" *ngIf="openedyesno" (close)="closeyesno('No')" [minWidth]="250" [width]="450">
+  <p style="font-size: 16px; word-wrap: break-word;">{{ NotesConfirmationMessage }}</p>
+  <div class="d-flex border-top pt-2">
+    <div class="ml-auto">
+      <button class="mr-2" kendoButton (click)="closeyesno('No')">No</button>
+      <button kendoButton (click)="closeyesno('Yes')" primary="true">Yes</button>
+    </div>      
+  </div>
+</kendo-dialog>
+  <!-- Notes dailog box -->
+
+  <!--Check history Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="filehistoryInfoModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"  
+>
+<div class="modal-dialog modal-lg" style="max-width: 850px !important;">
+  <app-filedistributionnotes 
+    [InputFileDistributionId]="Inputfiledistributionid"
+    [InputFileId]="Inputdisfileid"
+    [InputAuditLogstr]="inputauditlogstr"         
+    (OutputSelectFileHistoryResult)="OutputSelectFileHistoryResult($event)"
+    #SelectedfilehistoryChild
+  ></app-filedistributionnotes>
+</div>
+</div>
+<!--Check history Model -->

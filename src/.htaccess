@@ -1,0 +1,8 @@
+RewriteEngine On
+    # If an existing asset or directory is requested go to it as it is
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    #RewriteRule ^(.front-end*)$ /front-end [NS.L,QSA]
+
+    # If the requested resource doesn't exist, use index.html
+RewriteRule ^(.*)$ /index.html [NC,L,QSA]

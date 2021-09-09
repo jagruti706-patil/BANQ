@@ -1,0 +1,564 @@
+<div>
+  <aw-wizard class="my-wizard wizard-card-header" #wizard [navBarLayout]="'large-empty-symbols'" [navigationMode]="'strict'">
+    <!-- Client Contact Details -->
+    <aw-wizard-step [canExit]="moveDirection.bind(this, ClientContactGroup.valid)" [stepTitle]="'Client Contact'" [navigationSymbol]="{ symbol: '1' }">
+
+      <div class="card">
+        <div class="card-body">
+
+          <!-- <h4 class="text-center text-info">Client Contact Information</h4> -->
+
+          <!-- <kendo-grid [data]="gridData" [height]="410">
+                  <kendo-grid-column field="ProductID" title="ID" width="40">
+                  </kendo-grid-column>
+                  <kendo-grid-column field="ProductName" title="Name" width="250">
+                  </kendo-grid-column>
+                  <kendo-grid-column field="Category.CategoryName" title="Description">
+                  </kendo-grid-column>
+                  <kendo-grid-column field="UnitPrice" title="Facility" width="80">
+                  </kendo-grid-column>
+              </kendo-grid> -->
+
+          <form [formGroup]="ClientContactGroup">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="form-label">
+                  <strong class="text-danger">* </strong>Client Code</label>
+                <input kendoTextBox [class.is-invalid]="clientCode.invalid && clientCode.touched" formControlName="fcClientCode" type="text"
+                  id="clientCode" class="w-100" readonly />
+                <div *ngIf="clientCode.invalid && clientCode.touched">
+                  <small *ngIf="clientCode.errors?.required" class="text-danger">Code is required</small>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label">
+                  <strong class="text-danger">* </strong>Client Name</label>
+                <input kendoTextBox [class.is-invalid]="clientName.invalid && clientName.touched" formControlName="fcClientName" type="text"
+                  id="clientName" class="w-100" />
+                <div *ngIf="clientName.invalid && clientName.touched">
+                  <small *ngIf="clientName.errors?.required" class="text-danger">Client name is required</small>
+                  <small *ngIf="clientName.errors?.maxlength" class="text-danger">Client name allows 100 characters
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="form-label">
+                  <strong class="text-danger">* </strong>Contact Name</label>
+                <input kendoTextBox [class.is-invalid]="contactName.invalid && contactName.touched" formControlName="fcContactName" type="text"
+                  id="contactName" class="w-100" />
+                <div *ngIf="contactName.invalid && contactName.touched">
+                  <small *ngIf="contactName.errors?.required" class="text-danger">Contact name is required</small>
+                  <small *ngIf="contactName.errors?.maxlength" class="text-danger">Contact name allows 100 characters
+                  </small>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label">
+                  <strong class="text-danger">* </strong>Contact Email</label>
+                <input kendoTextBox [class.is-invalid]="contactEmail.invalid && contactEmail.touched" formControlName="fcContactEmail" type="text"
+                  id="ContactEmail" class="w-100">
+                <div *ngIf="contactEmail.invalid && contactEmail.touched">
+                  <small *ngIf="contactEmail.errors?.required" class="text-danger">Email is required</small>
+                  <small *ngIf="contactEmail.errors?.email" class="text-danger">Email is not valid</small>
+                  <small *ngIf="contactEmail.errors?.maxlength" class="text-danger">Email allows 50 characters</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label class="form-label">
+                  <strong class="text-danger">* </strong>Contact Phone</label>
+                <kendo-maskedtextbox [mask]="mask" [class.is-invalid]="contactPhone.invalid && contactPhone.touched" formControlName="fcContactPhone"
+                  type="text" id="ContactPhone" class="w-100">
+                </kendo-maskedtextbox>
+                <!-- <input kendoTextBox [class.is-invalid]="contactPhone.invalid && contactPhone.touched"  formControlName="fcContactPhone" type="text" 
+                          id="ContactPhone" class="form-control"> -->
+                <div *ngIf="contactPhone.invalid && contactPhone.touched">
+                  <small *ngIf="contactPhone.errors?.required" class="text-danger">Contact phone is required</small>
+                  <small *ngIf="contactPhone.errors?.pattern" class="text-danger">Only number is allowed</small>
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <!-- <label class="form-label"><strong class="text-danger">* </strong>Client Status: </label> -->
+
+                <div class="form-group mb-0">
+                  <label class="form-label">Client Status</label>
+                  <label class="custom-switch">
+                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input" formControlName="fcClientStatus">
+                    <span class="custom-switch-indicator"></span>
+                    <span class="custom-switch-description">{{ClientStatus.value === true ? "Active" : ClientStatus.value === null? "": "Inactive" }}</span>
+                  </label>
+                  <div *ngIf="ClientStatus.invalid && ClientStatus.touched">
+                    <small *ngIf="ClientStatus.errors?.required" class="text-danger">Client Status is required</small>
+                  </div>
+                </div>
+
+                <!-- <div class="row ml-1">
+                  <kendo-switch class="col-md-3 form-control" [onLabel]="' '" [offLabel]="' '"
+                    formControlName="fcClientStatus" (click)="ClientStatusChanged()"></kendo-switch>
+                  <label id="lblClientStatus"
+                    class="col-md-9 form-check-label">{{ClientStatus.value === true  ? "Active" : ClientStatus.value === null? "": "Inactive" }}</label>
+                  <div *ngIf="ClientStatus.invalid && ClientStatus.touched">
+                    <small *ngIf="ClientStatus.errors?.required" class="text-danger">Client Status is required</small>
+                  </div>
+                </div> -->
+
+              </div>
+            </div>
+          </form>
+          <div class="mt-3 text-right w-100">
+            <button type="button" [disabled]="!validateContact()" class="btn btn-primary btn-sm" (click)="setObject()" awNextStep>Next
+              <i class="fa fa-arrow-right ml-1 wizard-btn-arrow"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aw-wizard-step>
+    <!-- Client Service -->
+    <aw-wizard-step [canExit]="moveDirectionService.bind(this, ClientServiceGroup.valid)" [stepTitle]="'Client Service'" [navigationSymbol]="{ symbol: '2' }">
+
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="text-center text-info">Client Service Information</h4> -->
+          <form [formGroup]="ClientServiceGroup">
+
+            <div class="form-group">
+              <label class="form-label">
+                <strong class="text-danger">* </strong>Service</label>
+              <div class="d-flex flex-row">
+                <div class="p-1 pr-3" *ngFor="let service of arrServiceTypes">
+                  <div *ngIf="service.status==true" class="k-form-field ">
+                    <input id="chK_{{service.servicetypename}}" class="k-checkbox" type="checkbox" value="{{service.servicetypeid}}" (change)="serviceChange(service, this)"
+                      formControlName="fcServiceTypeValue" [checked]="isServiceSelected(service)">
+                    <label class="k-checkbox-label" for="chK_{{service.servicetypename}}">{{service.servicetypename}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="row">
+              <div class="form-group">
+                <label class="form-label"><strong class="text-danger">* </strong>Service: </label>
+                <div class="row">
+                  <div *ngFor="let service of arrServiceTypes" class="col-md-6">
+                    <div *ngIf="service.status==true" class="k-form-field ">
+                      <input id="chK_{{service.servicetypename}}" class="k-checkbox" type="checkbox"
+                        value="{{service.servicetypeid}}" (change)="serviceChange(service, this)"
+                        formControlName="fcServiceTypeValue" [checked]="isServiceSelected(service)">
+                      <label class="k-checkbox-label"
+                        for="chK_{{service.servicetypename}}">{{service.servicetypename}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </form>
+          <div class="mt-3 w-100">
+            <button type="button" class="btn btn-secondary btn-sm mr-2 float-left" awPreviousStep>
+              <i class="fa fa-arrow-left mr-1 wizard-btn-arrow"></i>Previous</button>
+            <button type="button" class="btn btn-primary btn-sm float-right" [disabled]="!validateService()" (click)="setObject()" awNextStep>Next
+              <i class="fa fa-arrow-right ml-1 wizard-btn-arrow"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aw-wizard-step>
+    <!-- Client FTP -->
+    <aw-wizard-step [canExit]="moveDirectionFTPInbound.bind(this,true)" [stepTitle]="'Client FTP'" [navigationSymbol]="{ symbol: '3' }">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="text-center text-info">Client Inbound FTP Information</h4> -->
+          <div class="form-group">
+            <div class="w-100">
+              <button class="float-right mb-3" id="AddClientFTP" kendoButton [primary]="true" (click)="onAddClientFTP()" data-toggle="modal"
+                data-target="#addftpModal">Add FTP
+              </button>
+              <!-- <button *ngIf="!(arrFtpMaster.length==0)" class="float-right mb-3" id="UpdateClientFTP" kendoButton [primary]="true" (click)="onOpenClientFTPClick()"
+                data-toggle="modal" data-target="#addftpModal">Update FTP
+              </button> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <kendo-grid [data]="ClientFtpgridView" style="width:100%" [pageSize]="ClientFtppageSize" [pageable]="true" [skip]="ClientFtpskip"
+              (pageChange)="pageClientFtpChange($event)" (edit)="EditFTP($event)" (remove)="DeleteFTP($event)" [sortable]="true"
+              [sort]="ClientFtpsort" (sortChange)="sortClientFtpChange($event)">
+
+              <kendo-grid-column field="ftpcode" title="Code" width="30" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="ftpname" title="FTP Name" width="50" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="ftpurl" title="FTP Url" width="130" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="ftpusername" title="FTP User Name" width="80" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="ftptype" title="FTP Type" width="40" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="ftpport" title="FTP Port" width="40" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <!-- <kendo-grid-column field="status" title="Status" width="90" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column> -->
+              <kendo-grid-column field="status" title="Status" width="40" [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  <!-- {{dataItem.status ? "Active" : "Inactive" }} -->
+                  <div *ngIf="dataItem.status==true" class="text-success">Active</div>
+                  <div *ngIf="dataItem.status==false" class="text-danger">Inactive</div>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column field="ftp835inboundfolder" title="835 Ftp Folder" width="50" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="ftp837inboundfolder" title="837 Ftp Folder" width="50" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+
+              <kendo-grid-command-column title="Action" width="50" [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  <button kendoGridEditCommand [primary]="true" title="Edit" data-toggle="modal" data-target="#editftpconfirmationModal">
+                    <i class="fe fe-edit-2"></i>
+                  </button>
+                  <button kendoGridRemoveCommand title="Delete" data-toggle="modal" data-target="#deleteftpconfirmationModal">
+                    <i class="fe fe-x"></i>
+                  </button>
+                </ng-template>
+              </kendo-grid-command-column>
+            </kendo-grid>
+          </div>
+          <!-- <div id="ClientFTPFolder">
+            <form [formGroup]="ClientFTPGroup">
+              <div class="row">
+                <div class="k-form-field col-md-6">
+                  <label class="form-label">
+                    <strong class="text-danger">* </strong>835 Ftp Folder</label>
+                  <input type="text" class="k-textbox form-control" [class.is-invalid]="client835FtpFolder.invalid && client835FtpFolder.touched"
+                    formControlName="fcClient835Ftpfolder" />
+                  <div *ngIf="client835FtpFolder.invalid && client835FtpFolder.touched" class="text-danger">
+                    <small *ngIf="client835FtpFolder.errors?.required">835 Ftp Folder is required</small>
+                    <small *ngIf="client835FtpFolder.errors?.maxlength">835 Ftp Folder allows 150 characters</small>
+                  </div>
+                </div>
+                <div class="k-form-field col-md-6">
+                  <label class="form-label">
+                    <strong class="text-danger">* </strong>837 Ftp Folder</label>
+                  <input type="text" class="k-textbox form-control" [class.is-invalid]="client837FtpFolder.invalid && client837FtpFolder.touched"
+                    formControlName="fcClient837Ftpfolder" />
+                  <div *ngIf="client837FtpFolder.invalid && client837FtpFolder.touched" class="text-danger">
+                    <small *ngIf="client837FtpFolder.errors?.required">837 Ftp Folder is required</small>
+                    <small *ngIf="client837FtpFolder.errors?.maxlength">837 Ftp Folder allows 150 characters</small>
+                  </div>
+                </div>
+              </div>
+              <div>                
+              </div>
+            </form>            
+          </div> -->
+          <!-- <label visible="false" formControlName="fcClientFtpId">{{OutFTPId}}</label> -->
+          <!-- <input type="hidden" value="{{OutFTPId}}" formControlName="fcClientFtpId"> -->
+
+          <div class="mt-3 w-100">
+            <button type="button" class="btn btn-secondary btn-sm float-left" awPreviousStep>
+              <i class="fa fa-arrow-left wizard-btn-arrow mr-1"></i>Previous</button>
+            <button type="button" [disabled]="!validateFTPGrid()" class="btn btn-primary btn-sm float-right" (click)="setObject()"
+              awNextStep>Next
+              <i class="fa fa-arrow-right wizard-btn-arrow ml-1"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </aw-wizard-step>
+    <!-- SubClient List -->
+    <aw-wizard-step *ngIf="IsERAHUBSelected" [stepTitle]="'Subclient Details'" [navigationSymbol]="{ symbol: '4' }">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="text-center text-info">Sub-Client Information</h4> -->
+          <div class="form-group">
+            <!-- <button class="ml-auto" id="AddClientFTP" kendoButton [primary]="true" (click)="onAddSubclientClick()"  >Add SubClient</button> -->
+            <!-- <button kendoButton class="ml-auto" *ngIf="!opened" [primary]="true" (click)="onAddSubclientClick()">Add
+                Subclient</button>
+            </div> -->
+
+            <!-- <form class="k-form" [formGroup]="SubclientSearchGroup">
+              <div class="row">
+                <div class="k-form-field col-md-4">
+                  <div class="input-group">
+                    <input type="text" class="k-textbox form-control" formControlName="fcSubclientSearch" />
+                    <div class="input-group-append">
+                      <button kendoButton class="ml-auto" (click)="onSubclientSearchClick()"><i class="fe fe-search"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form> -->
+
+            <!-- <button kendoButton class="float-right mb-3" [primary]="true" (click)="onAddSubclientClick()">Add Subclient</button> -->
+            <button kendoButton class="float-right mb-3" [primary]="true" (click)="onAddSubClient()" data-toggle="modal" data-target="#exampleSubClientModal">Add Subclient</button>
+          </div>
+          <!-- <div class="form-group"> 
+            <kendo-grid [data]="SubClientgridData" style="width:100%" (edit)="EditSubClient($event)"
+              (remove)="DeleteSubClient($event)">
+              <kendo-grid-column *ngIf="!isHidden('subclientid')" field="subclientid" title="id" width="40" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+              <kendo-grid-column field="subclientcode" title="Code" width="60" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientdivisioncode" title="Division" width="50" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientname" title="Name" width="90" [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientcontactname" title="Contact Name" width="80"
+                [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>
+              <kendo-grid-column field="subclientcontactemail" title="Contact Email" width="110"
+                [headerStyle]="{'font-weight': 'bold'}">
+              </kendo-grid-column>              
+              <kendo-grid-column field="subclientcontactphone" title="Contact Phone" width="80"
+                [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  {{dataItem.subclientcontactphone | phone}} 
+                </ng-template>
+              </kendo-grid-column>              
+              <kendo-grid-column field="subclientsplitparameters" title="Split Parameter" width="80"
+                [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem.subclientsplitparameters[0]">
+                  {{dataItem.splitparametername}} [{{dataItem.splitparametervalue}}]
+                </ng-template>
+              </kendo-grid-column>              
+              <kendo-grid-column field="subclientstatus" title="Status" width="50"
+                [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-dataItem>                  
+                  <div *ngIf="dataItem.subclientstatus==true" class="text-success">Active</div>
+                  <div *ngIf="dataItem.subclientstatus==false" class="text-danger">Inactive</div>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-command-column title="Action" width="70" [headerStyle]="{'font-weight': 'bold'}">
+                <ng-template kendoGridCellTemplate let-isNew="isNew">
+                  <button kendoGridEditCommand [primary]="true" title="Edit"><i class="fe fe-edit-2"></i></button>
+                  <button kendoGridRemoveCommand title="Delete"><i class="fe fe-x"></i></button>
+                </ng-template>
+              </kendo-grid-command-column>
+            </kendo-grid>
+          </div> -->
+
+
+          <div class="form-group">
+            <div class="grid-wrapper">
+              <kendo-grid [data]="SubClientgridView" style="width:100%" [pageSize]="SubClientpageSize" [pageable]="true" [skip]="SubClientskip"
+                (pageChange)="pageSubclientChange($event)" (edit)="EditSubClient($event)" (remove)="DeleteSubClient($event)"
+                [sortable]="true" [sort]="Subclientsort" (sortChange)="sortSubclientChange($event)">
+                <kendo-grid-column *ngIf="!isHidden('subclientid')" field="subclientid" title="id" width="40" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientcode" title="Code" width="60" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientdivisioncode" title="Division" width="50" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientname" title="Name" width="90" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientcontactname" title="Contact Name" width="80" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientcontactemail" title="Contact Email" width="110" [headerStyle]="{'font-weight': 'bold'}">
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientcontactphone" title="Contact Phone" width="80" [headerStyle]="{'font-weight': 'bold'}">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.subclientcontactphone | phone}}
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientsplitparameters" title="Split Parameter" width="80" [headerStyle]="{'font-weight': 'bold'}">
+                  <ng-template kendoGridCellTemplate let-dataItem="dataItem.subclientsplitparameters[0]">
+                    {{dataItem.splitparametername}} [{{dataItem.splitparametervalue}}]
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="subclientstatus" title="Status" width="50" [headerStyle]="{'font-weight': 'bold'}">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <div *ngIf="dataItem.subclientstatus==true" class="text-success">Active</div>
+                    <div *ngIf="dataItem.subclientstatus==false" class="text-danger">Inactive</div>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-command-column title="Action" width="70" [headerStyle]="{'font-weight': 'bold'}">
+                  <ng-template kendoGridCellTemplate let-isNew="isNew">
+                    <button kendoGridEditCommand [primary]="true" title="Edit" data-toggle="modal" data-target="#editsubclientdetailsconfirmationModal">
+                      <i class="fe fe-edit-2"></i>
+                    </button>
+                    <button kendoGridRemoveCommand title="Delete" data-toggle="modal" data-target="#deletesubclientconfirmationModal">
+                      <i class="fe fe-x"></i>
+                    </button>
+                  </ng-template>
+                </kendo-grid-command-column>
+              </kendo-grid>
+            </div>
+          </div>
+          <div class="mt-3 w-100">
+            <button type="button" class="btn btn-secondary float-left btn-sm" awPreviousStep>
+              <i class="fa fa-arrow-left wizard-btn-arrow mr-1"></i>Previous</button>
+            <button type="button" [disabled]="!validateSubClientGrid()" (click)="setObject()" class="btn btn-primary float-right btn-sm"
+              [awGoToStep]="{stepIndex: 4}">Preview
+              <i class="fa fa-eye ml-1 wizard-btn-arrow"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aw-wizard-step>
+    <!-- SubClient Contact Info-->
+
+    <!-- PREVIEW START -->
+    <aw-wizard-step *ngIf="!IsERAHUBSelected" [stepTitle]="'Preview'" [navigationSymbol]="{ symbol: '4' }">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="text-center text-info">Preview</h4> -->
+          <app-previewdetails [clsObject]="clsClientObject" [CallingForm]="'registration'"></app-previewdetails>
+
+          <div *ngIf="IsERAHUBSelected" class="mt-3 w-100">
+            <button type="button" class="btn btn-secondary btn-sm float-left" [awGoToStep]="{stepIndex: 3}">
+              <i class="fa fa-arrow-left mr-1 wizard-btn-arrow"></i>Previous</button>
+            <button type="button" class="btn btn-success btn-sm float-right" awResetWizard>Verify & Publish
+              <i class="fa fa-check mr-1 wizard-btn-arrow"></i>
+            </button>
+          </div>
+          <div *ngIf="!IsERAHUBSelected" class="mt-3 text-center w-100">
+            <button type="button" class="btn btn-secondary btn-sm float-left" awPreviousStep>
+              <i class="fa fa-arrow-left mr-1 wizard-btn-arrow"></i>Previous</button>
+            <button type="button" class="btn btn-success btn-sm float-right" (click)="onSubmit()" awResetWizard>Verify & Publish
+              <i class="fa fa-check mr-1 wizard-btn-arrow"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aw-wizard-step>
+    <!-- <aw-wizard-completion-step *ngIf="!IsERAHUBSelected" [stepTitle]="'Publish'" [navigationSymbol]="{ symbol: '5' }">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="text-center text-secondary">STEP 4</h4>
+          </div>
+        </div>
+        <div class="mt-3 text-center w-100">
+          <button type="button" class="btn btn-danger" awResetWizard>RESET</button>
+        </div>
+      </aw-wizard-completion-step> -->
+
+    <aw-wizard-step *ngIf="IsERAHUBSelected" [stepTitle]="'Preview'" [navigationSymbol]="{ symbol: '5' }">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h4 class="text-center text-info">Preview</h4> -->
+          <app-previewdetails [clsObject]="clsClientObject" [CallingForm]="Registration"></app-previewdetails>
+
+          <div *ngIf="IsERAHUBSelected" class="mt-3 w-100">
+            <button type="button" class="btn btn-secondary float-left btn-sm" [awGoToStep]="{stepIndex: 3}">
+              <i class="fa fa-arrow-left mr-1 wizard-btn-arrow"></i>Previous</button>
+            <button type="button" class="btn btn-success btn-sm float-right" (click)="onSubmit()" awResetWizard>Verify & Publish
+              <i class="fa fa-check mr-1 wizard-btn-arrow"></i>
+            </button>
+          </div>
+          <div *ngIf="!IsERAHUBSelected" class="mt-3 text-center w-100">
+            <button type="button" class="btn btn-secondary mr-2" awPreviousStep>
+              <i class="fa fa-arrow-left mr-1 wizard-btn-arrow"></i>Previous</button>
+            <button type="button" class="btn btn-success" awResetWizard>Verify & Publish
+              <i class="fa fa-check mr-1 wizard-btn-arrow"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </aw-wizard-step>
+    <!-- <aw-wizard-completion-step *ngIf="IsERAHUBSelected" [stepTitle]="'Publish'" [navigationSymbol]="{ symbol: '6' }">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="text-center text-secondary">STEP 4</h4>
+          </div>
+        </div>
+        <div class="mt-3 text-center w-100">
+          <button type="button" class="btn btn-danger" awResetWizard>RESET</button>
+        </div>
+      </aw-wizard-completion-step> -->
+  </aw-wizard>
+</div>
+
+<!-- Client FTP Dialog -->
+<!-- {{OutclientFTPDetail|json}} -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="addftpModal" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <app-ftpmaster [FTPCount]="OutClientFTPCount" [FTPDetails]="OutclientFTPDetail" (OutFTP)="OutputfromFTP($event)" #AddFTPChild></app-ftpmaster>
+  </div>
+</div>
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="exampleSubClientModal" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <!-- <app-ftpmaster [FTPDetails]="OutclientFTPDetail" (OutFTP)="OutputfromFTP($event)"></app-ftpmaster> -->
+    <app-subclientregistration [sAllSplitparametervalues]="sAllSplitparametervalues" [subClientCount]="OutSubClientCount" [subClientDetails]="OutsubclientDetail"
+      (outSubClient)="OutputSubClient($event)" #AddSubClientChild></app-subclientregistration>
+  </div>
+</div>
+
+<!-- <kendo-dialog id="clientInboundFTPModal" class="modal" title="FTP Details" *ngIf="ftpopened" (close)="close()">
+  <app-ftpmaster [FTPDetails]="OutclientFTPDetail" (OutFTP)="OutputfromFTP($event)"></app-ftpmaster>
+</kendo-dialog> -->
+
+<!--End Client FTP Dialog -->
+
+<!-- SubClient Modal -->
+
+<!-- 
+<kendo-dialog [height]="650" [minWidth]="400" class="modal" title="Subclient Details" *ngIf="opened" (close)="close()">
+  <app-subclientregistration [sAllSplitparametervalues]="sAllSplitparametervalues" [subClientCount]="OutsubClientCount"
+    [subClientDetails]="OutsubclientDetail" (outSubClient)="OutputSubClient($event)"></app-subclientregistration> -->
+<!-- <app-subclientregistration [subClientDetails]="OutsubclientDetail" (outSubClient)="OutputSubClient($event)">
+  </app-subclientregistration> -->
+<!-- </kendo-dialog> -->
+<!-- Subclient  Modal -->
+
+<!-- Confirmation Dialog -->
+<!-- <kendo-dialog title="{{confirmType}} confirmation" *ngIf="confirmOpened" (close)="closeConfirm('cancel')" [minWidth]="250">
+  <p style="margin: 30px; text-align: center;">{{confirmMessage}}</p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="closeConfirm('no')">No</button>
+    <button kendoButton (click)="closeConfirm('yes')" primary="true">Yes</button>
+  </kendo-dialog-actions>
+</kendo-dialog> -->
+<!-- Confirmation Dialog -->
+
+<!--Edit Confirmation Model -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="editftpconfirmationModal" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <app-editconfirmation [InputEditMessage]="ClientFtpInputEditMessage" (OutputEditResult)="OutputFtpEditResult($event)">
+    </app-editconfirmation>
+  </div>
+</div>
+<!--Edit Confirmation Model -->
+
+<!--Delete Confirmation Model -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="deleteftpconfirmationModal" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog">
+    <app-deleteconfirmation [InputDeleteMessage]="ClientFtpInputDeleteMessage" (OutputDeleteResult)="OutputFtpDeleteResult($event)">
+    </app-deleteconfirmation>
+  </div>
+</div>
+<!--Delete Confirmation Model -->
+
+
+<!--Edit Confirmation Model -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="editsubclientdetailsconfirmationModal" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <app-editconfirmation [InputEditMessage]="SubClientInputEditMessage" (OutputEditResult)="OutputSubclientEditResult($event)">
+    </app-editconfirmation>
+  </div>
+</div>
+<!--Edit Confirmation Model -->
+
+<!--Delete Confirmation Model -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="deletesubclientconfirmationModal" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <app-deleteconfirmation [InputDeleteMessage]="SubClientInputDeleteMessage" (OutputDeleteResult)="OutputSubclientDeleteResult($event)">
+    </app-deleteconfirmation>
+  </div>
+</div>
+<!--Delete Confirmation Model -->
+
+
+<div class="black-box" *ngIf="loadingClientDetails">
+  <div class="k-i-loading">
+  </div>
+</div>
+<!-- <div *ngIf="loading" class="k-i-loading"></div> -->

@@ -1,0 +1,465 @@
+<!-- <div *ngIf="ClientFilterShow"> -->
+<div *ngIf="showFilters">
+  <form [formGroup]="DropDownGroup">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body p-2">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group mb-0">
+                  <label class="form-label"
+                    ><strong class="text-danger">*</strong>Group
+                  </label>
+                  <kendo-dropdownlist
+                    class="form-control"
+                    formControlName="fcClientName"
+                    id="ddClients"
+                    [class.is-invalid]="
+                      fbcClientName.invalid && fbcClientName.touched
+                    "
+                    [data]="lstClients"
+                    textField="clientname"
+                    valueField="clientid"
+                    [valuePrimitive]="true"
+                    (selectionChange)="onClientChange($event)"
+                    (filterChange)="handleClientFilter($event)"
+                    [disabled]="disablegroup"
+                  >
+                    <!--(valueChange)="onClientChange($event)" [defaultItem]="ClientDefaultValue" -->
+                  </kendo-dropdownlist>
+                  <div *ngIf="fbcClientName.invalid && fbcClientName.touched">
+                    <small
+                      *ngIf="!!fbcClientName.errors?.required"
+                      class="text-danger"
+                      >Group is required</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group mb-0">
+                  <label class="form-label">Practice </label>
+                  <kendo-dropdownlist
+                    class="form-control"
+                    formControlName="fcSubClientName"
+                    id="ddClients"
+                    [class.is-invalid]="
+                      fbcSubClientName.invalid && fbcSubClientName.touched
+                    "
+                    [data]="lstSubClients"
+                    textField="subclientname"
+                    valueField="subclientid"
+                    [defaultItem]="SubClientDefaultValue"
+                    [valuePrimitive]="true"
+                    (filterChange)="handleClientFilter($event)"
+                    (selectionChange)="onSubClientChange($event)"
+                    [disabled]="disablepractice"
+                  >
+                    <!-- (valueChange)="onSubClientChange($event)" -->
+                  </kendo-dropdownlist>
+                  <div
+                    *ngIf="fbcSubClientName.invalid && fbcSubClientName.touched"
+                  >
+                    <small
+                      *ngIf="!!fbcSubClientName.errors?.required"
+                      class="text-danger"
+                      >Practice is required</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group mb-0">
+                  <label class="form-label"
+                    ><strong class="text-danger">*</strong>Processed Start Date
+                  </label>
+                  <kendo-datepicker
+                    id="dtstartDate"
+                    [(value)]="startDate"
+                    [max]="endDate"
+                    class="w-100 form-control"
+                    [format]="'MM/dd/yyyy'"
+                    (valueChange)="onDateChange($event, 'start date')"
+                    [disabled]="disabledate"
+                  >
+                    <!-- formControlName="fcFromDate" (valueChange)="onDateChange($event, 'start date')" 
+                      [disabled]="disabledstartdate" -->
+                  </kendo-datepicker>
+                  <!-- <div *ngIf="fbcFromDate.invalid && fbcFromDate.touched">
+                    <small
+                      *ngIf="!!fbcFromDate.errors?.required"
+                      class="text-danger"
+                      >Start Date is required</small
+                    >
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group mb-0">
+                  <label class="form-label"
+                    ><strong class="text-danger">*</strong>Processed End Date
+                  </label>
+                  <kendo-datepicker
+                    id="dtendDate"
+                    [(value)]="endDate"
+                    [format]="'MM/dd/yyyy'"
+                    [min]="startDate"
+                    class="w-100 form-control"
+                    (valueChange)="onDateChange($event, 'end date')"
+                    [disabled]="disabledate"
+                  >
+                    <!-- formControlName="fcToDate"(valueChange)="onDateChange($event, 'end date')"
+                       [disabled]="disabledenddate" -->
+                  </kendo-datepicker>
+
+                  <!-- <div *ngIf="fbcToDate.invalid && fbcToDate.touched">
+                    <small
+                      *ngIf="!!fbcToDate.errors?.required"
+                      class="text-danger"
+                      >End date is required</small
+                    >
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="ml-auto">
+                  <div class="mt-6 form-group">
+                    <button
+                      kendoButton
+                      type="button"
+                      [primary]="true"
+                      (click)="applyFilters()"
+                      title="Apply filters"
+                      [disabled]="this.DropDownGroup.invalid || disablebtn"
+                    >
+                      Apply
+                    </button>
+                    <button
+                      kendoButton
+                      type="button"
+                      class="ml-3"
+                      (click)="clearFilters()"
+                      title="Default filters set"
+                      [disabled]="this.DropDownGroup.invalid || disablebtn"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="row">
+  <div class="col-md-12" *ngIf="showGroupSummaryCards && isGroupuser">
+    <div class="card status">
+      <div class="card-status bg-cyan"></div>
+      <div class="card-header">
+        <h4 class="card-title mx-auto">Group Summary</h4>
+      </div>
+      <div class="card-body p-1">
+        <div class="row">
+          <div class="col-sm-6 col-md-3">
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp bg-blue mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">{{ clientCards.receivedfiles }}</h4>
+                  <small class="text-muted">Received Files</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp  bg-green mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">
+                    {{ clientCards.processedcount }}
+                  </h4>
+                  <small class="text-muted">Processed Files</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp  bg-red mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">
+                    {{ clientCards.unprocessedcount }}
+                  </h4>
+                  <small class="text-muted">Failed Processing Files</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-3 col-md-3">
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp bg-yellow mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">{{ clientCards.inprocessedcount }}</h4>
+                  <small class="text-muted">In-Process Files</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="loadingGroupCards"
+          class="k-i-loading"
+          style="font-size: 30px;"
+        ></div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-md-12"
+    *ngIf="showPracticeSummaryCards && practicecards != null"
+  >
+    <div class="card status">
+      <div class="card-status bg-orange"></div>
+      <div class="card-header">
+        <h4 class="card-title mx-auto">
+          <!-- *ngIf="practiceCardDetails != null && practiceCardDetails.length > 1" -->
+          Practice Summary
+        </h4>
+        <!-- <h4
+          *ngIf="
+            practiceCardDetails != null &&
+            (practiceCardDetails.length == 1 || practiceCardDetails.length == 0)
+          "
+          class="card-title mx-auto"
+        >
+          Practice Details
+        </h4> -->
+      </div>
+      <div class="card-body p-1">
+        <div class="row">
+          <div
+            [ngClass]="{
+              'col-md-4': !showPracticeSummaryFTPCard,
+              'col-md-3': showPracticeSummaryFTPCard
+            }"
+          >
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp bg-blue mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">{{ practicecards.totalsplitfiles }}</h4>
+                  <small class="text-muted">Total Files</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            [ngClass]="{
+              'col-md-4': !showPracticeSummaryFTPCard,
+              'col-md-3': showPracticeSummaryFTPCard
+            }"
+          >
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp  bg-red mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">
+                    {{ practicecards.totalhuppendingfiles }}
+                  </h4>
+                  <small class="text-muted">Pending Download</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            [ngClass]="{
+              'col-md-4': !showPracticeSummaryFTPCard,
+              'col-md-3': showPracticeSummaryFTPCard
+            }"
+          >
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp  bg-green mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">
+                    {{ practicecards.totalhubdownloadedfiles }}
+                  </h4>
+                  <small class="text-muted">Downloaded</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="showPracticeSummaryFTPCard" class="col-sm-3 col-md-3">
+            <div class="card mb-0 p-2">
+              <div class="d-flex align-items-center">
+                <span class="stamp bg-yellow mr-3">
+                  <em class="ti ti-files"></em>
+                </span>
+                <div>
+                  <h4 class="m-0">{{ practicecards.totalftpfiles }}</h4>
+                  <small class="text-muted">FTP Files</small>
+                </div>
+              </div>
+              <div
+                *ngIf="loadingFTP"
+                class="k-i-loading"
+                style="font-size: 30px;"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="col-md-12"
+    *ngIf="
+      (showPracticeDetailsCards && practiceCardDetails != null) ||
+      showPracticeSummaryCards
+    "
+  >
+    <div class="card status">
+      <div class="card-status bg-teal"></div>
+      <div class="card-header">
+        <h4 class="card-title mx-auto">Practice Details</h4>
+      </div>
+      <div class="card-body p-0 o-auto" style="max-height: 350px;">
+        <kendo-grid id="gridMaster" [data]="practiceCardDetails">
+          <kendo-grid-column
+            field="subclientname"
+            title="Practice"
+            width="25"
+            [headerStyle]="{ display: 'none' }"
+            class="bg-white pl-1 p-0"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <h4 class="p-2">
+                {{ dataItem.subclientname }}
+              </h4>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="splitfiles"
+            title="Total Files"
+            width="15"
+            [headerStyle]="{ display: 'none' }"
+            class="bg-white pl-1 p-0 pl-1 p-0"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div class="card m-0 border-0">
+                <div class="d-flex align-items-center">
+                  <!-- <span class="stamp bg-blue mr-2">
+                    <em class="ti ti-files"></em>
+                  </span> -->
+                  <div>
+                    <h4 class="m-0">{{ dataItem.splitfiles }}</h4>
+                    <small class="text-muted">Total Files</small>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="huppendingfiles"
+            title="Pending Download"
+            width="15"
+            [headerStyle]="{ display: 'none' }"
+            class="bg-white pl-1 p-0"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div class="card m-0 border-0">
+                <div class="d-flex align-items-center">
+                  <!-- <span class="stamp bg-red mr-2">
+                    <em class="ti ti-files"></em>
+                  </span> -->
+                  <div>
+                    <h4 class="m-0">{{ dataItem.huppendingfiles }}</h4>
+                    <small class="text-muted">Pending Download</small>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="hubdownloadedfiles"
+            title="HUB Download Files"
+            width="15"
+            [headerStyle]="{ display: 'none' }"
+            class="bg-white pl-1 p-0"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div class="card m-0 border-0">
+                <div class="d-flex align-items-center">
+                  <!-- <span class="stamp bg-green mr-2">
+                    <em class="ti ti-files"></em>
+                  </span> -->
+                  <div>
+                    <h4 class="m-0">{{ dataItem.hubdownloadedfiles }}</h4>
+                    <small class="text-muted">Downloaded</small>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpfiles"
+            title="FTP Files"
+            width="15"
+            [headerStyle]="{ display: 'none' }"
+            class="bg-white pl-1 p-0"
+            *ngIf="showPracticeSummaryFTPCard"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div class="card m-0 border-0">
+                <div class="d-flex align-items-center">
+                  <!-- <span class="stamp bg-yellow mr-2">
+                    <em class="ti ti-files"></em>
+                  </span> -->
+                  <div>
+                    <h4 class="m-0">{{ dataItem.ftpfiles }}</h4>
+                    <small class="text-muted">FTP Files</small>
+                  </div>
+                </div>
+                <div
+                  *ngIf="loadingFTP && dataItem.ftpfiles <= 0"
+                  class="k-i-loading"
+                  style="font-size: 30px;"
+                ></div>
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="black-box" *ngIf="loading">
+  <div class="k-i-loading"></div>
+</div>

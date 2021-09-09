@@ -1,0 +1,90 @@
+<app-navbar></app-navbar>
+<div class="container mt-4">
+  <router-outlet></router-outlet>
+  <div
+    *ngIf="!hideIdleModal"
+    class="modal fade"
+    id="idleModel"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="idleModelTitle"
+    aria-hidden="true"
+    data-backdrop="static"
+    data-keyboard="false"
+  >
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <!-- <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left">
+          You Have Been Idle!
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideChildModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> -->
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-9">
+              <p class="mt-4">Dear User,</p>
+              <p>
+                Your session will log out soon. Click continue to resume session
+                <!-- {{ idleState }} -->
+              </p>
+            </div>
+            <div class="col-md-3">
+              <circle-progress
+                [title]="counter"
+                [percent]="percent"
+                [startFromZero]="false"
+                [animation]="true"
+                [animationDuration]="200"
+                subtitleColor="#000"
+                titleColor="#000"
+                unitsColor="#000"
+                innerStrokeColor="#fd9644"
+                outerStrokeColor="#e76800"
+                subtitleFontSize="12"
+                [subtitle]="'seconds'"
+                [showUnits]="false"
+                [clockwise]="false"
+                [radius]="45"
+              ></circle-progress>
+              <!-- [subtitle]="fileInProgress" -->
+              <!-- <div
+              class="rounded-circle text-center"
+              style="border: 1px solid #979b9d;height: 85%;width: 100%;"
+            >
+              <span>
+                <h1 class="m-0 pt-4">{{ counter }}</h1></span
+              >
+              <div class="text-muted">seconds</div>
+            </div> -->
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <span class="float-right">
+                <button
+                  type="button"
+                  (click)="stay()"
+                  class="btn btn-success mr-3"
+                >
+                  Continue
+                </button>
+                <button type="button" (click)="logout()" class="btn btn-danger">
+                  Logout
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

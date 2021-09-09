@@ -1,0 +1,123 @@
+<div class="card border-0">
+  <div class="card-header pl-4">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i>Email
+      Configuration
+    </h4>
+    <button
+      *ngIf="clsPermission.addemailconfig"
+      class="ml-auto"
+      kendoButton
+      [primary]="true"
+      routerLink="/Configuration/emailconfiguration/new"
+    >
+      Add Email Configuration
+    </button>
+  </div>
+  <div class="card-body o-auto p-3" style=" height: 78vh">
+    <kendo-grid
+      [data]="gridView"
+      [sortable]="true"
+      [sort]="sortMaster"
+      [selectable]="true"
+      [pageable]="true"
+      [loading]="loadingEmailConfigGrid"
+      [pageSize]="Emailpagesize"
+      [skip]="EmailSkip"
+      (pageChange)="pageChange($event)"
+      [height]="660"
+    >
+      <kendo-grid-column
+        field="emailfrom"
+        title="From"
+        width="20"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="title"
+        title="Title"
+        width="10"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="emailtoreceive"
+        title="To"
+        width="20"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="emailccreceive"
+        title="Cc"
+        width="20"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-command-column
+        title="Action"
+        width="8"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button
+            *ngIf="clsPermission.editemailconfig"
+            kendoGridEditCommand
+            [primary]="true"
+            title="Edit"
+            data-toggle="modal"
+            (click)="editConfiratmion(dataItem)"
+          >
+            <i class="fe fe-edit-2"></i>
+          </button>
+        </ng-template>
+      </kendo-grid-command-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<!--Edit Confirmation Model -->
+<div
+  class="modal fade"
+  id="editemailmodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ editmessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [routerLink]="['/Configuration/emailconfiguration', editemailID]"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Edit Confirmation Model -->

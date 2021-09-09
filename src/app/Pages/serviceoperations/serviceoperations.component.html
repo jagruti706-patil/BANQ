@@ -1,0 +1,119 @@
+<div class="card">
+  <div class="card-header">
+    <h4 class="chart-title">BANQEDI Service Configuration</h4>
+  </div>
+  <div class="card-body">
+    <div class="row" style="margin-left: 0px; margin-right: 0px;">
+      <div class="col-md-5">        
+        <label class="mr-2 font-weight-bold">Service Status</label>
+        <strong>{{ QBANQEDIServiceStatus }}</strong>
+      </div>
+      <div class="col-md-7">
+        <label class="mr-2"><strong>Service Time Interval</strong></label>  
+      </div>
+    </div>   
+    <div class="row" style="margin-left: 0px; margin-right: 0px;">
+      <div class="col-md-5">
+        <!-- <button  [disabled]="isParserServiceStarted" *ngIf="!isParserServiceStarted" class="btn btn-success ml-1" (click)="onStartService('Parser')">Start Service</button>
+            <button [disabled]="isParserServiceStoped" *ngIf="isParserServiceStarted" class="btn btn-danger ml-1" (click)="onStopService('Parser')">Stop Service</button> -->
+        <button
+          [disabled]="isStartButtonDisabled"
+          *ngIf="!isBANQEDIServiceStarted"
+          class="btn btn-success btn-sm mr-2"
+          (click)="onStartService('BanqEDI')"
+        >
+          Start Service
+        </button>
+        <button
+          [disabled]="isStopButtonDisabled"
+          *ngIf="isBANQEDIServiceStarted"
+          class="btn btn-danger btn-sm mr-2"
+          (click)="onStopService('BanqEDI')"
+        >
+          Stop Service
+        </button>
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="GetBANQEDIServiceStatus()"
+        >
+          <i class="fe fe-rotate-cw"></i>
+        </button>
+      </div>
+      <div class="col-md-7">
+        <div [formGroup]="frmtimer">
+          <div class="form-group">
+            <button            
+              class="btn btn-success btn-sm mr-2" 
+              (click)="SetTimeIntervalDetails()"
+            >
+              Set Interval
+            </button>           
+            <input 
+              kendoTextBox
+              formControlName="fcinterval"
+              type="text"
+              id="timer"              
+              title="Set Interval" 
+              class="mr-1"    
+              [(ngModel)]="sSelectInterval"  
+              style="width: 3.4em;"                     
+            />  
+            <span class="text-muted">Minutes</span>            
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h4 class="chart-title">BANQEDI VALIDATE FILES</h4>
+  </div>
+  <div class="card-body">
+    <div class="col-md-12">
+      <label class="mr-2 font-weight-bold">Validate Files</label>
+      <strong>{{ QBANQEDIValidateFile }}</strong>
+    </div>
+    <div class="col-md-6">
+      <button
+        [disabled]="isValidateONButtonDisabled"
+        *ngIf="isValidateONButton"
+        class="btn btn-success btn-sm mr-2"
+        (click)="onBANQValidateSetStatus('true')"
+      >
+        Validate Files
+      </button>
+      <button
+        [disabled]="isValidateOFFButtonDisabled"
+        *ngIf="isValidateOFFButton"
+        class="btn btn-danger btn-sm mr-2"
+        (click)="onBANQValidateSetStatus('false')"
+      >
+        Don't Validate Files
+      </button>
+      <button
+        class="btn btn-primary btn-sm"
+        (click)="GetBANQValidateFileStatus()"
+      >
+        <i class="fe fe-rotate-cw"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- <div class="card">
+      <div class="card-header">
+        <h4 class="mb-0">Q835 Riven Service Configuration</h4>
+      </div>
+      <div class="card-body">
+          <div class="col-md-6">
+              <label class="mr-2 font-weight-bold">Service Status</label>
+              <strong>{{Q835RivenServiceStatus}}</strong>
+          </div>
+          <div class="col-md-6">
+            <button *ngIf="!isRivenServiceStarted" class="btn btn-success btn-sm mr-2" (click)="onStartService('Riven')">Start Service</button>
+            <button *ngIf="isRivenServiceStarted" class="btn btn-danger btn-sm mr-2" (click)="onStopService('Riven')">Stop Service</button>
+            <button class="btn btn-primary btn-sm" (click)="GetQ835RivenServiceStatus()"><i class="fe fe-rotate-cw"></i></button>
+          </div>
+      </div>
+    </div> -->

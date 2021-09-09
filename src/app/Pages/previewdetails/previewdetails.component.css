@@ -1,0 +1,16 @@
+.card-details{
+    background-color: #f9f9f9 !important; 
+}
+.table td{
+    padding: 0.25rem 1rem 0.25rem 0 !important;
+}
+.modal-body{
+    height: 750px;
+    overflow: scroll;
+}
+.font-10{
+    font-size: 10px;
+}
+.body-height{
+    height: 390px;
+}

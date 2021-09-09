@@ -1,0 +1,487 @@
+<div class="card">
+  <app-breadcrumb></app-breadcrumb>
+  <div class="card-body">
+    <div class="panelSep" *ngIf="disabledfilters == false">
+      <div class="row">
+        <div class="col-md-12">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label">Division</label>
+                  <kendo-dropdownlist
+                    class="form-control form-control-sm"
+                    formControlName="fcDivision"
+                    id="ddDivision"
+                    [class.is-invalid]="Division.invalid && Division.touched"
+                    [data]="sAllDivision"
+                    [textField]="'subclientdivisioncode'"
+                    [valueField]="'subclientdivisioncode'"
+                    [(ngModel)]="sSelectedDivisionID"
+                    [valuePrimitive]="true"
+                    (valueChange)="onDivisionChange($event)"
+                    [filterable]="true"
+                    (filterChange)="handleDivisionFilter($event)"
+                    [disabled]="disabledControls"
+                  >
+                  </kendo-dropdownlist>
+                  <div *ngIf="Division.invalid && Division.touched">
+                    <small *ngIf="Division.errors?.required" class="text-danger"
+                      >Division is required</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="" class="form-label">Practice</label>
+                  <kendo-dropdownlist
+                    class="w-100"
+                    formControlName="fcSubClientName"
+                    id="ddSubClients"
+                    [class.is-invalid]="
+                      SubClientName.invalid && SubClientName.touched
+                    "
+                    [data]="sSubClients"
+                    [textField]="'subclientname'"
+                    [valueField]="'subclientid'"
+                    [(ngModel)]="sSelectedSubClientCode"
+                    [valuePrimitive]="true"
+                    (valueChange)="onSubClientChange($event)"
+                    [filterable]="true"
+                    (filterChange)="handleSubclientFilter($event)"
+                    [disabled]="disabledPractice || disabledControls"
+                  >
+                  </kendo-dropdownlist>
+                  <div *ngIf="SubClientName.invalid && SubClientName.touched">
+                    <small
+                      *ngIf="SubClientName.errors?.required"
+                      class="text-danger"
+                      >Practice is required</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <div class="form-group">
+                    <label for="" class="form-label">Search By</label>
+                    <kendo-dropdownlist
+                      formControlName="fcSearchBy"
+                      id="ddfbcSearchBy"
+                      [class.is-invalid]="
+                        fbcSearchBy.invalid && fbcSearchBy.touched
+                      "
+                      [data]="SearchByData"
+                      [textField]="'text'"
+                      [valueField]="'value'"
+                      [(ngModel)]="sSelectedfbcSearchBy"
+                      [valuePrimitive]="true"
+                      (valueChange)="SearchByChange($event)"
+                      [disabled]="disabledControls"
+                    >
+                    </kendo-dropdownlist>
+                    <div *ngIf="fbcSearchBy.invalid && fbcSearchBy.touched">
+                      <small
+                        *ngIf="fbcSearchBy.errors?.required"
+                        class="text-danger"
+                        >SearchBy is required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group mr-3 ml-3 flex-fill">
+                    <label for="" class="form-label"
+                      ><strong class="text-danger">* </strong>Search</label
+                    >
+                    <div class="d-flex">
+                      <input
+                        kendoTextBox
+                        formControlName="fcSearch"
+                        type="text"
+                        id="Search"
+                        class="w-100"
+                        title="Search by {{ sSelectedfbcSearchBy }}"
+                        placeholder="Search by {{ sSelectedfbcSearchBy }}"
+                        [ngClass]="{ disabled: disabledControls }"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="ml-auto">
+                    <div class="form-group">
+                      <label for="" class="form-label">&nbsp;</label>
+                      <button
+                        kendoButton
+                        type="button"
+                        [primary]="true"
+                        class="mr-3"
+                        (click)="applyFilters()"
+                        title="Apply filters"
+                        [disabled]="disabledControls"
+                      >
+                        Apply
+                      </button>
+                      <button
+                        kendoButton
+                        type="button"
+                        (click)="clearFilters()"
+                        title="Default filters set"
+                        [disabled]="disabledControls"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <h4>File Summary</h4>
+      <div class="ml-auto">
+        <span class="text-muted">{{ this.totalRecords }} records found</span>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        #grid="kendoGrid"
+        id="gridSplit"
+        class="w-100 master"
+        style="max-height: 493px;"
+        [data]="FileSummaryGridView"
+        [groupable]="true"
+        [group]="groups"
+        (groupChange)="groupChange($event)"
+        [loading]="loading"
+      >
+        <!-- [sortable]="true"
+      [sort]="sort"
+      (sortChange)="sortChange($event)" -->
+        <ng-template
+          kendoGridToolbarTemplate
+          *ngIf="
+            disabledexportbutton == false &&
+            clsPermission.exporttopdfpracticefilesummary
+          "
+        >
+          <button
+            kendoGridPDFCommand
+            icon="file-pdf"
+            class="ml-auto float-right"
+            [disabled]="disabledexportbutton || disabledbutton"
+            (click)="exporttopdfclick()"
+          >
+            Export to PDF
+          </button>
+        </ng-template>
+
+        <kendo-grid-column
+          field="divcode"
+          title="Division Code"
+          width="50"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Division Code">Division Code</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.divcode }}">
+              {{ dataItem.divcode }}
+            </span>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate>
+            Total
+          </ng-template>
+        </kendo-grid-column>
+
+        <!-- <kendo-grid-column
+          field="billingloccode"
+          title="Billing Location"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Billing Location">Billing Location</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.sfilename }}">
+              {{ dataItem.sfilename }}
+            </span>
+          </ng-template>
+        </kendo-grid-column> -->
+
+        <kendo-grid-column
+          *ngIf="FilenameColumn"
+          field="masterfilename"
+          title="Master File Name"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="File Name">Master File Name</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.masterfilename }}">
+              {{ dataItem.masterfilename }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="subclientname"
+          title="Practice Name"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Practice Name">Practice Name</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.subclientname }}">
+              {{ dataItem.subclientname }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkno"
+          title="Check #"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Check #">Check #</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <span title="{{ dataItem.checkno }}">
+              {{ dataItem.checkno }}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkdate"
+          title="Check Date"
+          width="50"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template kendoGridHeaderTemplate let-column>
+            <span title="Check Date">Check Date</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.checkdate | date: "MM-dd-yyyy" }}
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkamt"
+          title="Check Amount"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+          ><ng-template kendoGridHeaderTemplate let-column>
+            <span title="Check Amount">Check Amount</span>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate>
+            {{ this.totalcheckamount }}
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkadj"
+          title="Check Adjustment"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Check Adjustment">Check Adjustment</span>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate>
+            {{ this.totalcheckadjustment }}
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="claimpaid"
+          title="Claim Paid"
+          width="60"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="Claim Paid">Claim Paid</span>
+          </ng-template>
+          <ng-template kendoGridFooterTemplate>
+            {{ this.totalclaimpaid }}
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-command-column
+          title=""
+          width="30"
+          [headerStyle]="{ 'font-weight': '600' }"
+          media="(min-width: 1025px)"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button
+              type="button"
+              (click)="onInfoClick(dataItem.nsplitid)"
+              data-toggle="modal"
+              data-target="#summaryInfoModal"
+              title="View Details"
+              class="k-button"
+            >
+              <i class="fe fe-info"></i>
+            </button>
+          </ng-template>
+        </kendo-grid-command-column>
+
+        <kendo-grid-pdf
+          fileName="{{ exportfilename }}"
+          paperSize="A4"
+          [scale]="0.6"
+          [repeatHeaders]="true"
+          [landscape]="true"
+        >
+          <kendo-grid-column field="divcode" title="Div. Code" width="80">
+          </kendo-grid-column>
+          <kendo-grid-column field="subclientname" title="Practice Name">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div
+                title="{{ dataItem.subclientname }}"
+                style="word-wrap: break-word;"
+              >
+                {{ dataItem.subclientname }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="checkno" title="Check #">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div
+                title="{{ dataItem.checkno }}"
+                style="word-wrap: break-word;"
+              >
+                {{ dataItem.checkno }}
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="checkdate" title="Check Date">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.checkdate | date: "MM-dd-yyyy" }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="checkamt"
+            title="Check Amount"
+            [headerStyle]="{ 'font-weight': '600' }"
+            ><ng-template kendoGridHeaderTemplate let-column>
+              <span title="Check Amount">Check Amount</span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              {{ this.totalcheckamount }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="checkadj"
+            title="Check Adjustment"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Check Adjustment">Check Adjustment</span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              {{ this.totalcheckadjustment }}
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="claimpaid"
+            title="Claim Paid"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Claim Paid">Claim Paid</span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              {{ this.totalclaimpaid }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-pdf-margin
+            top="5.8cm"
+            left="0.7cm"
+            right="0.7cm"
+            bottom="3cm"
+          ></kendo-grid-pdf-margin>
+          <ng-template
+            kendoGridPDFTemplate
+            let-pageNum="pageNum"
+            let-totalPages="totalPages"
+          >
+            <div class="page-template">
+              <div class="header">
+                <table class="table bg-white table-bordered table-striped">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h6>
+                          Michigan Healthcare Professionals, PC <br />
+                          <br />
+                          Division - Check and Practice Totals
+                        </h6>
+                      </td>
+                      <td>
+                        <img
+                          src="../../../../assets/img/TRIARQ-HUB-Report.png"
+                          alt=""
+                          width="225"
+                          class="d-block mx-auto"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card mb-2">
+                      <div class="card-body">
+                        <h6 class="mb-2">
+                          ERA Total Paid Amount : {{ totalclaimpaid }}
+                        </h6>
+                        <h6 class="mb-2">
+                          ERA Check Amount : {{ totalcheckamount }}
+                        </h6>
+                        <h6 class="mb-0">
+                          ERA PLB Amount : {{ totalcheckadjustment }}
+                        </h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="footer">Page {{ pageNum }} of {{ totalPages }}</div>
+            </div>
+          </ng-template>
+        </kendo-grid-pdf>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="summaryInfoModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" style="max-width: 1000px;">
+    <app-file-summary-info #FileSummaryInfo></app-file-summary-info>
+  </div>
+</div>

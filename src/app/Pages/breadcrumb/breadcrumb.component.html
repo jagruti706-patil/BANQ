@@ -1,0 +1,104 @@
+<div *ngIf="breadcrumbsvr.varbreadcrumb">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0 p-2 pl-3">
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varfilesummary"
+      >
+        <a routerLink="/filedata" routerLinkActive="active">File Summary</a>
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varsplitfilessummary"
+      >
+        <a routerLink="/filedata/split" routerLinkActive="active"
+          >Split File Summary</a
+        >
+      </li>
+      <li
+      class="breadcrumb-item"
+      aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varreportfilesummary"
+      >
+        <a routerLink="/practicefilesummaryreport/ERAreport" routerLinkActive="active"
+          >Report File Summary</a
+        >
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varchecksummary"
+      >
+        <a routerLink="/checksummary" routerLinkActive="active"
+          >Check Summary</a
+        >
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varclaimsvcsummary"
+      >
+        <a routerLink="/claimsummary" routerLinkActive="active"
+          >Claim Summary</a
+        >
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varplbsummary"
+      >
+        <a routerLink="/plbsummary" routerLinkActive="active">PLB Summary</a>
+      </li>
+    </ol>
+  </nav>
+</div>
+
+<div *ngIf="breadcrumbsvr.varFilesbreadcrumb">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0 p-2 pl-3">
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varMasterFilesbreadcrumb"
+      >
+        <a routerLink="/Files" routerLinkActive="active">Master Files</a>
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varSplitFilesbreadcrumb"
+      >
+        <a routerLink="/SplitFiles" routerLinkActive="active">Split Files</a>
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varUnMatchedClaimsbreadcrumb"
+      >
+        <a routerLink="/UnmatchedClaims" routerLinkActive="active"
+          >Un-Matched Claims</a
+        >
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varFilesClaimDetailsbreadcrumb"
+      >
+        <a routerLink="/FilesClaimDetails" routerLinkActive="active"
+          >Payer Details</a
+        >
+      </li>
+      <li
+        class="breadcrumb-item"
+        aria-label="breadcrumb"
+        *ngIf="breadcrumbsvr.varUnMatchedPLBsbreadcrumb"
+      >
+        <a routerLink="/UnmatchedPLBs" routerLinkActive="active"
+          >Un-Matched PLBs</a
+        >
+      </li>
+    </ol>
+  </nav>
+</div>

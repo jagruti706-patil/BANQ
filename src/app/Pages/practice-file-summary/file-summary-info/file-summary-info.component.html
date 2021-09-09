@@ -1,0 +1,116 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLabel">
+      File Summary Info
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <kendo-grid
+          [data]="FileSummaryInfoGridView"
+          style="max-height: 550px;"
+          [groupable]="true"
+          [group]="groups"
+          (groupChange)="groupChange($event)"
+          [loading]="loading"
+        >
+        <!-- [sortable]="true"
+        [sort]="sort"
+        (sortChange)="sortChange($event)" -->
+          <kendo-grid-column field="claimno" title="Claim #" width="70">
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Claim #">Claim #</span>
+            </ng-template>
+
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span title="{{ dataItem.claimno }}">{{ dataItem.claimno }}</span>
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              Total
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="claimpaid" title="Paid" width="40">
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Paid">Paid</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.claimpaid }}
+            </ng-template>
+            <ng-template kendoGridFooterTemplate>
+              {{ this.claimtotalpaid }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            field="claimidentifier"
+            title="Claim Identifier Type"
+            width="60"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Claim Identifier Type">Claim Identifier Type</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.claimidentifier }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            field="claimidentifiervalue"
+            title="Claim Identifier Value"
+            width="60"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Claim Identifier Value">Claim Identifier Value</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.claimidentifiervalue }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column
+            field="renderinname"
+            title="Rendering Provider"
+            width="60"
+          >
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Rendering Provider">Rendering Provider</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.renderinname }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="idtype" title="Id Type" width="30">
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Id Type">Id Type</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.idtype }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <kendo-grid-column field="idvalue" title="Id Value" width="50">
+            <ng-template kendoGridHeaderTemplate let-column>
+              <span title="Id Value">Id Value</span>
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{ dataItem.idvalue }}
+            </ng-template>
+          </kendo-grid-column>
+
+          <ng-template kendoGridNoRecordsTemplate>
+            No records available.
+          </ng-template>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

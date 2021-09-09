@@ -1,0 +1,154 @@
+<div class="card">
+  <div class="card-header ">
+    <h4 class="mb-0">Client</h4>
+    <button class="ml-auto" kendoButton [primary]="true" (click)="onAddClientClick()">
+      Add Client
+    </button>
+  </div>
+  <div class="card-body">
+    <!-- <form class="k-form" [formGroup]="ClientSearchGroup">
+      <div class="row">
+        <div class="k-form-field col-md-4">
+          <div class="input-group">
+            <input type="text" class="k-textbox form-control" formControlName="fcClientSearch" />
+            <div class="input-group-append">
+              <button kendoButton class="ml-auto" (click)="onClientSearchClick()"><i class="fe fe-search"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form> -->
+
+    <!-- <h4 class="text-center text-success"> Client </h4> -->
+    <div class="grid-wrapper">
+      <kendo-grid [data]="ClientDetailsgridView" style="width:100%" [height]="480" [pageSize]="ClientDetailspageSize"
+        [pageable]="true" [skip]="ClientDetailsskip" (pageChange)="pageChange($event)" (edit)="EditClient($event)"
+        (remove)="DeleteClient($event)" [sortable]="true" [sort]="ClientDetailssort" (sortChange)="sortChange($event)">
+        <!-- [columnMenu]="{ columnChooser: false }"> -->
+        <kendo-grid-column *ngIf="!isHidden('clientid')" field="clientid" title="ID">
+        </kendo-grid-column>
+        <kendo-grid-column field="clientcode" title="Code" width="40" [headerStyle]="{ 'font-weight': 'bold' }">
+        </kendo-grid-column>
+        <kendo-grid-column field="clientname" title="Name" width="80" [headerStyle]="{ 'font-weight': 'bold' }">
+        </kendo-grid-column>
+        <kendo-grid-column field="clientcontactname" title="Contact Name" width="80"
+          [headerStyle]="{ 'font-weight': 'bold' }">
+        </kendo-grid-column>
+        <kendo-grid-column field="clientcontactemail" title="Contact Email" width="100"
+          [headerStyle]="{ 'font-weight': 'bold' }">
+        </kendo-grid-column>
+        <kendo-grid-column field="clientcontactphone" title="Contact Phone" width="45"
+          [headerStyle]="{ 'font-weight': 'bold' }">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.clientcontactphone | phone }}
+          </ng-template>
+        </kendo-grid-column>
+        <!-- <kendo-grid-column field="ClientService" title="Client Service" width="60" [headerStyle]="{'font-weight': 'bold'}">
+          </kendo-grid-column> -->
+        <!-- <kendo-grid-column field="clientstatus" title="Status" width="40" [headerStyle]="{'font-weight': 'bold'}">
+          </kendo-grid-column> -->
+        <kendo-grid-column field="clientstatus" title="Status" width="30" [headerStyle]="{ 'font-weight': 'bold' }">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div *ngIf="dataItem.clientstatus == 'true'" class="text-success">
+              Active
+            </div>
+            <div *ngIf="dataItem.clientstatus == 'false'" class="text-danger">
+              Inactive
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-command-column title="Action" width="70" [headerStyle]="{ 'font-weight': 'bold' }">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <button kendoGridEditCommand [primary]="true" title="Edit" data-toggle="modal"
+              data-target="#editclientdetailsconfirmationModal">
+              <i class="fe fe-edit-2"></i>
+            </button>
+            <button kendoGridRemoveCommand title="Delete" data-toggle="modal"
+              data-target="#deleteclientconfirmationModal">
+              <i class="fe fe-x"></i>
+            </button>
+            <!-- <button *ngIf="dataItem.clientstatus=='false'" class="k-button" (click)="OnClientDetails(dataItem.clientid)"
+              title="Activate"><i class="fe fe-zap"></i></button>
+            <button *ngIf="dataItem.clientstatus=='true'" class="k-button" (click)="OnClientDetails(dataItem.clientid)"
+              title="Deactivate"><i class="fe fe-zap-off"></i></button>
+            <button class="k-button" (click)="OnClientSubclientDetails(dataItem.clientid)" title="View Details"><i
+                class="fe fe-info"></i></button> -->
+            <button *ngIf="dataItem.clientstatus == 'false'" data-toggle="modal" data-target=".bd-example-modal-lg"
+              class="k-button" (click)="OnClientDetails(dataItem.clientid)" title="Activate">
+              <i class="fe fe-zap"></i>
+            </button>
+            <button *ngIf="dataItem.clientstatus == 'true'" class="k-button" data-toggle="modal"
+              data-target=".bd-example-modal-lg" (click)="OnClientDetails(dataItem.clientid)" title="Deactivate">
+              <i class="fe fe-zap-off"></i>
+            </button>
+            <button class="k-button" data-toggle="modal" data-target="#subClientDetails"
+              (click)="OnClientSubclientDetails(dataItem.clientid)" title="View Details">
+              <i class="fe fe-info"></i>
+            </button>
+          </ng-template>
+        </kendo-grid-command-column>
+      </kendo-grid>
+      <div *ngIf="!this.ClientDetailsgridView" class="k-icon k-i-loading" style="font-size: 64px; "></div>
+    </div>
+  </div>
+</div>
+
+<!-- SubClient Modal -->
+<!-- <kendo-dialog [minWidth]="250" class="modal" title="Status" *ngIf="opened" (close)="close()"> -->
+
+<!-- Large modal -->
+
+<div *ngIf="clientID > 0" data-backdrop="static" data-keyboard="false" class="modal fade bd-example-modal-lg"
+  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <app-clientstatus (outClientStatus)="OutputClientStatus($event)" [SelectedClientID]="clientID"></app-clientstatus>
+  </div>
+</div>
+
+<!-- <kendo-dialog [minWidth]="250" class="modal" title="View Details" *ngIf="opened" (close)="close()">
+  <app-clientstatus (outClientStatus)="OutputClientStatus($event)" [SelectedClientID]="clientID"></app-clientstatus>
+</kendo-dialog> -->
+<!-- Subclient  Modal -->
+
+<!-- Details Modal -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="subClientDetails" tabindex="-1" role="dialog"
+  aria-labelledby="subClientDetailsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <app-previewdetails [clsObject]="clsClientObject"></app-previewdetails>
+  </div>
+</div>
+
+<!-- <kendo-dialog [minWidth]="250" class="modal" title="View Details" *ngIf="openedDetails" (close)="closeDetails()">
+  <app-previewdetails [clsObject]="clsClientObject"></app-previewdetails>
+</kendo-dialog> -->
+
+<!-- <kendo-dialog title="{{confirmType}} confirmation" *ngIf="confirmOpened" (close)="closeConfirm('cancel')"
+  [minWidth]="250">
+  <p style="margin: 30px; text-align: center;">{{confirmMessage}}</p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="closeConfirm('no')">No</button>
+    <button kendoButton (click)="closeConfirm('yes')" primary="true">Yes</button>
+  </kendo-dialog-actions>
+</kendo-dialog> -->
+
+<!--Edit Confirmation Model -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="editclientdetailsconfirmationModal"
+  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <app-editconfirmation [InputEditMessage]="ClientDetailsInputEditMessage"
+      (OutputEditResult)="OutputEditResult($event)">
+    </app-editconfirmation>
+  </div>
+</div>
+<!--Edit Confirmation Model -->
+
+<!--Delete Confirmation Model -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="deleteclientconfirmationModal" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <app-deleteconfirmation [InputDeleteMessage]="ClientDetailsInputDeleteMessage"
+      (OutputDeleteResult)="OutputDeleteResult($event)">
+    </app-deleteconfirmation>
+  </div>
+</div>
+<!--Delete Confirmation Model -->

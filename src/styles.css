@@ -1,0 +1,392 @@
+/* You can add global styles to this file, and also import other style files */
+/*----------------------------- Filter Sidepanel -----------------------*/
+
+.second-filter {
+  position: absolute;
+  top: 65%;
+  width: 35%;
+  z-index: 1010;
+  transform: translateX(1500px);
+  -webkit-transform: translateX(1500px);
+  -moz-transform: translateX(1500px);
+  -o-transform: translateX(1500px);
+  -ms-transform: translateX(1500px);
+  transition: all 0.5s ease-out;
+  height: fit-content;
+}
+
+.right-side-panel {
+  position: absolute;
+  top: 220px;
+  width: 35%;
+  z-index: 1010;
+  transform: translateX(1500px);
+  -webkit-transform: translateX(1500px);
+  -moz-transform: translateX(1500px);
+  -o-transform: translateX(1500px);
+  -ms-transform: translateX(1500px);
+  transition: all 0.5s ease-out;
+  height: fit-content;
+}
+.side-panel.side-panel-open .side-panel-wrapper,
+.side-panel-bottom.side-panel-open-bottom .side-panel-wrapper-bottom {
+  transform: translateX(770px);
+  -webkit-transform: translateX(770px);
+  -moz-transform: translateX(770px);
+  -o-transform: translateX(770px);
+  -ms-transform: translateX(770px);
+}
+/*------------------------- Filter Sidepanel End --------------------------*/
+@import "../node_modules/c3/c3.min.css";
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+:focus {
+  outline: none !important;
+}
+.black-box {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.master.k-grid th {
+  /* #gridMaster.k-grid th,
+#gridUnmatchedClaims.k-grid th { */
+  white-space: pre-wrap !important;
+}
+
+/* Tooltip Grid for Master Files */
+
+.mastergrid.k-grid td {
+  padding: 0px 0px;
+}
+
+.mastergrid.k-grid td span,
+.mastergrid.k-grid td div {
+  padding: 8px 12px;
+}
+
+.mastergrid.k-grid td .badge {
+  padding: 0.25em 0.4em;
+}
+
+/* End */
+
+/* .k-i-loading {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding: 20px;
+    border-radius: 30px;
+    font-size: 24px;
+    background-color: #fefefe;
+  } */
+
+.k-i-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 64px;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #ff6757;
+}
+.padding-left {
+  padding-left: 0 !important;
+}
+
+/* Mobile Responsive media query */
+
+@media only screen and (max-width: 600px) {
+  .flexrow {
+    -ms-flex-direction: column;
+    flex-direction: column;
+    display: flex;
+    text-align: left;
+    margin-left: 0;
+  }
+  .modal {
+    padding: 10px;
+  }
+  .padding-left {
+    padding-left: 0.75rem !important;
+  }
+}
+
+/* grid Filter Spacing Issue Resolved */
+
+/* .k-grid-header .k-header {
+  height: 20px;
+  padding: 5px;
+  overflow: visible;
+  white-space: normal;
+} */
+
+/* Grid style default for advance grid  */
+
+/* .k-grid {
+  font-family: "Source Sans Pro";
+  font-size: 13px;
+}
+.k-grid tbody tr {
+  line-height: 15px;
+}
+
+.k-grid tbody td {
+  padding: 5px;
+} */
+
+.c3 {
+  max-height: 87px !important;
+}
+
+.card-details {
+  background-color: #f9f9f9 !important;
+}
+
+.card-chart {
+  border-right: 1px solid #f0f0f0;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.chart-header {
+  padding: 0.75rem 1.25rem;
+  border-bottom: 0;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chart-title {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 0;
+}
+
+.chart-body {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chart-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 10px 20px;
+  border-color: #e9ecef;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tx-60 {
+  font-size: 60px;
+}
+
+.tx-11 {
+  font-size: 12px;
+}
+
+.tx-24 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.tx-14 {
+  font-size: 14px;
+}
+
+.tx-inverse {
+  color: #37393b;
+}
+
+.panelSep {
+  margin-bottom: 22px;
+  border-bottom: 1px dashed #dcdcdc;
+}
+
+.f-bold {
+  font-weight: 550 !important;
+}
+
+/* Angular Multiselect */
+.custom-class-example .list-filter input,
+.custom-class-example {
+  color: #656565 !important;
+}
+.custom-class-example .c-token {
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #f6f6f6 !important;
+  border-radius: 0px !important;
+}
+.custom-class-example .selected-list .c-list .c-token .c-label {
+  color: #656565 !important;
+}
+.custom-class-example .selected-list .c-list .c-token .c-remove svg {
+  fill: #656565 !important;
+}
+.custom-class-example .pure-checkbox label::before {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  background-color: #fff !important;
+}
+.custom-class-example
+  .pure-checkbox
+  input[type="checkbox"]:checked
+  + label:before {
+  border-color: #ff6358 !important;
+  background-color: #ff6358 !important;
+}
+.custom-class-example .list-filter {
+  height: 34px !important;
+}
+.custom-class-example .c-btn {
+  color: rgba(0, 0, 0, 0.3) !important;
+  min-height: calc(1.4285714286em + 12px) !important;
+  padding: 4px !important;
+  border: 1px solid #ebebeb !important;
+  border-radius: 0 !important;
+}
+.custom-class-example .selected-list .c-list .c-token {
+  margin-top: 0 !important;
+}
+.custom-class-example .pure-checkbox input[type="checkbox"] + label {
+  font-weight: normal !important;
+  color: #656565 !important;
+}
+
+.custom-class-example .list-message {
+  color: #656565 !important;
+  font-weight: normal !important;
+}
+.custom-class-example .dropdown-list ul li {
+  padding: 4px 10px !important;
+}
+.custom-class-example .dropdown-list ul li:last-child {
+  padding-bottom: 4px !important;
+}
+.custom-class-example .dropdown-list ul li:first-child {
+  padding-top: 4px !important;
+}
+.custom-class-example .pure-checkbox input[type="checkbox"] + label:before {
+  border-radius: 0 !important;
+}
+.custom-class-example .selected-item {
+  background-color: rgba(255, 99, 88, 0.25);
+}
+
+.custom-class-example .selected-list .countplaceholder {
+  color: black !important;
+}
+
+.custom-class-example .c-btn.disabled {
+  background-color: #fff !important;
+}
+/* End */
+
+/* Toatser */
+.toast-container .ngx-toastr {
+  width: 400px !important;
+}
+.progress-box {
+  display: block;
+  position: fixed;
+  z-index: 1300;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.report.k-grid {
+  font-size: 12px !important;
+}
+
+.k-textbox.disabled,
+.k-textbox[disabled] {
+  outline: none;
+  cursor: default;
+  opacity: 0.6;
+  -webkit-filter: grayscale(0.1);
+  filter: grayscale(0.1);
+  pointer-events: none;
+  box-shadow: none;
+}
+/* .light-blue-header.k-grid .k-grid-header {
+  background: #406b98 !important;
+  color: white !important;
+}
+.light-blue-footer.k-grid .k-grid-footer {
+  background: #a2b6ce !important;
+  color: black !important;
+}
+.light-blue-header.k-grid td {
+  border-color: #d4d4d4 !important;
+  color: black !important;
+} */
+
+.light-blue-header.k-grid .k-grid-header {
+  background: #b0c4de !important;
+  color: black !important;
+}
+.light-blue-footer.k-grid .k-grid-footer {
+  background: #b0c4de !important;
+  color: black !important;
+}
+.light-blue-header.k-grid td {
+  border-color: #b0c4de !important;
+  color: black;
+}
+
+.pendinggrid.k-grid tbody tr:hover,
+.pendinggrid.k-grid tbody tr.k-state-hover {
+  font-weight: bold !important;
+}
+
+/* .k-grid {
+  font-family: "Source Sans Pro";
+  font-size: 13px;
+}
+
+.k-grid-header .k-header {
+  padding: 4px;
+  height: 30px; 
+}
+
+.k-grid tbody tr {
+  line-height: 15px;
+}
+
+.k-grid tbody td {
+  padding: 5px;
+} */
+
+.customdialog.k-dialog-wrapper{ justify-content: start !important; top:15px !important}

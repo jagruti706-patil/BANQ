@@ -1,0 +1,11 @@
+.nav-tabs .nav-link.active {
+    border-color: #e96127;
+    color: #e96127;
+    background: #ffe5da;
+    border-width: 2px;
+  }
+  .nav-tabs .nav-link{
+    padding: .5rem;
+    color: #888888;
+    font-size: 13px;
+  }

@@ -1,0 +1,403 @@
+<div class="card">
+  <div class="card-body">
+    <div class="panelSep">
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <div class="d-flex">
+            <div class="mr-3">
+              <div class="form-group">
+                <label class="form-label">Import Start Date</label>
+                <kendo-datepicker
+                  id="dtstartDate"
+                  [(value)]="startDate"
+                  (valueChange)="onDateChange($event, 'start date')"
+                  class="w-100"
+                  [max]="endDate"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label class="form-label">Import End Date</label>
+                <kendo-datepicker
+                  id="dtendDate"
+                  [(value)]="endDate"
+                  (valueChange)="onDateChange($event, 'end date')"
+                  class="w-100"
+                  [min]="startDate"
+                ></kendo-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+              <div class="form-group">
+                <label class="form-label">Group</label>
+                <kendo-dropdownlist
+                  class="form-control form-control-sm"
+                  formControlName="fcClientName"
+                  id="ddClients"
+                  [class.is-invalid]="ClientName.invalid && ClientName.touched"
+                  [data]="sAllClients"
+                  [textField]="'clientname'"
+                  [valueField]="'clientid'"
+                  [(ngModel)]="nSelectedClientID"
+                  [valuePrimitive]="true"
+                  (valueChange)="onClientChange($event)"
+                  [filterable]="true"
+                  (filterChange)="handleClientFilter($event)"
+                >
+                </kendo-dropdownlist>
+                <div *ngIf="ClientName.invalid && ClientName.touched">
+                  <small *ngIf="ClientName.errors?.required" class="text-danger"
+                    >Group is required</small
+                  >
+                </div>
+              </div>
+          </form>
+        </div>
+        <div class="col-md-4">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="d-flex">
+              <div class="form-group ml-2 flex-fill">
+                <label for="" class="form-label">Search By</label>
+                <kendo-dropdownlist
+                  formControlName="fcMasterSearchBy"
+                  id="ddMasterSearchBy"
+                  [class.is-invalid]="
+                    MasterSearchBy.invalid && MasterSearchBy.touched
+                  "
+                  [data]="sMasterSearchBy"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedMasterSearchBy"
+                  [valuePrimitive]="true"               
+                  (valueChange)="onMasterSearchByChange($event)"                 
+                >
+                </kendo-dropdownlist>
+                <div *ngIf="MasterSearchBy.invalid && MasterSearchBy.touched">
+                  <small
+                    *ngIf="MasterSearchBy.errors?.required"
+                    class="text-danger"
+                    >SearchBy is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group ml-2 flex-fill">
+                <label for="" class="form-label">Search</label>
+                <div class="d-flex">
+                  <input
+                    kendoTextBox
+                    formControlName="fcSearch"
+                    type="text"
+                    id="Search"                   
+                    class="form-control form-control-sm flex-fill"
+                    title="Search by {{ sSelectedMasterSearchBy }}"
+                    placeholder="Search by {{ sSelectedMasterSearchBy }}"                    
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-2">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="d-flex">
+              <div class="ml-auto">
+                <div class="form-group">
+                  <label for="" class="form-label">&nbsp;</label>
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    type="button"
+                    (click)="applyFilters()"
+                    title="Apply filters"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    kendoButton
+                    class="ml-3"
+                    type="button"
+                    (click)="clearFilters()"
+                    title="Default filters set"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <h4>Hold Payment Files</h4>
+      <div class="ml-auto">
+        <span class="text-muted"
+          >{{ MasterFilesdisplaytotalrecordscount }} records found</span
+        >
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridMaster"
+        [data]="MasterFilesGridView"
+        [sortable]="true"
+        [sort]="sortMaster"
+        (sortChange)="sortMasterChange($event)"
+        [selectable]="true"
+        class="master"
+        [loading]="loadingMasterFilesGrid"
+        [pageable]="true"
+        [pageSize]="MasterFilespagesize"
+        [skip]="MasterFilesSkip"
+        (pageChange)="pageChangeMasterFile($event)"
+        [height]="465"        
+      >
+        <!-- <kendo-grid-column
+          field="clientcode"
+          title="Code"
+          width="8"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.clientcode }}">
+              {{ dataItem.clientcode }}
+            </div>
+          </ng-template>
+        </kendo-grid-column> -->
+        <kendo-grid-column
+          field="clientname"
+          title="Group Name"
+          width="15"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.clientname }}">
+              {{ dataItem.clientname }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="sfilename"
+          title="File Name"
+          width="23"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.sfilename }}">
+              {{ dataItem.sfilename }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="spayername"
+          title="Payer"
+          width="18"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.spayername }}">
+              {{ dataItem.spayername }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="scheckdate"
+          title="Check Date"
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div>
+              {{ dataItem.scheckdate | date: "MM-dd-yyyy" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="schecknumber"
+          title="Check #"
+          width="16"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.schecknumber }}">
+              {{ dataItem.schecknumber }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="scheckamount"
+          title="Check Amount"
+          width="11"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.scheckamount }}">
+              {{ dataItem.scheckamount }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="dtimportdate"
+          title="Import Date"
+          width="20"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div>
+              {{ dataItem.dtimportdate | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="nstatus"
+          title="Status"
+          width="9"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              #target
+              title="{{
+                dataItem?.nstatus === 'UnProcess'
+                  ? clsPermission.fileunprocesslogs
+                    ? dataItem.serrormsg
+                    : ''
+                  : ''
+              }}"
+            >
+              <span class="badge badge-warning" *ngIf="dataItem?.nstatus == '3'"
+                >Duplicate</span
+              >
+              <kendo-contextmenu
+                *ngIf="
+                  dataItem?.nstatus == '3' &&
+                  clsPermission.holdpaymentreprocessaccess &&
+                  (currentusername
+                    .toLowerCase()
+                    .includes('vijay.patil@triarqhealth.com') ||
+                    currentusername
+                      .toLowerCase()
+                      .includes('sagar.ghodke@triarqhealth.com') ||
+                    currentusername
+                      .toLowerCase()
+                      .includes('juily.hardas@triarqhealth.com') ||
+                    currentusername
+                      .toLowerCase()
+                      .includes('manisha.sonawane@triarqhealth.com') ||
+                    currentusername
+                      .toLowerCase()
+                      .includes('dhananjay.wagh@triarqhealth.com') ||
+                    currentusername
+                      .toLowerCase()
+                      .includes('pravina.khandbahale@triarqhealth.com') ||
+                    currentusername
+                      .toLowerCase()
+                      .includes('priyanka.nikam@triarqhealth.com'))
+                "
+                [target]="target"
+                [items]="items"
+                (select)="onMenuItemSelect(dataItem)"
+              >
+              </kendo-contextmenu>
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-command-column  *ngIf="clsPermission.viewholdpaymenthistory"
+          title=""
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+          media="(min-width: 1025px)"
+        >
+        <ng-template kendoGridCellTemplate let-dataItem>
+              <button
+                  id="btnViewMaster"
+                  class="k-button k-primary"
+                  (click)="
+                    RetriveMaster835File(
+                      dataItem.nmastererafileid,
+                      dataItem.sfilename,
+                      'View'
+                    )
+                  "
+                  title="View Duplicate File"
+                >
+              <i class="fe fe-file"></i>
+            </button>
+            <button
+              type="button"             
+              data-toggle="modal"
+              data-target="#checkhistoryInfoModal"
+              title="View Check History"
+              class="k-button"
+              (click)="oncheckhistoryinfoclick(dataItem)"
+            >
+            <i class="fe fe-info"></i>
+            </button>
+          </ng-template>
+        </kendo-grid-command-column>
+
+        <ng-template kendoGridNoRecordsTemplate>
+          No records available.
+        </ng-template>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<kendo-dialog class="customdialog" title="Confirmation" *ngIf="openedreprocess" (close)="close('No')" [minWidth]="250" [width]="450">
+  <p style="font-size: 16px; word-wrap: break-word;">{{ DownloadConfirmationMessage }}</p>
+  <div class="d-flex border-top pt-2">
+    <div class="ml-auto">
+      <button class="mr-2" kendoButton (click)="close('No')">No</button>
+      <button kendoButton (click)="close('Yes')" primary="true">Yes</button>
+    </div>      
+  </div>
+</kendo-dialog>
+
+<!--Check history Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="checkhistoryInfoModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"  
+>
+  <div class="modal-dialog modal-lg" style="max-width: 850px;">
+    <app-duplicatecheckpaymenthistory 
+      [InputClientid]="InputClientid"
+      [InputCheckno]="InputChecknumber"         
+      (OutputSelectCheckHistoryResult)="OutputSelectCheckHistoryResult($event)"
+      #SelectedcheckhistoryChild
+    ></app-duplicatecheckpaymenthistory>
+  </div>
+</div>
+<!--Check history Model -->
+
+<kendo-dialog
+  id="modelMaster"
+  [width]="650"
+  class="modal"
+  title="{{ stitleMasterfile }}"
+  *ngIf="masteropened"
+  (close)="masterclose()"
+>
+<!-- <p style="font-size: 16px; word-wrap: break-word; font-weight: 600;">{{ stitleMasterfile }}</p> -->
+  <div>
+    <textarea
+      class="form-control"
+      id="txtSplitFile"
+      style="font-size: 0.9em; width: 100%;"
+      rows="21"
+      readonly
+      >{{ s835erainstring }}</textarea
+    >
+  </div>
+</kendo-dialog>

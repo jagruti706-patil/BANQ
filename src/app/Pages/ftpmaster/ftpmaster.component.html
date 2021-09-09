@@ -1,0 +1,299 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">FTP Details</h5>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="FTPGroup">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>FTP Code</label
+            >
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPCode.invalid && FTPCode.touched"
+              formControlName="fcFTPCode"
+              type="text"
+              id="FTPCode"
+              class="w-100"
+              readonly
+            />
+            <div *ngIf="FTPCode.invalid && FTPCode.touched">
+              <small *ngIf="FTPCode.errors?.required" class="text-danger"
+                >FTP Code is required</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>FTP Url</label
+            >
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPUrl.invalid && FTPUrl.touched"
+              formControlName="fcFTPUrl"
+              type="text"
+              id="FTPUrl"
+              class="w-100"
+            />
+            <div *ngIf="FTPUrl.invalid && FTPUrl.touched" class="text-danger">
+              <small *ngIf="FTPUrl.errors?.required">FTP Url is required</small>
+              <small *ngIf="FTPUrl.errors?.maxlength"
+                >FTP Url allows 100 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>Port</label
+            >
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPPort.invalid && FTPPort.touched"
+              formControlName="fcFTPPort"
+              type="text"
+              id="FTPPort"
+              class="w-100"
+            />
+            <div *ngIf="FTPPort.invalid && FTPPort.touched" class="text-danger">
+              <small *ngIf="FTPPort.errors?.required">Port is required</small>
+              <small *ngIf="FTPPort.errors?.pattern"
+                >Only number is allowed.</small
+              >
+              <small *ngIf="FTPPort.errors?.maxlength"
+                >Port must have maximum 4 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>User Name</label
+            >
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPUsername.invalid && FTPUsername.touched"
+              formControlName="fcFTPUsername"
+              type="text"
+              id="FTPUsername"
+              class="w-100"
+            />
+            <div
+              *ngIf="FTPUsername.invalid && FTPUsername.touched"
+              class="text-danger"
+            >
+              <small *ngIf="FTPUsername.errors?.required"
+                >UserName is required</small
+              >
+              <small *ngIf="FTPUsername.errors?.maxlength"
+                >UserName allows 50 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>Password</label
+            >
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPPassword.invalid && FTPPassword.touched"
+              formControlName="fcFTPPassword"
+              type="password"
+              id="FTPPassword"
+              class="w-100"
+            />
+            <div
+              *ngIf="FTPPassword.invalid && FTPPassword.touched"
+              class="text-danger"
+            >
+              <small *ngIf="FTPPassword.errors?.required"
+                >Password is required.</small
+              >
+              <small *ngIf="FTPPassword.errors?.minlength"
+                >Password must have 8 characters</small
+              >
+              <small *ngIf="FTPPassword.errors?.maxlength"
+                >Password allows 50 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>FTP Name</label
+            >
+            <input
+              kendoTextBox
+              [class.is-invalid]="FTPName.invalid && FTPName.touched"
+              formControlName="fcFTPName"
+              type="text"
+              id="FTPName"
+              class="w-100"
+            />
+            <div *ngIf="FTPName.invalid && FTPName.touched" class="text-danger">
+              <small *ngIf="FTPName.errors?.required"
+                >FTP Name is required</small
+              >
+              <small *ngIf="FTPName.errors?.maxlength"
+                >FTP Name allows 50 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">FTP Type</label>
+            <kendo-dropdownlist
+              formControlName="fcFTPType"
+              [data]="arrFTPType"
+              class="w-100"
+            >
+            </kendo-dropdownlist>
+          </div>
+        </div>
+
+        <div class=" col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>835 Ftp Folder</label
+            >
+            <input
+              type="text"
+              kendoTextBox
+              class="w-100"
+              [class.is-invalid]="
+                client835FtpFolder.invalid && client835FtpFolder.touched
+              "
+              formControlName="fcClient835Ftpfolder"
+            />
+            <div
+              *ngIf="client835FtpFolder.invalid && client835FtpFolder.touched"
+              class="text-danger"
+            >
+              <small *ngIf="client835FtpFolder.errors?.required"
+                >835 Ftp Folder is required</small
+              >
+              <small *ngIf="client835FtpFolder.errors?.maxlength"
+                >835 Ftp Folder allows 150 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class=" col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>837 Ftp Folder</label
+            >
+            <input
+              type="text"
+              kendoTextBox
+              class="w-100"
+              [class.is-invalid]="
+                client837FtpFolder.invalid && client837FtpFolder.touched
+              "
+              formControlName="fcClient837Ftpfolder"
+            />
+            <div
+              *ngIf="client837FtpFolder.invalid && client837FtpFolder.touched"
+              class="text-danger"
+            >
+              <small *ngIf="client837FtpFolder.errors?.required"
+                >837 Ftp Folder is required</small
+              >
+              <small *ngIf="client837FtpFolder.errors?.maxlength"
+                >837 Ftp Folder allows 150 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <label class="custom-switch">
+              <input
+                type="checkbox"
+                name="custom-switch-checkbox"
+                class="custom-switch-input"
+                formControlName="fcFTPStatus"
+                [class.is-invalid]="FTPStatus.invalid && FTPStatus.touched"
+              />
+              <span class="custom-switch-indicator"></span>
+              <span class="custom-switch-description">{{
+                FTPStatus.value === true
+                  ? "Active"
+                  : FTPStatus.value === false
+                  ? "Inactive"
+                  : ""
+              }}</span>
+            </label>
+            <!-- <kendo-switch class="col-md-2 form-control" [onLabel]="' '" [offLabel]="' '" formControlName="fcFTPStatus"
+                      (click)="ClientStatusChanged()" [class.is-invalid]="FTPStatus.invalid && FTPStatus.touched">
+                    </kendo-switch>
+                    <label id="lblFTPMasterStatus" class="col-md-10 form-check-label" *ngIf="FTPStatus.value==true"
+                      class="text-success">Active</label>
+                    <label id="lblFTPMasterStatus" class="col-md-10 form-check-label" *ngIf="FTPStatus.value==false"
+                      class="text-danger">Inactive</label>
+                    <div *ngIf="FTPStatus.invalid && FTPStatus.touched">
+                      <small *ngIf="FTPStatus.errors?.required" class="text-danger">Status is required</small>
+                    </div> -->
+          </div>
+        </div>
+        <div class="col-md-3">
+          <button
+            id="btnCheckFTPConnection"
+            kendoButton
+            [primary]="true"
+            title="Check FTP Connection"
+            (click)="OnCheckFTPConnection()"
+            class="mt-5"
+          >
+            <i class="fe fe-check-square"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Row end here -->
+      <!-- 
+      <div class="row ml-auto">
+        <button class="ml-auto" type="button" id="AddClientFTP" kendoButton [primary]="true" [disabled]="!validateFTP()"
+          (click)="onSaveFTP()">Save</button>
+      </div> -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" (click)="OnClose()">
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="AddClientFTP"
+      [disabled]="!validateFTP()"
+      (click)="onSaveFTP()"
+    >
+      Save
+    </button>
+  </div>
+</div>

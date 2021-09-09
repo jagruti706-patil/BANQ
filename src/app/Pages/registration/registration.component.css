@@ -1,0 +1,30 @@
+.flexrow{
+    -ms-flex-direction: row;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-left: 1.7rem;
+   }
+
+
+   .wizard-card-header{
+    background-color: #fff;
+    background-clip: border-box;
+    height: 100px;
+    margin-top: 20px;
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-radius: 3px;
+    }
+    aw-wizard-step{
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    @media (min-width: 576px)
+{
+   #exampleSubClientModal .modal-dialog {
+    max-width: 1200px !important;
+    margin: 1.75rem auto;
+}
+}

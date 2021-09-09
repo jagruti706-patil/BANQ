@@ -1,0 +1,776 @@
+<div class="card">
+  <!-- <div class="card-header ">
+    <h4 class="mb-0">TRIARQ Hub Account Information</h4>
+  </div> -->
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="grid-wrapper">
+          <kendo-grid style="width:100%" [data]="view">
+            <kendo-grid-column
+              field="text"
+              width="250"
+              [headerStyle]="{ display: 'none' }"
+              class="bg-white"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.serialno == 0">
+                  <div class="row">
+                    <div class="col-md-12 text-center">
+                      <img
+                        src="../../../assets/img/MHPLogo.jpg"
+                        alt="MHP Logo"
+                      />
+                      <div>
+                        <h3><u>TRIARQ Hub Account Information</u></h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-md-12">
+                      <b>Date:</b>
+                      {{ todaydate | date: "MM/dd/yyyy" }}
+                      <div>
+                        <h6>{{ dataItem.text }}</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="dataItem.serialno == 1">
+                  <div class="row">
+                    <!-- <div class="col-md-12">
+                      <h5>{{ dataItem.text }}</h5>
+                    </div> -->
+                    <div class="col-md-12 text-center">
+                      <table class="clientInformation" style="width:100%">
+                        <tr>
+                          <td class="name">
+                            Client Name
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            Triarq Health Alliance
+                          </td>
+                          <td class="name">
+                            Sub Client Code
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.subclientcode }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="name">
+                            Division Code
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.subclientdivisioncode }}
+                          </td>
+                          <td class="name">
+                            Billing Location
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.billinglocationcode }}
+                          </td>
+                        </tr>
+                        <!-- <tr>
+                              <td class="name">
+                                Division Code
+                              </td>
+                              <td class="middle">:</td>
+                              <td class="value">
+                                {{ objclient.subclientdivisioncode }}
+                              </td>
+                            </tr> -->
+                        <tr>
+                          <td class="name">
+                            Sub Client Name
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.subclientname }}
+                          </td>
+                          <td class="name">
+                            Sub Client Status
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            <span
+                              *ngIf="objclient.subclientstatus"
+                              class="text-success"
+                              >Active</span
+                            >
+                            <span
+                              *ngIf="!objclient.subclientstatus"
+                              class="text-danger"
+                              >Inactive</span
+                            >
+                          </td>
+                        </tr>
+                        <!-- <tr>
+                              <td class="name">
+                                Sub Client Name
+                              </td>
+                              <td class="middle">:</td>
+                              <td class="value">
+                                {{ objclient.subclientname }}
+                              </td>
+                            </tr> -->
+                        <!-- <tr>
+                              <td class="name">
+                                Sub Client Status
+                              </td>
+                              <td class="middle">:</td>
+                              <td class="value">
+                                <span
+                                  *ngIf="objclient.subclientstatus"
+                                  class="text-success"
+                                  >Active</span
+                                >
+                                <span
+                                  *ngIf="!objclient.subclientstatus"
+                                  class="text-danger"
+                                  >Inactive</span
+                                >
+                              </td>
+                            </tr> -->
+                        <tr>
+                          <td class="name">
+                            Contact Name
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.subclientcontactname }}
+                          </td>
+                          <td class="name">
+                            Contact Phone
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.subclientcontactphone | phone }}
+                          </td>
+                        </tr>
+                        <!-- <tr>
+                              <td class="name">
+                                Contact Phone
+                              </td>
+                              <td class="middle">:</td>
+                              <td class="value">
+                                {{
+                                  objclient.subclientcontactphone | phone
+                                }}
+                              </td>
+                            </tr> -->
+                        <tr>
+                          <td class="name">
+                            Contact Email
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value" colspan="4">
+                            {{ objclient.subclientcontactemail }}
+                          </td>
+                        </tr>
+                        <!-- <tr>
+                          <td class="name">
+                            Billing Company
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.billingcompany }}
+                          </td>
+                          <td class="name">
+                            Company
+                            <ng-container
+                              *ngIf="
+                                objclient.billingcompany == '3rd Party'
+                              "
+                              >Name</ng-container
+                            >
+                            <ng-container
+                              *ngIf="
+                                objclient.billingcompany != '3rd Party'
+                              "
+                              >Type</ng-container
+                            >
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objclient.companytype }}
+                          </td>
+                        </tr> -->
+                        <!-- <tr>
+                              <td class="name">
+                                Company
+                                <ng-container
+                                  *ngIf="
+                                    objclient.billingcompany == '3rd Party'
+                                  "
+                                  >Name</ng-container
+                                >
+                                <ng-container
+                                  *ngIf="
+                                    objclient.billingcompany != '3rd Party'
+                                  "
+                                  >Type</ng-container
+                                >
+                              </td>
+                              <td class="middle">:</td>
+                              <td class="value">
+                                {{ objclient.companytype }}
+                              </td>
+                            </tr> -->
+                      </table>
+                    </div>
+                  </div>
+                  <!-- <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <div class="small text-muted">Client Name</div>
+                            Triarq Health Alliance
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">Sub Client Code</div>
+                            <span>{{ objclient.subclientcode }}</span>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">Division Code</div>
+                            <span>{{
+                              objclient.subclientdivisioncode
+                            }}</span>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">Billing Location</div>
+                            <span>{{ objclient.billinglocationcode }}</span>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">Sub Client Name</div>
+                            <span>{{ objclient.subclientname }}</span>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">
+                              Sub Client Status
+                            </div>
+                            <span
+                              *ngIf="objclient.subclientstatus"
+                              class="text-success"
+                              >Active</span
+                            >
+                            <span
+                              *ngIf="!objclient.subclientstatus"
+                              class="text-danger"
+                              >Inactive</span
+                            >
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <div class="small text-muted">Contact Name</div>
+                            <span>{{
+                              objclient.subclientcontactname
+                            }}</span>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">Contact Phone</div>
+                            <span>{{
+                              objclient.subclientcontactphone | phone
+                            }}</span>
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <div class="small text-muted">Contact Email</div>
+                            <span>{{
+                              objclient.subclientcontactemail
+                            }}</span>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">Billing Company</div>
+                            <span>{{ objclient.billingcompany }}</span>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <div class="small text-muted">
+                              Company
+                              <ng-container
+                                *ngIf="
+                                  objclient.billingcompany == '3rd Party'
+                                "
+                                >Name</ng-container
+                              >
+                              <ng-container
+                                *ngIf="
+                                  objclient.billingcompany != '3rd Party'
+                                "
+                                >Type</ng-container
+                              >
+                            </div>
+                            <span>{{ objclient.companytype }}</span>
+                          </div>
+                        </div>
+                      </div> -->
+                  <div class="row mt-2">
+                    <div class="col-md-12">
+                      <p class="m-0">
+                        Hi Managers/Billers,<br />
+                        Please find your TRIARQ Hub account details:
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="dataItem.serialno == 2">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h5 style="color: #fd9644;">{{ dataItem.text }}</h5>
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <table class="SubclientFTP" style="width:100%">
+                        <tr>
+                          <td class="name">
+                            Host/URL
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objftpinfo.ftpurl }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="name">
+                            Port
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objftpinfo.ftpport }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="name">
+                            Protocol
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            SFTP – SSH File Transfer Protocol
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="name">
+                            Username
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objftpinfo.ftpusername }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="name">
+                            Password
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objftpinfo.ftppassword }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="name">
+                            ERA Folder
+                          </td>
+                          <td class="middle">:</td>
+                          <td class="value">
+                            {{ objftpinfo.ftp835outboundfolder }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="col-md-12">
+                      <h6>
+                        We request your co-operation in verification of your
+                        TRIARQ Hub account by performing a connection test using
+                        the shared credentials on or before February 24, 2020
+                        with a reply to this e-mail on successful connection. We
+                        would be happy to assist, if you have any questions or
+                        face any issue connecting TRIARQ Hub using the provided
+                        account details.<br />
+                        For assistance or queries feel free to connect us @
+                      </h6>
+                      <p>
+                        Phone : 877-456-3671 Ext 3 <br />
+                        Phone : 877-456-3671 Ext 3 <br />
+                        Email :
+                        <a href="mailto: incident@triarqhealth.com"
+                          >incident@triarqhealth.com</a
+                        >
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="dataItem.serialno == 2">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <form [formGroup]="VerificationSFTPGroup">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <input
+                              id="idIsFTPCorrect"
+                              formControlName="fcIsFTPInfoCorrect"
+                              name="fcIsFTPInfoCorrect"
+                              type="radio"
+                              class="mr-2"
+                              value="true"
+                            /><label for="idIsFTPCorrect" class="mr-2">
+                              <b>Connection Successful.</b> I have verified the
+                              connection with provided credentials and is
+                              working
+                            </label>
+                            <br />
+                            <input
+                              id="idIsFTPNotCorrect"
+                              formControlName="fcIsFTPInfoCorrect"
+                              name="fcIsFTPInfoCorrect"
+                              type="radio"
+                              class="mr-2"
+                              value="false"
+                            /><label for="idIsFTPNotCorrect" class="mr-2">
+                              <b>Connection Failed.</b> Provided account details
+                              are not working for me
+                            </label>
+                            <!-- <div *ngIf="errOrderCategory" class="text-danger">
+                            Please select answer.
+                          </div> -->
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <b>Comments: </b><br />
+                            <textarea
+                              id="txtFTPNote"
+                              formControlName="fcFTPComment"
+                              kendoTextArea
+                              style="height: 50px;"
+                              cols="21"
+                              class="w-100"
+                            ></textarea>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-md-12">
+        <div class="grid-wrapper">
+          <h5 style="color: #fd9644;">Claim Identifier Code</h5>
+          <kendo-grid
+            style="width:100%"
+            [data]="viewClaimIdentifier"
+            [pageSize]="pageSizeClaimIdentifier"
+            [skip]="skipClaimIdentifier"
+            [pageable]="true"
+          >
+            <!-- (pageChange)="pageChangeClaimIdentifier($event)" -->
+
+            <kendo-grid-column
+              field="splitparametername"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              class="bg-white"
+              title="Identifier"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="splitparametervalue"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              class="bg-white"
+              title="Value"
+            >
+            </kendo-grid-column>
+          </kendo-grid>
+          <kendo-grid style="width:100%" [data]="VerificationFormInfo">
+            <kendo-grid-column
+              field="text"
+              width="250"
+              [headerStyle]="{ display: 'none' }"
+              class="bg-white"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <!-- <div *ngIf="dataItem.serialno == 0">
+                  <div class="row">
+                    <div class="col-md-12"> -->
+                <form [formGroup]="VerificationIdentifierGroup">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <input
+                        id="idIsIdentifierInfoCorrect"
+                        formControlName="fcIsIdentifierInfoCorrect"
+                        name="fcIsIdentifierInfoCorrect"
+                        type="radio"
+                        class="mr-2"
+                        value="true"
+                      /><label for="idIsIdentifierInfoCorrect" class="mr-2">
+                        <b>Correct</b>
+                      </label>
+                      <br />
+                      <input
+                        id="idIsNotIdentifierInfoCorrect"
+                        formControlName="fcIsIdentifierInfoCorrect"
+                        name="fcIsIdentifierInfoCorrect"
+                        type="radio"
+                        class="mr-2"
+                        value="false"
+                      /><label for="idIsNotIdentifierInfoCorrect" class="mr-2">
+                        <b>Incorrect </b>(use comments section to mark your
+                        findings)
+                      </label>
+                      <!-- <div *ngIf="errOrderCategory" class="text-danger">
+                            Please select answer.
+                          </div> -->
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <b>Comments: </b><br />
+                      <textarea
+                        id="txtIdentifierNote"
+                        formControlName="fcIdentifierComment"
+                        kendoTextArea
+                        style="height: 50px;"
+                        cols="21"
+                        class="w-100"
+                      ></textarea>
+                    </div>
+                  </div>
+                </form>
+                <!-- </div>
+                  </div>
+                </div> -->
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-md-12">
+        <div class="grid-wrapper">
+          <h5 style="color: #fd9644;">Provider Information</h5>
+          <kendo-grid
+            style="width:100%"
+            [data]="viewRederingProvider"
+            [pageSize]="pageSizeRederingProvider"
+            [skip]="skipRederingProvider"
+            [pageable]="true"
+          >
+            <!-- (pageChange)="pageChangeRederingProvider($event)" -->
+
+            <kendo-grid-column
+              field="providernpi"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              class="bg-white"
+              title="NPI"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="sname"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              class="bg-white"
+              title="Provider Name"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="npitype"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              class="bg-white"
+              title="Type"
+            >
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="status"
+              [headerStyle]="{ 'font-weight': 'bold' }"
+              class="bg-white"
+              title="Status"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div *ngIf="dataItem.status" class="text-success">
+                  Active
+                </div>
+                <div *ngIf="!dataItem.status" class="text-danger">
+                  Inactive
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <kendo-grid style="width:100%" [data]="VerificationFormInfo">
+            <kendo-grid-column
+              field="text"
+              width="250"
+              [headerStyle]="{ display: 'none' }"
+              class="bg-white"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <!-- <div *ngIf="dataItem.serialno == 0"> -->
+                <!-- <div class="row">
+                    <div class="col-md-12"> -->
+                <form [formGroup]="VerificationProviderGroup">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <input
+                        id="idIsProviderInfoCorrect"
+                        formControlName="fcIsProviderInfoCorrect"
+                        name="fcIsProviderInfoCorrect"
+                        type="radio"
+                        class="mr-2"
+                        value="true"
+                      /><label for="idIsProviderInfoCorrect" class="mr-2">
+                        <b>Correct</b>
+                      </label>
+                      <br />
+                      <input
+                        id="idIsNotProviderInfoCorrect"
+                        formControlName="fcIsProviderInfoCorrect"
+                        name="fcIsProviderInfoCorrect"
+                        type="radio"
+                        class="mr-2"
+                        value="false"
+                      /><label for="idIsNotProviderInfoCorrect" class="mr-2">
+                        <b>Incorrect </b>(use comments section to mark your
+                        findings)
+                      </label>
+                      <!-- <div *ngIf="errOrderCategory" class="text-danger">
+                            Please select answer.
+                          </div> -->
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <b>Comments: </b><br />
+                      <textarea
+                        id="txtIdentifierNote"
+                        formControlName="fcProviderComment"
+                        kendoTextArea
+                        style="height: 50px;"
+                        cols="21"
+                        class="w-100"
+                      ></textarea>
+                    </div>
+                  </div>
+                </form>
+                <!-- </div>
+                  </div> -->
+                <!-- </div> -->
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <!-- <div class="grid-wrapper">
+          <kendo-grid style="width:100%" [data]="viewForm">
+            <kendo-grid-column
+              field="text"
+              width="250"
+              [headerStyle]="{ display: 'none' }"
+              class="bg-white"
+            >
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <form [formGroup]="VerificationSFTPGroup">
+                  <div *ngIf="dataItem.serialno == 0">
+                    <div class="row">
+                      <div class="col-md-12">
+                        {{ dataItem.text }}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <input
+                          id="idIsFTPCorrect"
+                          formControlName="fcIsFTPInfoCorrect"
+                          name="fcIsFTPInfoCorrect"
+                          type="radio"
+                          class="mr-2"
+                          value="true"
+                        /><label for="idIsFTPCorrect" class="form-label mr-2">
+                          <b>Connection Successful.</b> I have verified the
+                          connection with provided credentials and is working
+                        </label>
+                        <br />
+                        <input
+                          id="idIsFTPNotCorrect"
+                          formControlName="fcIsFTPInfoCorrect"
+                          name="fcIsFTPInfoCorrect"
+                          type="radio"
+                          class="mr-2"
+                          value="false"
+                        /><label
+                          for="idIsFTPNotCorrect"
+                          class="form-label mr-2"
+                        >
+                          <b>Connection Failed.</b> Provided account details are
+                          not working for me
+                        </label>
+                        <div *ngIf="errOrderCategory" class="text-danger">
+                          Please select answer.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <b>Comments: </b><br />
+                        <textarea
+                          id="txtFTPNote"
+                          formControlName="fcFTPComment"
+                          kendoTextArea
+                          style="height: 50px;"
+                          cols="21"
+                          class="w-100"
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div> -->
+        <button
+          type="button"
+          class="btn btn-primary mr-5"
+          onclick="SubmitActivation(true)"
+        >
+          Agree & Submit
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="SubmitActivation(false)"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,283 @@
+<!-- <ngx-loading [show]="loading"
+[config]="{ backdropBorderRadius: '1px',fullScreenBackdrop: true,primaryColour:'#EEA127',secondaryColour:'#EEA127',tertiaryColour:'#EEA127',backdropBackgroundColour:'rgba(255, 255, 255, 0.1)' }">
+</ngx-loading> -->
+
+<div class="card border-0">
+  <div class="card-header pl-4">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="toggle()"></i>
+      Group List
+    </h4>
+    <button
+      *ngIf="clsPermission.addgroup"
+      class="ml-auto"
+      kendoButton
+      [primary]="true"
+      routerLink="/Configuration/client/new"
+    >
+      Add New Group
+    </button>
+  </div>
+  <div class="card-body o-auto p-3" style="height: 78vh;">
+    <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [filterable]="true"
+      [loading]="loading"
+      (dataStateChange)="dataStateChange($event)"
+      [height]="660"
+    >
+      <!-- <kendo-grid-column field="clientid" title="ID" width="80" [headerStyle]="{ 'font-weight': '600' }">
+      </kendo-grid-column> -->
+
+      <kendo-grid-column
+        field="clientname"
+        title="Group Name"
+        width="120"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="clientcode"
+        title="Group Code"
+        width="120"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <!-- <kendo-grid-column field="clientcontactname" title="Contact Name" width="80" [headerStyle]="{ 'font-weight': '600' }">
+      </kendo-grid-column> -->
+
+      <!-- <kendo-grid-column field="clientcontactphone" title="Phone" width="90" [headerStyle]="{ 'font-weight': '600' }">
+      </kendo-grid-column> -->
+      <!-- 
+      <kendo-grid-column field="clientstatus" title="Status" width="80" [headerStyle]="{ 'font-weight': '600' }">
+      </kendo-grid-column> -->
+
+      <kendo-grid-column
+        field="clientstatus"
+        title="Status"
+        width="70"
+        [filterable]="true"
+        filter="boolean"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div *ngIf="dataItem.clientstatus == true" class="text-success">
+            Active
+          </div>
+          <div *ngIf="dataItem.clientstatus == false" class="text-danger">
+            Inactive
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+
+      <!-- format="{0:dd/MM/yyyy}" -->
+      <!-- [format]="'{0:dd/MM/yyyy}'" -->
+      <!-- format="{0:d}" -->
+      <kendo-grid-column
+        field="dt"
+        title="Modified On"
+        width="90"
+        [filterable]="true"
+        filter="date"
+        format="{0:d}"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <!-- <ng-template kendoGridCellTemplate let-dataItem>
+          {{ dataItem.dt | date:'dd/MM/yyyy' }}
+        </ng-template> -->
+        <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+          <kendo-grid-date-filter-cell
+            [showOperators]="true"
+            [column]="column"
+            placeholder=""
+            [filter]="filter"
+          >
+          </kendo-grid-date-filter-cell>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-command-column
+        title="Action"
+        width="70"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button
+            *ngIf="clsPermission.editgroup"
+            kendoGridEditCommand
+            [primary]="true"
+            title="Edit"
+            data-toggle="modal"
+            (click)="editConfiratmion(dataItem)"
+          >
+            <i class="fe fe-edit-2"></i>
+          </button>
+          <button
+            *ngIf="clsPermission.statusofgroup"
+            kendoGridRemoveCommand
+            data-toggle="modal"
+            (click)="deleteConfiratmion(dataItem)"
+          >
+            <!-- <i class="fe fe-x"></i>  -->
+
+            <i
+              class="fa fa-toggle-off"
+              title="Click here to Activate Client"
+              *ngIf="dataItem.clientstatus == false"
+            ></i>
+            <i
+              class="fa fa-toggle-on"
+              title="Click here to Deactivate client"
+              *ngIf="dataItem.clientstatus != false"
+            ></i>
+            <!-- 
+           <span class="k-icon k-i-unlock"  *ngIf="dataItem.clientstatus == false"></span>
+          <span class="k-icon k-i-lock"  *ngIf="dataItem.clientstatus != false"></span>  -->
+            <!-- 
+          <span class="k-icon k-i-lock"></span>
+          <span class="k-icon k-i-unlock"></span> -->
+          </button>
+          <button
+            data-toggle="modal"
+            data-target="#infomodal"
+            title="View Details"
+            class="k-button"
+            (click)="
+              createInfoComponent(dataItem.clientid, dataItem.clientname)
+            "
+          >
+            <i class="fe fe-info"></i>
+          </button>
+
+          <!-- 
+          <button kendoGridRemoveCommand title="Modify" data-toggle="modal"
+            [routerLink]="['/client',dataItem.clientid]">
+            <i class="fe fe-x"></i> Modify
+          </button>
+          <button kendoGridRemoveCommand title="Delete" data-toggle="modal" (click)="deleteConfiratmion(dataItem)">
+            <i class="fe fe-x"></i> Remove
+          </button> -->
+        </ng-template>
+      </kendo-grid-command-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="deletemodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ deletemessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteusermapping()"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Confirmation Model -->
+<div
+  class="modal fade"
+  id="editclientmodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ editmessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [routerLink]="['/Configuration/client', editclientid]"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Edit Confirmation Model -->
+
+<!-- <div class="modal fade" id="infomodal" tabindex="-1" role="dialog" aria-labelledby="info" aria-hidden="true"
+  data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Client Infomation</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <template #infocontainer></template>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="infomodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <template #infocontainer></template>
+  </div>
+</div>

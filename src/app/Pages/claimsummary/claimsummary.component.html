@@ -1,0 +1,402 @@
+<ngx-loading
+[show]="emailloading"
+[config]="{
+  backdropBorderRadius: '1px',
+  fullScreenBackdrop: true,
+  primaryColour: '#EEA127',
+  secondaryColour: '#EEA127',
+  tertiaryColour: '#EEA127',
+  backdropBackgroundColour: 'rgba(255, 255, 255, 0.5)'
+}"
+></ngx-loading>
+
+<div class="card">
+  <app-breadcrumb></app-breadcrumb>
+
+  <div class="card-body">
+    <div class="panelSep">
+      <div class="row mb-3">
+        <div class="col-md-5">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="form-group">
+              <div class="f-bold">Search</div>
+              <div class="d-flex">
+                <input
+                  kendoTextBox
+                  formControlName="fcSearch"
+                  type="text"
+                  id="Search"
+                  class="w-100"
+                  title="Search by claimno"
+                  placeholder="Search by claimno"
+                  (keyup.enter)="onSearch($event)"
+                />
+                <button
+                  type="button"
+                  class="k-button"
+                  (click)="onSearch($event)"
+                >
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <h4>Check #: {{ dataService.filecheckno }}</h4>
+      <div class="ml-auto">
+        <span class="text-muted"
+          >{{ MasterClaimdisplaytotalrecordscount }} records found</span
+        >
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridMaster"
+        [data]="MasterClaimGridView"
+        [height]="538"
+        [sortable]="true"
+        [sort]="sortMaster"
+        (sortChange)="sortMasterChange($event)"
+        [selectable]="true"
+        [pageable]="true"
+        [pageSize]="MasterClaimpagesize"
+        [skip]="MasterClaimSkip"
+        [loading]="loadingClaimsDetailsGrid"
+        (cellClick)="OnCellClickClaimDetails($event)"
+        (pageChange)="pageChangeonClaims($event)"
+        [navigable]="true"
+        class="w-100 master"
+        (excelExport)="onMasterExcelExport($event)"
+      >
+
+        <ng-template kendoGridToolbarTemplate *ngIf="clsPermission.filedataexportexcel">
+          <button  
+            *ngIf="clsPermission.filedataexportexcel"   
+            [primary]="true"          
+            kendoButton
+            class="float-right mr-1"
+            type="button"
+            title="Export Excel"  
+            (click)="onMasterFilesExcelExportClick()" 
+            [disabled]="MasterClaimdisplaytotalrecordscount==0"  
+          >
+            Export Excel
+          </button>
+
+          <button  
+            hidden
+            [primary]="true"
+            kendoGridExcelCommand
+            kendoButton
+            class="float-right mr-1"
+            type="button"
+            title="Export Excel"   
+            id="hbtnClaimMasterExportExcel"              
+            >
+              Hidden Export Excel
+            </button>
+        </ng-template>
+
+        <kendo-grid-column
+          field="clpno"
+          title="Claim #"
+          width="110"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.clpno }}">
+              {{ dataItem.clpno }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="clpstatus"
+          title="Status"
+          width="160"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.clpstatus }}">
+              {{ dataItem.clpstatus }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="svccount"
+          title="Charges Count"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="">Charges Count</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.svccount }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="totalbilledamount"
+          title="Billed Amount"
+          width="100"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.totalbilledamount | currency }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="totalpayment"
+          title="Paid Amount"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.totalpayment | currency }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="totalpatientdue"
+          title="Patient Responsibility"
+          width="110"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template
+            kendoGridHeaderTemplate
+            let-column
+            let-columnIndex="columnIndex"
+          >
+            <span title="">Patient Responsibility</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.totalpatientdue }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="totaladjustment"
+          title="Adjustment"
+          width="100"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.totaladjustment | currency }}
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column [headerStyle]="{ 'font-weight': 'bold' }" width="90">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <!-- <button kendoGridRemoveCommand title="Claims" data-toggle="modal">
+            <i class="fe fe-airplay pr-3">Claims</i>
+          </button> -->
+            <button
+              type="button"
+              class="btn btn-link"
+              data-toggle="modal"
+              data-target="#viewEOBReportModal"
+              (click)="onViewEOBClick(dataItem)"
+            >
+              View EOB
+            </button>
+          </ng-template>
+        </kendo-grid-column>
+
+        <!-- <ng-template
+          kendoGridDetailTemplate
+          let-dataItem
+          let-rowIndex="rowIndex"
+        >
+          <ng-container *ngFor="let svc of claimSVClinearray">
+            <ng-container *ngIf="svc.index == rowIndex">
+              <div *ngIf="dataItem.svccount > 0" class="mb-2"> -->
+        <!-- {{dataItem.svccount}} {{rowIndex}} -->
+        <!-- <kendo-grid
+                  id="gridMaster"
+                  [data]="svc.pagingdata"
+                  style="width:100%"
+                  [height]="200"
+                  [sortable]="true"
+                  [sort]="sortMaster"
+                  [selectable]="true"
+                  [navigable]="true"
+                > -->
+        <!-- [pageable]="true" [pageSize]="MasterSVClinepagesize" [skip]="MasterSVClineSkip" (pageChange)="pageChangeonClaimsSVClines($event, svc.masterdata, svc.pagingdata, svc.index)" -->
+        <!-- <kendo-grid-column
+                    field="code"
+                    title="SVC Code"
+                    [headerStyle]="{ 'font-weight': '600' }"
+                  >
+                  </kendo-grid-column>
+                  <kendo-grid-column
+                    field="billedamount"
+                    title="Billed Amount"
+                    [headerStyle]="{ 'font-weight': '600' }"
+                  >
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                      {{ dataItem.billedamount }}
+                    </ng-template>
+                  </kendo-grid-column>
+                  <kendo-grid-column
+                    field="paymentamount"
+                    title="Payment Amount"
+                    [headerStyle]="{ 'font-weight': '600' }"
+                  >
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                      {{ dataItem.paymentamount }}
+                    </ng-template>
+                  </kendo-grid-column> -->
+        <!-- <kendo-grid-column field="patientdue" title="Pat.Res.Amount"
+                    [headerStyle]="{ 'font-weight': '600' }">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                      $ {{ dataItem.patientdue }}
+                    </ng-template>
+                  </kendo-grid-column> -->
+        <!-- <kendo-grid-column
+                    field="adjustmentamount"
+                    title="Adjustment Amount"
+                    [headerStyle]="{ 'font-weight': '600' }"
+                  >
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                      $ {{ dataItem.adjustmentamount }}
+                    </ng-template>
+                  </kendo-grid-column>
+                </kendo-grid>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-template> -->
+      
+        <kendo-grid-excel [fetchData]="allDataClaim" >
+
+          <kendo-excelexport-column
+            field="clpno"
+            title="Claim #"
+            [width]="400"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="clpstatus"
+            title="Status"
+            [width]="400"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="svccount"
+            title="Charges Count"
+            [width]="100"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="totalbilledamount"
+            title="Billed Amount"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="totalpayment"
+            title="Paid Amount"
+            [width]="300"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="totalpatientdue"
+            title="Patient Responsibility"
+            [width]="300"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="totaladjustment"
+            title="Adjustment"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+          
+        </kendo-grid-excel>
+
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<!-- View EOB Report Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="viewEOBReportModal"
+  role="dialog"
+  aria-labelledby="viewEOBReportModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <app-eobreport
+      [InputMastererafileid]="inputmastererafileid"
+      [InputTsid]="inputtsid"
+      [InputClpid]="inputclpid"
+      [InputSplitfileid]="inputsplitfileid"
+      [InputComponentname]="inputcomponentname"
+      (OutputViewEobReportResult)="OutputResult($event)"
+      #EobreportChild
+    ></app-eobreport>
+  </div>
+</div>
+<!-- View EOB Report Model -->
+
+<!--Claim Export Excel Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="ClaimMasterExportExcelClaimconfirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lgc" role="document" style="max-width: 500px;">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onMasterClaimExportExcelCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ MasterClaimExportExcelDownloadConfirmationMessage }}
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onMasterClaimExportExcelCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="onMasterClaimExportExcelYesConfirmationClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Claim Export Excel Confirmation Model -->

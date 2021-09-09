@@ -1,0 +1,652 @@
+<div class="modal-content">
+  <div class="modal-header p-2 pl-3">
+    <h5 class="modal-title" id="mdNoteTitle">
+      {{ formtitle }}
+      <!-- <br>{{currentselectedclientid}} <br>
+       {{currentselectedftpid}} <br>
+       {{objclient?.ftpid}} <br> -->
+    </h5>
+    <button
+      type="button"
+      style="visibility: hidden;"
+      id="closeModal"
+      data-dismiss="modal"
+    ></button>
+    <button
+      type="button"
+      class="close pr-5"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="onCloseClick()"
+      [disabled]="makeModalDisabled"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="frmclient">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>FTP Code</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcFTPCode"
+              type="text"
+              id="FTPCode"
+              class="w-100"
+              [(ngModel)]="objclient.ftpcode"
+              readonly
+              #fcFTPCode
+            />
+            <div
+              *ngIf="
+                frmclient.controls.fcFTPCode.touched &&
+                frmclient.controls.fcFTPCode.errors
+              "
+            >
+              <small
+                class="text-danger"
+                *ngIf="frmclient.controls.fcFTPCode.errors?.required"
+                >FTP Code is required</small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>FTP Url</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcFTPUrl"
+              [(ngModel)]="objclient.ftpurl"
+              #fcFTPUrl
+              type="text"
+              id="FTPUrl"
+              class="w-100"
+            />
+
+            <div
+              *ngIf="
+                frmclient.controls.fcFTPUrl.touched &&
+                frmclient.controls.fcFTPUrl.errors
+              "
+              class="text-danger"
+            >
+              <small *ngIf="frmclient.controls.fcFTPUrl.errors?.required"
+                >FTP Url is required</small
+              >
+              <small *ngIf="frmclient.controls.fcFTPUrl.errors?.maxlength"
+                >FTP Url allows 100 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>Port</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcFTPPort"
+              [(ngModel)]="objclient.ftpport"
+              #fcFTPPort
+              type="text"
+              class="w-100"
+            />
+
+            <div
+              *ngIf="
+                frmclient.controls.fcFTPPort.touched &&
+                frmclient.controls.fcFTPPort.errors
+              "
+              class="text-danger"
+            >
+              <small *ngIf="frmclient.controls.fcFTPPort.errors?.required"
+                >Port is required</small
+              >
+              <small *ngIf="frmclient.controls.fcFTPPort.errors?.pattern"
+                >Only number is allowed.</small
+              >
+              <small *ngIf="frmclient.controls.fcFTPPort.errors?.maxlength"
+                >Port must have maximum 4 characters.</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>User Name</label
+            >
+            <input
+              kendoTextBox
+              [(ngModel)]="objclient.ftpusername"
+              #fcFTPUsername
+              formControlName="fcFTPUsername"
+              type="text"
+              id="FTPUsername"
+              class="w-100"
+            />
+
+            <div
+              *ngIf="
+                frmclient.controls.fcFTPUsername.touched &&
+                frmclient.controls.fcFTPUsername.errors
+              "
+              class="text-danger"
+            >
+              <small *ngIf="frmclient.controls.fcFTPUsername.errors?.required"
+                >User Name is required</small
+              >
+              <small *ngIf="frmclient.controls.fcFTPUsername.errors?.maxlength"
+                >User Name allows 50 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>Password</label
+            >
+            <span class="position-relative">
+              <input
+                kendoTextBox
+                [(ngModel)]="objclient.ftppassword"
+                #fcFTPPassword
+                formControlName="fcFTPPassword"
+                [type]="hide ? 'password' : 'text'"
+                id="FTPPassword"
+                class="w-100 custom-padding"
+              />
+              <i *ngIf="clsPermission.viewepassword" (click)="hide = !hide" class="fa eye-icon pointer" [ngClass]="hide ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </span>
+            <div
+              *ngIf="
+                frmclient.controls.fcFTPPassword.touched &&
+                frmclient.controls.fcFTPPassword.errors
+              "
+              class="text-danger"
+            >
+              <small *ngIf="frmclient.controls.fcFTPPassword.errors?.required"
+                >Password is required</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">*</strong>FTP Name</label
+            >
+            <input
+              kendoTextBox
+              formControlName="fcFTPName"
+              [(ngModel)]="objclient.ftpname"
+              #fcFTPName
+              type="text"
+              class="w-100"
+            />
+            <div
+              *ngIf="
+                frmclient.controls.fcFTPName.touched &&
+                frmclient.controls.fcFTPName.errors
+              "
+              class="text-danger"
+            >
+              <small *ngIf="frmclient.controls.fcFTPName.errors?.required"
+                >FTP Name is required</small
+              >
+              <small *ngIf="frmclient.controls.fcFTPName.errors?.maxlength"
+                >FTP Name allows 50 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">FTP Type</label>
+            <kendo-dropdownlist
+              formControlName="fcFTPType"
+              [(ngModel)]="objclient.ftptype"
+              #fcFTPName
+              [data]="arrFTPType"
+              class="w-100"
+            >
+            </kendo-dropdownlist>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class=" col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>835 Ftp Folder</label
+            >
+            <input
+              type="text"
+              kendoTextBox
+              class="w-100"
+              formControlName="fcClient835Ftpfolder"
+              [(ngModel)]="objclient.ftp835inboundfolder"
+              #fcClient835Ftpfolder
+            />
+
+            <div
+              *ngIf="
+                frmclient.controls.fcClient835Ftpfolder.touched &&
+                frmclient.controls.fcClient835Ftpfolder.errors
+              "
+              class="text-danger"
+            >
+              <small
+                *ngIf="frmclient.controls.fcClient835Ftpfolder.errors?.required"
+                >835 Ftp Folder is required</small
+              >
+              <small
+                *ngIf="
+                  frmclient.controls.fcClient835Ftpfolder.errors?.maxlength
+                "
+                >835 Ftp Folder allows 150 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class=" col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>File Extension</label
+            >
+            <input
+              type="text"
+              kendoTextBox
+              class="w-100"
+              formControlName="fcFileExtension"
+              [(ngModel)]="objclient.ftpfileextension"
+              #fcFileExtension
+            />
+            <small class="text-muted">Add multiple file extension separated by semicolon for e.g. .txt; .RMT</small>
+
+            <div
+              *ngIf="
+                frmclient.controls.fcFileExtension.touched &&
+                frmclient.controls.fcFileExtension.errors
+              "
+              class="text-danger"
+            >
+              <small
+                *ngIf="frmclient.controls.fcFileExtension.errors?.required"
+                >File Extension is required</small
+              >   
+              <small
+                *ngIf="frmclient.controls.fcFileExtension.errors?.pattern"
+                >File Extension format not valid</small
+              >
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">        
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <label class="custom-switch">
+              <input
+                type="checkbox"
+                name="custom-switch-checkbox"
+                class="custom-switch-input"
+                formControlName="fcFTPStatus"
+                [(ngModel)]="objclient.status"
+                #fcFTPStatus
+              />
+              <span class="custom-switch-indicator"></span>
+              <span class="custom-switch-description">{{
+                frmclient.controls.fcFTPStatus.value === true
+                  ? "Active"
+                  : frmclient.controls.fcFTPStatus.value === false
+                  ? "Inactive"
+                  : ""
+              }}</span>
+              <!-- <span class="custom-switch-description">{{frmclient.controls.fcFTPStatus.value === true? "Active" : frmclient.controls.fcFTPStatus.value === false? "Inactive": ""}}</span> -->
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <button
+            id="btnCheckFTPConnection"
+            kendoButton
+            [primary]="true"
+            title="Check FTP Connection"
+            (click)="OnCheckFTPConnection()"
+            class="mt-5"
+            [disabled]="!frmclient.valid"
+          >
+            <i class="fe fe-check-square"></i>
+          </button>
+        </div>
+
+        <div class="col-md-6">            
+        </div>
+
+        <!-- <div class=" col-md-6">
+          <div class="form-group">
+            <label class="form-label">
+              <strong class="text-danger">* </strong>837 Ftp Folder</label
+            >
+            <input
+              type="text"
+              kendoTextBox
+              class="w-100"
+              formControlName="fcClient837Ftpfolder"
+              [(ngModel)]="objclient.ftp837inboundfolder"
+              #fcClient837Ftpfolder
+            />
+            <div
+              *ngIf="
+                frmclient.controls.fcClient837Ftpfolder.touched &&
+                frmclient.controls.fcClient837Ftpfolder.errors
+              "
+              class="text-danger"
+            >
+              <small
+                *ngIf="frmclient.controls.fcClient837Ftpfolder.errors?.required"
+                >837 Ftp Folder is required</small
+              >
+              <small
+                *ngIf="
+                  frmclient.controls.fcClient837Ftpfolder.errors?.maxlength
+                "
+                >837 Ftp Folder allows 150 characters</small
+              >
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <!-- <div class="row">
+       
+      </div> -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-dismiss="modal"
+      id="btnCancel"
+      (click)="onCloseClick()"
+      [disabled]="makeModalDisabled"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      data-toggle="modal"
+      class="btn btn-primary btn-sm"
+      id="btnSave"
+      [disabled]="!frmclient.valid || makeModalDisabled || disableSave"
+      (click)="OnSaveorUpdateClicked()"
+    >
+      <!-- data-dismiss="modal" -->
+      <!-- (click)="addupdateclientftp()" -->
+      {{ buttonCaption }}
+    </button>
+  </div>
+</div>
+
+<!-- 
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">{{formtitle}}</h3>
+          <button class="ml-auto" kendoButton [primary]="true" routerLink="/clientlist">
+            <i class="fe fe-x ml-auto"></i>
+          </button>
+        </div> 
+        <div class="card-body">
+          <form [formGroup]="frmclient">
+  
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">* </strong>FTP Code</label>
+                  <input kendoTextBox formControlName="fcFTPCode" type="text" id="FTPCode" class="w-100"
+                    [(ngModel)]="objclient.ftpcode" #fcFTPCode />
+                  <div *ngIf="frmclient.controls.fcFTPCode.touched && frmclient.controls.fcFTPCode.errors">
+                    <small class="text-danger" *ngIf="frmclient.controls.fcFTPCode.errors?.required">FTP Code is
+                      required</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">*</strong>FTP Url</label>
+                  <input kendoTextBox formControlName="fcFTPUrl" [(ngModel)]="objclient.ftpurl" #fcFTPUrl type="text"
+                    id="FTPUrl" class="w-100" />
+  
+                  <div *ngIf="frmclient.controls.fcFTPUrl.touched  && frmclient.controls.fcFTPUrl.errors"
+                    class="text-danger">
+                    <small *ngIf="frmclient.controls.fcFTPUrl.errors?.required">FTP Url is required</small>
+                    <small *ngIf="frmclient.controls.fcFTPUrl.errors?.maxlength">FTP Url allows 100 characters</small>
+                  </div>
+  
+                </div>
+              </div>
+  
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">*</strong>Port</label>
+                  <input kendoTextBox formControlName="fcFTPPort" [(ngModel)]="objclient.ftpport" #fcFTPPort type="text"
+                    class="w-100" />
+  
+                  <div *ngIf="frmclient.controls.fcFTPPort.touched  && frmclient.controls.fcFTPPort.errors"
+                    class="text-danger">
+                    <small *ngIf="frmclient.controls.fcFTPPort.errors?.required">Port is required</small>
+                    <small *ngIf="frmclient.controls.fcFTPPort.errors?.pattern">Only number is allowed.</small>
+                    <small *ngIf="frmclient.controls.fcFTPPort.errors?.maxlength">Port must have maximum 4
+                      characters.</small>
+                  </div>
+  
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">*</strong>User Name</label>
+                  <input kendoTextBox [(ngModel)]="objclient.ftpusername " #fcFTPUsername formControlName="fcFTPUsername"
+                    type="text" id="FTPUsername" class="w-100" />
+  
+                  <div *ngIf="frmclient.controls.fcFTPUsername.touched  && frmclient.controls.fcFTPUsername.errors"
+                    class="text-danger">
+                    <small *ngIf="frmclient.controls.fcFTPUsername.errors?.required">UserName is required</small>
+                    <small *ngIf="frmclient.controls.fcFTPUsername.errors?.maxlength">UserName allows 50
+                      characters</small>
+                  </div>
+  
+                </div>
+              </div>
+  
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">*</strong>Password</label>
+                  <input kendoTextBox [(ngModel)]="objclient.ftppassword" #fcFTPPassword formControlName="fcFTPPassword"
+                    type="password" id="FTPPassword" class="w-100" />
+  
+                  <div *ngIf="frmclient.controls.fcFTPPassword.touched  && frmclient.controls.fcFTPPassword.errors"
+                    class="text-danger">
+                    <small *ngIf="frmclient.controls.fcFTPPassword.errors?.required">Password is required</small>
+  
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+  
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">*</strong>FTP Name</label>
+                  <input kendoTextBox formControlName="fcFTPName" [(ngModel)]="objclient.ftpname" #fcFTPName type="text"
+                    class="w-100" />
+                  <div *ngIf="frmclient.controls.fcFTPName.touched  && frmclient.controls.fcFTPName.errors"
+                    class="text-danger">
+                    <small *ngIf="frmclient.controls.fcFTPName.errors?.required">FTP Name is required</small>
+                    <small *ngIf="frmclient.controls.fcFTPName.errors?.maxlength">FTP Name allows 50 characters</small>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">FTP Type</label>
+                  <kendo-dropdownlist formControlName="fcFTPType" [(ngModel)]="objclient.ftptype" #fcFTPName
+                    [data]="arrFTPType" class="w-100">
+                  </kendo-dropdownlist>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class=" col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">* </strong>835 Ftp Folder</label>
+                  <input type="text" kendoTextBox class="w-100" formControlName="fcClient835Ftpfolder"
+                    [(ngModel)]="objclient.ftp835inboundfolder" #fcClient835Ftpfolder />
+  
+                  <div
+                    *ngIf="frmclient.controls.fcClient835Ftpfolder.touched  && frmclient.controls.fcClient835Ftpfolder.errors"
+                    class="text-danger">
+                    <small *ngIf="frmclient.controls.fcClient835Ftpfolder.errors?.required">835 Ftp Folder is
+                      required</small>
+                    <small *ngIf="frmclient.controls.fcClient835Ftpfolder.errors?.maxlength">835 Ftp Folder allows 150
+                      characters</small>
+                  </div>
+  
+                </div>
+              </div>
+  
+              <div class=" col-md-6">
+                <div class="form-group">
+                  <label class="form-label">
+                    <strong class="text-danger">* </strong>837 Ftp Folder</label>
+                  <input type="text" kendoTextBox class="w-100" formControlName="fcClient837Ftpfolder"
+                    [(ngModel)]="objclient.ftp837inboundfolder" #fcClient837Ftpfolder />
+                  <div
+                    *ngIf="frmclient.controls.fcClient837Ftpfolder.touched  && frmclient.controls.fcClient837Ftpfolder.errors"
+                    class="text-danger">
+                    <small *ngIf="frmclient.controls.fcClient837Ftpfolder.errors?.required">837 Ftp Folder is
+                      required</small>
+                    <small *ngIf="frmclient.controls.fcClient837Ftpfolder.errors?.maxlength">837 Ftp Folder allows 150
+                      characters</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Status</label>
+                  <label class="custom-switch">
+                    <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input"
+                      formControlName="fcFTPStatus" [(ngModel)]="objclient.status" #fcFTPStatus />
+                    <span class="custom-switch-indicator"></span>
+                  </label>
+  
+                </div>
+              </div>
+  
+              <div class="col-md-3">
+                <button id="btnCheckFTPConnection" kendoButton [primary]="true" title="Check FTP Connection"
+                  (click)="OnCheckFTPConnection()" class="mt-5">
+                  <i class="fe fe-check-square"></i>
+                </button>
+              </div>
+            </div>
+  
+          </form>
+        </div>
+        <div class="card-footer text-right">
+          <button type="button" class="btn btn-primary" [disabled]="!frmclient.valid"
+            (click)="addupdateclientftp()">{{buttonCaption}}</button>
+        </div>
+  
+      </div>
+  
+   -->
+
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="confirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ ftpConnectionMsg }} Are you sure you want to save the ftp?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="onYes()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <button type="button" class="hl-btn hl-btn-default" id="btnUploadCancel">Cancel</button> -->
+<!-- <button type="button" id="confirmationOpenId" data-target="#confirmationModal"></button> -->
+<div class="black-box" *ngIf="loadingFtpdetails">
+  <div class="k-i-loading"></div>
+</div>

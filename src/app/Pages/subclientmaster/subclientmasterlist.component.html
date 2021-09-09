@@ -1,0 +1,248 @@
+<!-- <ngx-loading [show]="loading"
+[config]="{ backdropBorderRadius: '1px',fullScreenBackdrop: true,primaryColour:'#EEA127',secondaryColour:'#EEA127',tertiaryColour:'#EEA127',backdropBackgroundColour:'rgba(255, 255, 255, 0.1)' }">
+</ngx-loading> -->
+
+<div class="card border-0">
+  <div class="card-header pl-4">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i>
+      Practice List
+    </h4>
+    <button
+      *ngIf="clsPermission.addpractice"
+      class="ml-auto"
+      kendoButton
+      [primary]="true"
+      routerLink="/Configuration/subclient/new"
+    >
+      Add Practice
+    </button>
+  </div>
+  <div class="card-body o-auto p-3" style=" height: 78vh">
+    <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [filterable]="true"
+      [loading]="loading"
+      (dataStateChange)="dataStateChange($event)"
+      [height]="660"
+    >
+      <kendo-grid-column
+        field="clientname"
+        title="Group"
+        width="80"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientcode"
+        title="Practice Code"
+        width="70"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientname"
+        title="Practice Name"
+        width="80"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientdivisioncode"
+        title="Division Code"
+        width="60"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="subclientcontactname"
+        title="Contact Name"
+        width="80"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+      <!-- <kendo-grid-column field="subclientcontactphone" title="Phone" width="70" [headerStyle]="{ 'font-weight': '600' }">
+      </kendo-grid-column> -->
+
+      <kendo-grid-column
+        field="subclientstatus"
+        title="Status"
+        width="50"
+        [filterable]="true"
+        filter="boolean"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div *ngIf="dataItem.subclientstatus == true" class="text-success">
+            Active
+          </div>
+          <div *ngIf="dataItem.subclientstatus == false" class="text-danger">
+            Inactive
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+
+      <!-- <kendo-grid-column field="subclientstatus" title="Status" width="80" [headerStyle]="{ 'font-weight': '600' }"   [filterable]="false">
+      </kendo-grid-column>  -->
+
+      <kendo-grid-command-column
+        title="Action"
+        width="75"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button
+            *ngIf="clsPermission.editpractice"
+            kendoGridEditCommand
+            [primary]="true"
+            title="Edit"
+            data-toggle="modal"
+            (click)="editConfiratmion(dataItem)"
+          >
+            <i class="fe fe-edit-2"></i>
+          </button>
+          <button
+            *ngIf="clsPermission.statusofpractice"
+            kendoGridRemoveCommand
+            data-toggle="modal"
+            (click)="deleteConfiratmion(dataItem)"
+          >
+            <!-- <i class="fe fe-x"></i> -->
+            <i
+              class="fa fa-toggle-off"
+              title="Click here to Activate Practice"
+              *ngIf="dataItem.subclientstatus == false"
+            ></i>
+            <i
+              class="fa fa-toggle-on"
+              title="Click here to Deactivate Practice"
+              *ngIf="dataItem.subclientstatus != false"
+            ></i>
+          </button>
+          <button
+            data-toggle="modal"
+            data-target="#subclientinfomodal"
+            title="View Details"
+            class="k-button"
+            (click)="
+              createInfoComponent(
+                dataItem.subclientcode,
+                dataItem.subclientname
+              )
+            "
+          >
+            <i class="fe fe-info"></i>
+          </button>
+        </ng-template>
+      </kendo-grid-command-column>
+    </kendo-grid>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="deletemodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ deletemessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteusermapping()"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="subclientinfomodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <template #subclientinfocontainer></template>
+  </div>
+</div>
+
+<!--Edit Confirmation Model -->
+<div
+  class="modal fade"
+  id="editsubclientmodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ editmessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [routerLink]="[
+            '/Configuration/subclient',
+            editsubClientID,
+            editsubClientcode
+          ]"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Edit Confirmation Model -->

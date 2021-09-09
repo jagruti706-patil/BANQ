@@ -1,0 +1,198 @@
+<div class="card">
+  <app-breadcrumb></app-breadcrumb>
+
+  <div class="card-body">
+    <div class="panelSep">
+      <form [formGroup]="DropDownGroup" autocomplete="off">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group mr-3">
+              <label for="" class="form-label">Search By</label>
+              <kendo-dropdownlist
+                formControlName="fcPayerSearchBy"
+                id="ddPayerSearchBy"
+                [class.is-invalid]="
+                  PayerSearchBy.invalid && PayerSearchBy.touched
+                "
+                [data]="sPayerSearchBy"
+                [textField]="'text'"
+                [valueField]="'value'"
+                [(ngModel)]="sSelectedPayerSearchBy"
+                [valuePrimitive]="true"
+                [disabled]="disabledsearchBy"
+                (valueChange)="onPayerSearchByChange($event)"
+                class="w-100"
+              >
+              </kendo-dropdownlist>
+              <div *ngIf="PayerSearchBy.invalid && PayerSearchBy.touched">
+                <small
+                  *ngIf="PayerSearchBy.errors?.required"
+                  class="text-danger"
+                  >SearchBy is required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="d-flex">
+              <div class="form-group flex-fill mr-3">
+                <label for="" class="form-label">Search</label>
+                <div class="d-flex">
+                  <input
+                    kendoTextBox
+                    formControlName="fcSearch"
+                    type="text"
+                    id="Search"
+                    class="w-100"
+                    title="Search by {{ sSelectedPayerSearchBy }}"
+                    placeholder="Search by {{ sSelectedPayerSearchBy }}"
+                  />
+                </div>
+              </div>
+              <div class="ml-auto">
+                <div class="form-group">
+                  <label for="" class="form-label">&nbsp;</label>
+                  <button
+                    kendoButton
+                    type="button"
+                    [primary]="true"
+                    (click)="applyFilters()"
+                    title="Apply filters"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    kendoButton
+                    type="button"
+                    class="ml-3"
+                    (click)="clearFilters()"
+                    title="Default filters set"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="d-flex">
+      <h4>Payer Details</h4>
+      <div class="ml-auto">
+        <span class="text-muted"
+          >{{ Payerdetailsdisplaytotalrecordscount }} records found</span
+        >
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        id="gridPayerdetails"
+        [data]="PayerdetailsGridView"
+        [pageSize]="PayerdetailsPageSize"
+        [pageable]="true"
+        [skip]="PayerdetailsSkip"
+        (pageChange)="pageChangePayerdetails($event)"
+        [sortable]="true"
+        [sort]="sortPayerdetails"
+        (sortChange)="sortPayerdetailsChange($event)"
+        [selectable]="true"
+        [loading]="loadingPayerdetailsGrid"
+        class="w-100 master"
+        [height]="555"
+      >
+        <kendo-grid-column
+          field="checknumber"
+          title="Check #"
+          width="25"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="payeridentificationcode"
+          title="Payer ID"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="payername"
+          title="Payer Name"
+          width="22"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="checkdate"
+          title=""
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Check Date</span>
+          </ng-template>
+
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.checkdate | date: "MM-dd-yyyy" }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="eftdate"
+          title="EFT Date"
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.eftdate | date: "MM-dd-yyyy" }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="paymentmethodcode"
+          title=""
+          width="10"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Payment Method</span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="checkamount"
+          title=""
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Check Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.checkamount | currency }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="totalpaidamt"
+          title=""
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Total Paid Amount</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.totalpaidamt | currency }}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="plbamount"
+          title="PLB Amount"
+          width="12"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{ dataItem.plbamount | currency }}
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>

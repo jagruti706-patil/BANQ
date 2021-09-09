@@ -1,0 +1,190 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="newUserclientmapping">
+      Add User Mapping
+    </h4>
+    <h4
+      class="modal-title"
+      id="exampleModalLabel"
+      *ngIf="!newUserclientmapping"
+    >
+      Update User Mapping
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="OnClose()"
+      [disabled]="bMessageopen"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="frmuserclient">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="form-label">Select Group </label>
+            <kendo-dropdownlist
+              class="w-100"
+              [defaultItem]="defaultItem"
+              [data]="copygroupList"
+              [valuePrimitive]="true"
+              [filterable]="true"
+              [textField]="'groupname'"
+              [valueField]="'groupid'"
+              [(ngModel)]="selectedgroups"
+              formControlName="groupid"
+              (filterChange)="handleFilter($event)"
+              (valueChange)="OnchangeGroup($event)"
+            >
+            </kendo-dropdownlist>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group ">
+            <label class="form-label">Group </label>
+            <kendo-combobox
+              style="width:100%"
+              [data]="clientList"
+              [textField]="'clientname'"
+              [valuePrimitive]="true"
+              [valueField]="'clientid'"
+              [filterable]="true"
+              formControlName="clientid"
+              [valuePrimitive]="true"
+              [(ngModel)]="selectedclients"
+              [placeholder]="'Select Group Name'"
+              (valueChange)="cmbclientchange()"
+              (filterChange)="handleClientFilter($event)"
+            >
+            </kendo-combobox>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group ">
+            <label class="form-label"
+              >Practice <small>(Optional)</small>
+            </label>
+
+            <angular2-multiselect
+              [data]="itemList"
+              [(ngModel)]="selectedValues"
+              [settings]="dropdownSettings"
+              formControlName="subclientcode"
+              (onDeSelectAll)="onDeSelectAll($event)"
+            >
+            </angular2-multiselect>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <kendo-grid
+            [data]="gridView"
+            [pageSize]="state.take"
+            [skip]="state.skip"
+            [pageable]="true"
+            [sortable]="true"
+            [sort]="state.sort"
+            (pageChange)="pageChange($event)"
+            [kendoGridSelectBy]="selectedCallback"
+            [selectable]="selectableSettings"
+            [selectedKeys]="mySelection"
+            [filter]="state.filter"
+            [filterable]="true"
+            (dataStateChange)="dataStateChange($event)"
+            height="550"
+          >
+            <!-- <kendo-grid-checkbox-column
+              showSelectAll="true"
+              width="10"
+            ></kendo-grid-checkbox-column> -->
+
+            <kendo-grid-checkbox-column width="10" showSelectAll="true">
+              <ng-template kendoGridHeaderTemplate let-idx="rowIndex">
+                <input [kendoGridSelectAllCheckbox]="true" />
+              </ng-template>
+              <ng-template kendoGridCellTemplate let-idx="rowIndex">
+                <input [kendoGridSelectionCheckbox]="idx" />
+              </ng-template>
+            </kendo-grid-checkbox-column>
+
+            <kendo-grid-column field="firstname" title="First Name" width="40">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.firstname }}
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="lastname" title="Last Name" width="40">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.lastname }}
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="email" title="Email" width="80">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.email }}
+              </ng-template>
+            </kendo-grid-column>
+            <ng-template kendoGridNoRecordsTemplate>
+              No records available.
+            </ng-template>
+          </kendo-grid>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-dismiss="modal"
+      (click)="OnClose()"
+      [disabled]="bMessageopen"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="Adduserclientmapping"
+      (click)="saveuserclientmapping()"
+      [disabled]="!validateUserClientmapping() || disabledsave || bMessageopen"
+    >
+      Save
+    </button>
+  </div>
+</div>
+
+<!-- Message Model -->
+<div
+  class="modal fade"
+  id="messagesubclientmodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Message</h5>
+      </div>
+      <div class="modal-body o-auto" style="height: 150px;">
+        <p style="white-space:pre-line">{{ responsemessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="OnMessageModel()"
+        >
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Message Model -->

@@ -1,0 +1,42 @@
+.k-textbox.disabled,
+.k-textbox[disabled] {
+  outline: none;
+  cursor: default;
+  opacity: 0.6;
+  -webkit-filter: grayscale(0.1);
+  filter: grayscale(0.1);
+  pointer-events: none;
+  box-shadow: none;
+}
+.page-template {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.page-template .header {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      right: 30px;
+      bottom: 20px;
+      color: #888;
+      background-color: white !important;
+    }
+
+.page-template .footer {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
+  text-align: center;
+  color: #888;
+}
+.font-14{
+  font-size: 14px;
+}

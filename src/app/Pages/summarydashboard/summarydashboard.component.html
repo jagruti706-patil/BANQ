@@ -1,0 +1,274 @@
+<div class="row" *ngIf="showSystemAdminCards">
+  <div class="col-sm-6 col-lg-4 ">
+    <div class="card mb-0 pointer" routerLink="/Configuration/clientlist">
+      <div class="card-body p-4">
+        <div class="card-value float-right text-blue">
+          <span class="tx-60 mr-3">
+            <em class="fe fe-users"></em>
+          </span>
+        </div>
+        <h1 class="mb-1">{{ tilesummary?.totalclient }}</h1>
+        <div class="text-muted font-weight-light">Total Group</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <div class="card pointer" routerLink="/Configuration/subclientlist">
+      <div class="card-body p-4">
+        <div class="card-value float-right text-purple">
+          <span class="tx-60 mr-3">
+            <em class="fe fe-user-plus"></em>
+          </span>
+        </div>
+        <h1 class="mb-1">{{ tilesummary?.totalsubclient }}</h1>
+        <div class="text-muted">Total Practice</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-4">
+    <div class="card">
+      <div class="card-body p-4">
+        <div class="card-value float-right text-green">
+          <span class="tx-60 mr-3">
+            <em class="fe fe-layers"></em>
+          </span>
+        </div>
+        <h1 class="mb-1">{{ tilesummary?.totalfiles }}</h1>
+        <div class="text-muted">Total Files Processed</div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-hub-cards></app-hub-cards>
+<!--<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <div class="card p-3" style="cursor: pointer;" routerLink="/Configuration/clientlist">
+            <div class="d-flex align-items-center">
+                <span class="stamp bg-red mr-3">
+              <em class="fe fe-users"></em>
+            </span>
+                <div>
+                    <h4 class="m-0">{{ tilesummary?.totalclient }}</h4>
+                    <small class="text-muted">Total Clients</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+        <div class="card p-3" style="cursor: pointer;" routerLink="/Configuration/subclientlist">
+            <div class="d-flex align-items-center">
+                <span class="stamp  bg-yellow mr-3">
+              <em class="fe fe-users"></em>
+            </span>
+                <div>
+                    <h4 class="m-0">{{ tilesummary?.totalsubclient }}</h4>
+                    <small class="text-muted">Total Sub Clients</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+        <div class="card p-3">
+            <div class="d-flex align-items-center">
+                <span class="stamp bg-blue mr-3">
+              <em class="fe fe-list"></em>
+            </span>
+                <div>
+                    <h4 class="m-0">{{ tilesummary?.totalfiles }}</h4>
+                    <small class="text-muted">Total Files Processed</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div> -->
+
+<!-- <div class="row">
+  <div class="col-sm-6 col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <span class="stamp bg-blue mr-3">
+          <em class="fe fe-menu"></em>
+        </span>
+        <div>
+          <h4 class="m-0">{{ tilesummary?.totalcheck }}</h4>
+          <small class="text-muted">Total Check</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <span class="stamp  bg-green mr-3">
+          <em class="fe fe-dollar-sign"></em>
+        </span>
+        <div>
+          <h4 class="m-0">
+            {{ tilesummary?.totalpaidamount }}
+          </h4>
+          <small class="text-muted">Paid Amount</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <span class="stamp  bg-yellow mr-3">
+          <em class="fe fe-dollar-sign"></em>
+        </span>
+        <div>
+          <h4 class="m-0">
+            {{ tilesummary?.totaladjustmentamount }}
+          </h4>
+          <small class="text-muted">Adjusted Amount</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <span class="stamp bg-red mr-3">
+          <em class="fe fe-dollar-sign"></em>
+        </span>
+        <div>
+          <h4 class="m-0">{{ tilesummary?.totalpatresponsibilityamt }}</h4>
+          <small class="text-muted">Pat. Resp Amt</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="chart-title">Revenue Trend</h3>
+      </div>
+      <div class="card-body p-1 pt-2">
+        <canvas
+          baseChart
+          [datasets]="revenueChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [colors]="lineChartColors"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType"
+        ></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="chart-title">Denial Trend</h3>
+      </div>
+      <div class="card-body p-1 pt-2">
+        <canvas
+          baseChart
+          [datasets]="denialChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [colors]="lineChartColors"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType"
+        ></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="chart-title">Payment Distribution - Top Division</h3>
+      </div>
+      <google-chart [data]="pieChartDataPayment"></google-chart>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="chart-title">Adjustment Distribution - Top Division</h3>
+      </div>
+      <google-chart [data]="pieChartDataAdjustment"></google-chart>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="chart-title">Denial Distribution - Top Division</h3>
+      </div>
+      <google-chart [data]="pieChartDataDenial"></google-chart>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="chart-title">2019 Top Divisional Mix - Combo Chart</h3>
+        <div class="card-options"></div>
+      </div>
+
+      <div class="card-body">
+        <div class="dimmer" [ngClass]="{ active: comboloading == true }">
+          <div class="loader"></div>
+          <div class="dimmer-content">
+            <div class="chk-block-content">
+              <combo-chart-component
+                [view]="view"
+                [scheme]="comboBarScheme"
+                [colorSchemeLine]="lineChartScheme"
+                [results]="new_bar"
+                [animations]="animations"
+                [lineChart]="new_series"
+                [yAxisTickFormatting]="yLeftTickFormat"
+                [yLeftAxisScaleFactor]="yLeftAxisScale"
+                [yRightAxisScaleFactor]="yRightAxisScale"
+                [yRightAxisTickFormatting]="yRightTickFormat"
+                [gradient]="gradient"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegend"
+                [legendTitle]="legendTitle"
+                [legendPosition]="legendPosition"
+                [showGridLines]="showGridLines"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [showRightYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel"
+                [barPadding]="barPadding"
+                [yAxisLabelRight]="yAxisLabelRight"
+              >
+              </combo-chart-component>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="chart-title">Top Divisional Mix - 2019</h3>
+      </div>
+      <google-chart [data]="mixtop10"></google-chart>
+    </div>
+  </div>
+</div> -->

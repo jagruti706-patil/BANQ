@@ -1,0 +1,53 @@
+.nav-tabs .nav-link.active {
+  border: none !important;
+}
+.logo-text {
+  position: absolute;
+  top: 10px;
+  font-weight: normal;
+  font-size: 22px;
+}
+.header-brand-img {
+  /* height: 2rem; */
+  line-height: 2rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  width: 180px;
+  height: auto;
+}
+.second-menu {
+  display: none;
+}
+.menu:hover .second-menu {
+  display: block;
+}
+/* Navbar hover */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+  top: 35px;
+}
+.badge-red{
+  border: 1px solid #cd201f;
+  background: transparent;
+  color: #cd201f;
+}
+.badge-red.active
+{
+  border: 1px solid #e96127;
+  background: transparent;
+  color: #e96127;
+}
+.badge-red.white-active, .dropdown-item:hover .badge-red{
+  border: 1px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+}

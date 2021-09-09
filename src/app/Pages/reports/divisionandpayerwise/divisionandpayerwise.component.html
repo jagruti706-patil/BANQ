@@ -1,0 +1,87 @@
+<!-- <ngx-loading
+  [show]="reportloading"
+  [config]="{
+    backdropBorderRadius: '1px',
+    fullScreenBackdrop: true,
+    primaryColour: '#EEA127',
+    secondaryColour: '#EEA127',
+    tertiaryColour: '#EEA127',
+    backdropBackgroundColour: 'rgba(255, 255, 255, 0)'
+  }"
+></ngx-loading> -->
+
+<div class="modal-content">
+  <div class="modal-header" style="padding: 0.6rem; background-color: #fff; color: black;">
+    <div class="col-md-11">
+      <!-- <h3 class="text-dark text-uppercase float-right" style="margin-bottom: 0px; color: #fff !important;">
+        Payer and Division wise Report
+      </h3> -->
+      <!-- <h3 class="text-dark mb-2" style="padding: 0.6rem; font-size: 14px;">
+        File Share ID: {{InputFileshareid}} Payer: {{InputPayername}}
+      </h3> -->
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item waves-effect waves-light">
+          <a class="nav-link" id="check-tab" [ngClass]="{ active: checktab == true }"  data-toggle="tab" href="#tab1check" role="tab" aria-controls="check" aria-selected="false" style="padding: 0px;" (click)="onChecktabselection()"><h3 class="text-dark text-center" style="padding: 0.6rem; font-size: 14px; width: 535px;">
+            File Share ID: {{InputFileshareid}} Payer: {{InputPayername}}
+          </h3></a>
+        </li>
+        <li class="nav-item waves-effect waves-light">
+          <a class="nav-link" id="plb-tab" [ngClass]="{ active: plbtab == true }" data-toggle="tab" href="#tab2plb" role="tab" aria-controls="plb" aria-selected="false" style="padding: 0px;" (click)="onPLBtabselection()"><h3 class="text-dark text-center" style="padding: 0.6rem; font-size: 14px; width: 535px">
+            PLB: {{InputFileshareid}} Payer: {{InputPayername}}
+          </h3></a>            
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-1">          
+      <button
+        type="button"
+        class="float-right"
+        data-dismiss="modal"
+        aria-label="Close"
+        title="Close"        
+        (click)="onCloseClick()"
+        kendoButton 
+        [look]="'flat'"
+      >
+        <i class="fe fe-x"></i>
+      </button>      
+      <!-- <button
+        *ngIf="clsPermission.exporttopdfcheckvieweob"
+        id="btnPrintSplit"
+        class="k-button"        
+        title="Download"
+        (click)="downloadpdf()"
+        class="float-right"
+        [disabled]="disabledbutton"
+        kendoButton 
+        [look]="'flat'"        
+      >
+        <i class="fe fe-download"></i>
+      </button> -->
+    </div>
+  </div>
+
+  <div class="modal-body" style="padding: 0.6rem;">
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade" id="tab1check" role="tabpanel" aria-labelledby="check-tab">       
+      </div>
+      <div class="tab-pane fade" id="tab2plb" role="tabpanel" aria-labelledby="plb-tab">        
+      </div>     
+    </div>    
+    <div class="card-body p-0">
+      <div style="height: 110.4vh;">
+        <ng2-pdfjs-viewer
+          #pdfViewerAutoLoad
+          id="pdfViewerAutoLoad"
+          [viewBookmark]="false"
+          [showSpinner]="false"
+          [openFile]="false"
+          [download]="true"
+          [downloadFileName]="exportfilename"
+          [zoom]="100"
+        ></ng2-pdfjs-viewer>
+      </div>
+    </div>
+  </div> 
+</div>
+

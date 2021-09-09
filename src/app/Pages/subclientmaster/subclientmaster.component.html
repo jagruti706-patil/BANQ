@@ -1,0 +1,1255 @@
+<ngx-loading
+  [show]="loading"
+  [config]="{
+    backdropBorderRadius: '1px',
+    fullScreenBackdrop: true,
+    primaryColour: '#EEA127',
+    secondaryColour: '#EEA127',
+    tertiaryColour: '#EEA127',
+    backdropBackgroundColour: 'rgba(255, 255, 255, 0.1)'
+  }"
+>
+</ngx-loading>
+
+<div class="">
+  <div class="card-header pl-4">
+    <h3 class="card-title">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i
+      >{{ formtitle }}
+    </h3>
+    <button
+      class="ml-auto"
+      kendoButton
+      [primary]="true"
+      routerLink="/Configuration/subclientlist"
+    >
+      <i class="fe fe-x ml-auto"></i>
+    </button>
+  </div>
+  <div class="">
+    <div class="card border-0">
+      <div class="card-body p-3 o-auto" style="height: 74vh;">
+        <div class="row">
+          <div class="col-md-7">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header pl-4">
+                    <h5 class="mb-0">Practice Infomation</h5>
+                  </div>
+                  <div class="card-body p-3">
+                    <form [formGroup]="frmclient">
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label class="form-label">
+                            <strong class="text-danger">* </strong>Group</label
+                          >
+                          <div class="example-wrapper ">
+                            <kendo-dropdownlist
+                              style="width:95%"
+                              [data]="copygroupList"
+                              [valuePrimitive]="true"
+                              [filterable]="true"
+                              [disabled]="!isaddmode"
+                              [textField]="'clientname'"
+                              [valueField]="'clientid'"
+                              (filterChange)="handleFilter($event)"
+                              (valueChange)="valueChange($event)"
+                              formControlName="fcClientid"
+                              [(ngModel)]="objclient.clientid"
+                              #fcClientid
+                            >
+                            </kendo-dropdownlist>
+                            <div
+                              *ngIf="
+                                frmclient.controls.fcClientid.touched &&
+                                frmclient.controls.fcClientid.errors
+                              "
+                            >
+                              <small class="text-danger">Select Group</small>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label class="form-label">
+                            <strong class="text-danger">* </strong>Practice
+                            Code</label
+                          >
+                          <input
+                            kendoTextBox
+                            formControlName="fcSubClientCode"
+                            type="text"
+                            class="w-100"
+                            readonly
+                            [(ngModel)]="objclient.subclientcode"
+                            #fcSubClientCode
+                          />
+                          <div
+                            *ngIf="
+                              frmclient.controls.fcSubClientCode.touched &&
+                              frmclient.controls.fcSubClientCode.errors
+                            "
+                          >
+                            <small class="text-danger"
+                              >Practice Code is required</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label class="form-label">
+                            <strong class="text-danger">* </strong>Practice
+                            Name</label
+                          >
+                          <input
+                            kendoTextBox
+                            formControlName="fcSubClientName"
+                            type="text"
+                            id="subClientName"
+                            class="w-100"
+                            [(ngModel)]="objclient.subclientname"
+                            #fcSubClientName
+                          />
+                          <div
+                            *ngIf="
+                              frmclient.controls.fcSubClientName.touched &&
+                              frmclient.controls.fcSubClientName.errors
+                            "
+                            class="text-danger"
+                          >
+                            <small
+                              *ngIf="
+                                frmclient.controls.fcSubClientName.errors
+                                  ?.required
+                              "
+                              >Practice is required</small
+                            >
+                            <small
+                              *ngIf="
+                                frmclient.controls.fcSubClientName.errors
+                                  ?.maxlength
+                              "
+                              >Practice allows 100 characters
+                            </small>
+                          </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label class="form-label">
+                            <strong class="text-danger">* </strong>Division
+                            Code</label
+                          >
+                          <input
+                            kendoTextBox
+                            formControlName="fcSubClientDevisionCode"
+                            type="text"
+                            id="subClientDivisionCode"
+                            class="w-100"
+                            [(ngModel)]="objclient.subclientdivisioncode"
+                            #fcSubClientDevisionCode
+                          />
+                          <div
+                            *ngIf="
+                              frmclient.controls.fcSubClientDevisionCode
+                                .touched &&
+                              frmclient.controls.fcSubClientDevisionCode.errors
+                            "
+                            class="text-danger"
+                          >
+                            <small
+                              *ngIf="
+                                frmclient.controls.fcSubClientDevisionCode
+                                  .errors?.required
+                              "
+                              >Division Code is required
+                            </small>
+                            <small
+                              *ngIf="
+                                frmclient.controls.fcSubClientDevisionCode
+                                  .errors?.maxlength
+                              "
+                              >Division Code allows 10 characters</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label class="form-label">
+                            Billing Location Code</label
+                          >
+                          <input
+                            kendoTextBox
+                            formControlName="fcbillingloccode"
+                            type="text"
+                            id="billindlocationcodeName"
+                            class="w-100"
+                            [(ngModel)]="objclient.billinglocationcode"
+                            #fcbillingloccode
+                            maxlength="100"
+                          />
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label class="form-label"> Contact Name</label>
+                          <input
+                            kendoTextBox
+                            formControlName="fcSubContactName"
+                            type="text"
+                            id="subContactName"
+                            class="w-100"
+                            [(ngModel)]="objclient.subclientcontactname"
+                            #fcSubContactName
+                            maxlength="100"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label class="form-label"> Contact Email</label>
+                          <input
+                            kendoTextBox
+                            formControlName="fcSubContactEmail"
+                            [(ngModel)]="objclient.subclientcontactemail"
+                            #fcSubContactEmail
+                            type="text"
+                            maxlength="50"
+                            id="subContactEmail"
+                            class="w-100"
+                          />
+                          <div
+                            *ngIf="
+                              frmclient.controls.fcSubContactEmail.touched &&
+                              frmclient.controls.fcSubContactEmail.errors
+                            "
+                            class="text-danger"
+                          >
+                            <small
+                              *ngIf="
+                                frmclient.controls.fcSubContactEmail.errors
+                                  ?.email
+                              "
+                              >Email is not valid
+                            </small>
+                            <!-- <small *ngIf="frmclient.controls.fcSubContactEmail.errors?.maxlength">Email allows 50
+                              characters</small> -->
+                          </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label class="form-label"> Contact Phone</label>
+                          <kendo-maskedtextbox
+                            [mask]="mask"
+                            formControlName="fcSubContactPhone"
+                            [(ngModel)]="objclient.subclientcontactphone"
+                            #fcSubContactPhone
+                            type="text"
+                            class="w-100"
+                          >
+                          </kendo-maskedtextbox>
+                          <div
+                            *ngIf="
+                              frmclient.controls.fcSubContactPhone.touched &&
+                              frmclient.controls.fcSubContactPhone.errors
+                            "
+                            class="text-danger"
+                          >
+                            <small
+                              *ngIf="
+                                frmclient.controls.fcSubContactPhone.errors
+                                  ?.pattern
+                              "
+                              >Contact Phone is not valid</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label class="form-label">
+                            <strong class="text-danger">* </strong>Practice
+                            Status</label
+                          >
+                          <div class="form-group mb-0">
+                            <label class="custom-switch">
+                              <input
+                                type="checkbox"
+                                name="custom-switch-checkbox"
+                                class="custom-switch-input"
+                                formControlName="fcSubClientStatus"
+                                [(ngModel)]="objclient.subclientstatus"
+                                #fcSubClientStatus
+                              />
+                              <span class="custom-switch-indicator"></span>
+                              <span class="custom-switch-description">{{
+                                frmclient.controls.fcSubClientStatus.value ===
+                                true
+                                  ? "Active"
+                                  : frmclient.controls.fcSubClientStatus
+                                      .value === false
+                                  ? "Inactive"
+                                  : ""
+                              }}</span>
+                              <div
+                                *ngIf="
+                                  frmclient.controls.fcSubClientStatus
+                                    .touched &&
+                                  frmclient.controls.fcSubClientStatus.errors
+                                "
+                                class="text-danger"
+                              >
+                                <small
+                                  *ngIf="
+                                    frmclient.controls.fcSubClientStatus.errors
+                                      ?.required
+                                  "
+                                  >Practice Status is required
+                                </small>
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                          <label class="form-label">
+                            Billing Company
+                          </label>
+                          <kendo-dropdownlist
+                            formControlName="billingCompany"
+                            [data]="billingCompanies"
+                            class="w-100"
+                            [(ngModel)]="objclient.billingcompany"
+                            (ngModelChange)="onCompanyChange($event)"
+                          >
+                          </kendo-dropdownlist>
+                        </div>
+                        <div
+                          class="col-sm-6 form-group"
+                          *ngIf="f.billingCompany.value == 'TRIARQ'"
+                        >
+                          <label class="form-label">
+                            <strong class="text-danger">* </strong> Company Type
+                          </label>
+                          <div class="k-form-field">
+                            <input
+                              type="radio"
+                              formControlName="companyTypes"
+                              id="qComplete"
+                              class="k-radio"
+                              value="QPro"
+                              [(ngModel)]="objclient.companytype"
+                            />
+                            <label class="k-radio-label" for="qComplete"
+                              >QPro</label
+                            >
+                            &nbsp;&nbsp;
+                            <input
+                              type="radio"
+                              formControlName="companyTypes"
+                              id="qPro"
+                              class="k-radio"
+                              value="QComplete"
+                              [(ngModel)]="objclient.companytype"
+                            />
+                            <label class="k-radio-label" for="qPro"
+                              >QComplete</label
+                            >
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-6 form-group"
+                          *ngIf="f.billingCompany.value == '3rd Party'"
+                        >
+                          <label class="form-label">
+                            <strong class="text-danger">* </strong> Company Name
+                          </label>
+                          <input
+                            kendoTextBox
+                            type="text"
+                            class="w-100"
+                            placeholder="Please Specify"
+                            formControlName="companyName"
+                            [(ngModel)]="companyName"
+                          />
+                          <div
+                            *ngIf="
+                              frmclient.controls.companyName.touched &&
+                              frmclient.controls.companyName.errors
+                            "
+                            class="text-danger"
+                          >
+                            <small
+                              *ngIf="
+                                frmclient.controls.companyName.errors.required
+                              "
+                              >Company Name is required</small
+                            >
+                          </div>
+                        </div>                      
+                      </div>
+                      <div class="row">                       
+                        <div class="form-group col-md-6">
+                          <span class="mr-3 d-inline-block">
+                            <label class="form-label"
+                              ><strong class="text-danger">*</strong>File
+                              Transfer Option
+                            </label>
+                            <input
+                              type="radio"
+                              name="fcFTPoption"
+                              id="FTPTool"
+                              class="k-radio"
+                              value="1"
+                              formControlName="fcFTPoption"
+                              checked
+                              #fcFTPoption
+                              data-toggle="modal"
+                              (change)="filetransferConfiratmion()"
+                            />
+                            <label for="FTPTool" class="k-radio-label">
+                              FTP Tool
+                            </label>
+                          </span>
+                          <span>
+                            <input
+                              type="radio"
+                              name="fcFTPoption"
+                              id="FTPHUB"
+                              class="k-radio  "
+                              value="2"
+                              formControlName="fcFTPoption"
+                              #fcFTPoption
+                              data-toggle="modal"
+                              (change)="filetransferConfiratmion()"
+                            />
+                            <label for="FTPHUB" class="k-radio-label">
+                              HUB
+                            </label>
+                            <div
+                              *ngIf="
+                                frmclient.controls.fcFTPoption.touched &&
+                                frmclient.controls.fcFTPoption.errors
+                              "
+                              class="text-danger"
+                            >
+                              <small
+                                *ngIf="
+                                  frmclient.controls.fcFTPoption.errors
+                                    .required
+                                "
+                                >FTPOption is required</small
+                              >
+                            </div>
+                          </span>
+                        </div>                                              
+                        <div class="form-group col-md-6" *ngIf="clsPermission.practicesendfilecopyto">
+                          <label class="form-label">
+                            Send file copy to
+                          </label>                          
+                          <kendo-dropdownlist
+                              style="width:95%"
+                              [data]="SubclientList"
+                              [valuePrimitive]="true"
+                              [filterable]="true"                             
+                              [textField]="'subclientname'"
+                              [valueField]="'subclientid'"
+                              (filterChange)="handlesubClientFilter($event)"
+                              (valueChange)="cmbsubclientchange($event)"
+                              formControlName="fccopytoftpsubclientid"
+                              [(ngModel)]="objclient.copytoftpsubclientid"
+                              #fccopytoftpsubclientid
+                            >
+                          </kendo-dropdownlist>
+                        </div>                          
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header pl-4">
+                    <h5 class="mb-0">
+                      Practice Split Parameters
+                      <small>(Count: {{ splitparalist?.length }}) </small>
+                    </h5>
+                    <div class="card-options">
+                      <div class="card-options">
+                        <a
+                          class="btn btn-secondary btn-sm"
+                          (click)="opensplitparamodal()"
+                        >
+                          <i class="fe fe-plus-circle"></i> Add Split
+                          Parameter</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body o-auto p-3" style="height: 240px;">
+                    <!-- <form [formGroup]="frmsplitpara">
+                        <div class="row">
+    
+                     
+    
+                          <div class="form-group col-md-5">
+                            <label class="form-label">
+                              <strong class="text-danger">*</strong>Split Parameter: </label>
+                            <kendo-dropdownlist class="w-100" id="ParameterName" formControlName="fcSplitParameterName"
+                              [data]="arrSplitParameter" [textField]="'splitparametername'"
+                              [valueField]="'splitparameterid'" [valuePrimitive]="true"
+                              (ngModelChange)='onSplitParameterChange($event)' #fcSplitParameterName>
+                            </kendo-dropdownlist>
+                            <div
+                              *ngIf="frmsplitpara.controls.fcSplitParameterName.touched && frmsplitpara.controls.fcSplitParameterName.errors">
+                              <small class="text-danger">Split Parameter is required</small>
+                            </div>
+                          </div>
+    
+                         
+                          <div class="form-group col-md-5">
+                            <label class="form-label">
+                              <strong class="text-danger">*</strong>Split Parameter Value: </label>
+                            <input kendoTextBox formControlName="fcSplitParameterValue" #fcSplitParameterValue type="text"
+                              class="w-100" />
+                            <div
+                              *ngIf="frmsplitpara.controls.fcSplitParameterValue.touched && frmsplitpara.controls.fcSplitParameterValue.errors"
+                              class="text-danger">
+                              <small *ngIf="frmsplitpara.controls.fcSplitParameterValue.errors?.required">Split Parameter
+                                Value
+                                is required</small>
+                              <small *ngIf="frmsplitpara.controls.fcSplitParameterValue.errors?.maxlength">Split Parameter
+                                Value
+                                allows 100 characters</small>
+                            </div>
+                          </div>
+    
+                          <div class="form-group col-md-2">
+                            <label class="form-label"></label>
+                            <button type="button" class="btn btn-primary" [disabled]="!frmsplitpara.valid"
+                              (click)="addsplitpara()">Add</button>
+                            <button type="button" class="btn btn-primary" (click)="formobj()">Form Object</button>
+                          </div>
+                        </div>
+    
+    
+                      </form> -->
+
+                    <div
+                      class="col-lg-12 mt-2"
+                      *ngIf="splitparalist?.length == 0"
+                    >
+                      <!-- <p class="text-muted">
+                        <i class="fe fe-alert-circle mr-1"></i>One Split
+                        Parameter is Mandatory for Subclient Registration.
+                      </p> -->
+                    </div>
+
+                    <div
+                      class="table-responsive"
+                      *ngIf="splitparalist?.length > 0"
+                    >
+                      <table
+                        class="table card-table table-striped table-vcenter"
+                      >
+                        <thead>
+                          <tr>
+                            <th>Split Parameter</th>
+                            <th>Split Value</th>
+                            <th class="text-center">Status</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- <tr>
+                                <td>Rendering Provider</td>
+                                <td>RED-</td>
+                                <td class="text-center"> <i class="fe fe-trash text-danger" style="cursor: pointer;"></i></td>
+                                 <td class="w-1"><a href="#" class="icon"><i class="fe fe-trash"></i></a></td> 
+                              </tr> -->
+                          <tr *ngFor="let item of splitparalist">
+                            <td>{{ item.splitparametername }}</td>
+                            <td>{{ item.splitparametervalue }}</td>
+
+                            <td class="text-center">
+                              <!-- {{item.splitparameterstatus}} -->
+                              <!-- <span class="badge badge-success">{{item.splitparameterstatus}}</span> -->
+                              <span
+                                class="badge badge-success"
+                                *ngIf="item?.splitparameterstatus == true"
+                                >Active</span
+                              >
+                              <span
+                                class="badge badge-secondary"
+                                *ngIf="item?.splitparameterstatus == ''"
+                                >Inactive</span
+                              >
+                            </td>
+
+                            <td class="text-center">
+                              <!-- <i class="fe fe-trash text-danger" style="cursor: pointer;" (click)="removeitem(item)"></i> -->
+                              <i
+                                class="fe fe-check-circle"
+                                style="cursor: pointer;"
+                                title="Click to Activate Split Parameter"
+                                data-toggle="modal"
+                                (click)="activeinactiveConfiratmion(item)"
+                                *ngIf="item?.splitparameterstatus == ''"
+                              ></i>
+
+                              <i
+                                class="fe fe-slash"
+                                style="cursor: pointer;"
+                                title="Click to Deactivate Split Parameter"
+                                data-toggle="modal"
+                                (click)="activeinactiveConfiratmion(item)"
+                                *ngIf="item?.splitparameterstatus == true"
+                              ></i>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- {{splitparalist | json}} -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="card" style="min-height:515px;">
+              <div class="card-header pl-4">
+                <h5 class="mb-0">Practice Outbound FTP</h5>
+              </div>
+              <div class="card-body p-3">
+                <form [formGroup]="frmftp">
+                  <div class="row">
+                    <div class="form-group col-md-12">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>FTP Code</label
+                      >
+                      <input
+                        kendoTextBox
+                        formControlName="fcFTPcode"
+                        type="text"
+                        [(ngModel)]="objftp.ftpcode"
+                        #fcFTPcode
+                        class="w-100"
+                        readonly
+                      />
+                      <div
+                        *ngIf="
+                          frmftp.controls.fcFTPcode.touched &&
+                          frmftp.controls.fcFTPcode.errors
+                        "
+                        class="text-danger"
+                      >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPcode.errors?.required"
+                          >FTP Code is required</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-12">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>FTP Url</label
+                      >
+                      <input
+                        kendoTextBox
+                        formControlName="fcFTPUrl"
+                        type="text"
+                        [(ngModel)]="objftp.ftpurl"
+                        #fcFTPUrl
+                        class="w-100"
+                      />
+                      <div
+                        *ngIf="
+                          frmftp.controls.fcFTPUrl.touched &&
+                          frmftp.controls.fcFTPUrl.errors
+                        "
+                        class="text-danger"
+                      >
+                        <small *ngIf="frmftp.controls.fcFTPUrl.errors?.required"
+                          >FTP Url is required</small
+                        >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPUrl.errors?.maxlength"
+                          >FTP Url allows 100 characters</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-12">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>User Name</label
+                      >
+                      <input
+                        kendoTextBox
+                        formControlName="fcFTPUsername"
+                        type="text"
+                        [(ngModel)]="objftp.ftpusername"
+                        #fcFTPUsername
+                        class="w-100"
+                      />
+                      <div
+                        *ngIf="
+                          frmftp.controls.fcFTPUsername.touched &&
+                          frmftp.controls.fcFTPUsername.errors
+                        "
+                        class="text-danger"
+                      >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPUsername.errors?.required"
+                          >User Name is required</small
+                        >
+                        <small
+                          *ngIf="
+                            frmftp.controls.fcFTPUsername.errors?.maxlength
+                          "
+                          >User Name allows 50 characters</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-12">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>Password</label
+                      >
+                      <span class="position-relative">
+                        <input
+                          kendoTextBox
+                          formControlName="fcFTPPassword"
+                          [type]="hide ? 'password' : 'text'"
+                          [(ngModel)]="objftp.ftppassword"
+                          #fcFTPPassword
+                          class="w-100 custom-padding"
+                        />
+                        <i *ngIf="clsPermission.viewepassword" (click)="hide = !hide" class="fa eye-icon pointer" [ngClass]="hide ? 'fa-eye-slash' : 'fa-eye'"></i>
+                      </span>
+                      <div
+                        *ngIf="
+                          frmftp.controls.fcFTPPassword.touched &&
+                          frmftp.controls.fcFTPPassword.errors
+                        "
+                        class="text-danger"
+                      >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPPassword.errors?.required"
+                          >Password is required</small
+                        >
+                        <small
+                          *ngIf="
+                            frmftp.controls.fcFTPPassword.errors?.maxlength
+                          "
+                          >Password allows 50 characters</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-12">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>FTP Name</label
+                      >
+                      <input
+                        kendoTextBox
+                        formControlName="fcFTPName"
+                        type="text"
+                        [(ngModel)]="objftp.ftpname"
+                        #fcFTPName
+                        class="w-100"
+                      />
+                      <div
+                        *ngIf="
+                          frmftp.controls.fcFTPName.touched &&
+                          frmftp.controls.fcFTPName.errors
+                        "
+                        class="text-danger"
+                      >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPName.errors?.required"
+                          >FTP Name is required</small
+                        >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPName.errors?.maxlength"
+                          >FTP Name allows 50 characters</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group k-form-field col-md-12">
+                      <label class="form-label">
+                        <strong class="text-danger">*</strong>835 OutBound
+                        Folder</label
+                      >
+                      <input
+                        kendoTextBox
+                        formControlName="fcFTP835Outbound"
+                        [(ngModel)]="objftp.ftp835outboundfolder"
+                        #fcFTP835Outbound
+                        type="text"
+                        class="w-100"
+                      />
+                      <div
+                        *ngIf="
+                          frmftp.controls.fcFTP835Outbound.touched &&
+                          frmftp.controls.fcFTP835Outbound.errors
+                        "
+                        class="text-danger"
+                      >
+                        <small
+                          *ngIf="
+                            frmftp.controls.fcFTP835Outbound.errors?.required
+                          "
+                          >835 OutBound Folder is required</small
+                        >
+                        <small
+                          *ngIf="
+                            frmftp.controls.fcFTP835Outbound.errors?.maxlength
+                          "
+                          >835 OutBound Folder allows 150 characters</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>FTP Type</label
+                      >
+                      <kendo-dropdownlist
+                        formControlName="fcFTPType"
+                        [data]="arrFTPType"
+                        class="w-100"
+                        [(ngModel)]="objftp.ftptype"
+                        #fcFTPType
+                      >
+                      </kendo-dropdownlist>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>Port</label
+                      >
+                      <input
+                        kendoTextBox
+                        formControlName="fcFTPPort"
+                        type="text"
+                        class="w-100"
+                        [(ngModel)]="objftp.ftpport"
+                        #fcFTPPort
+                      />
+                      <div
+                        *ngIf="
+                          frmftp.controls.fcFTPPort.touched &&
+                          frmftp.controls.fcFTPPort.errors
+                        "
+                        class="text-danger"
+                      >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPPort.errors?.required"
+                          >Port is required</small
+                        >
+                        <small *ngIf="frmftp.controls.fcFTPPort.errors?.pattern"
+                          >Only number is allowed</small
+                        >
+                        <small
+                          *ngIf="frmftp.controls.fcFTPPort.errors?.maxlength"
+                          >Port must have maximum 4 characters</small
+                        >
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <label class="form-label">
+                        <strong class="text-danger">* </strong>Status</label
+                      >
+                      <div class="form-group mb-0">
+                        <label class="custom-switch">
+                          <input
+                            type="checkbox"
+                            name="custom-switch-checkbox"
+                            class="custom-switch-input"
+                            formControlName="fcFTPStatus"
+                            id="subClientFTPStatus"
+                            [(ngModel)]="objftp.status"
+                            #fcFTPStatus
+                          />
+                          <span class="custom-switch-indicator"></span>
+                          <span class="custom-switch-description">{{
+                            frmftp.controls.fcFTPStatus.value === true
+                              ? "Active"
+                              : frmftp.controls.fcFTPStatus.value === false
+                              ? "Inactive"
+                              : ""
+                          }}</span>
+                          <div
+                            *ngIf="
+                              frmftp.controls.fcFTPStatus.touched &&
+                              frmftp.controls.fcFTPStatus.errors
+                            "
+                            class="text-danger"
+                          >
+                            <small
+                              *ngIf="
+                                frmftp.controls.fcFTPStatus.errors?.required
+                              "
+                              >Status is required</small
+                            >
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <button
+                        id="btnCheckFTPConnection"
+                        kendoButton
+                        [primary]="true"
+                        title="Check FTP Connection"
+                        (click)="OnCheckFTPConnection()"
+                        class="mt-5"
+                        [disabled]="!frmftp.valid"
+                      >
+                        <i class="fe fe-check-square"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="text-right">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            [disabled]="!frmclient.valid || !frmftp.valid || disableSave"
+            (click)="onSaveorUpdateClick()"
+          >
+            {{ buttonCaption }}
+          </button>
+          <!-- addupdateclient() -->
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="splitparamodal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="signup"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Sub Client Split Information</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="frmsplitpara">
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label class="form-label">
+                    <strong class="text-danger">*</strong>Split Parameter:
+                  </label>
+                  <kendo-dropdownlist
+                    class="w-100"
+                    id="ParameterName"
+                    formControlName="fcSplitParameterName"
+                    [data]="arrSplitParameter"
+                    [textField]="'splitparametername'"
+                    [valueField]="'splitparameterid'"
+                    [valuePrimitive]="true"
+                    (ngModelChange)="onSplitParameterChange($event)"
+                    [(ngModel)]="objsplit.splitparameterid"
+                    #fcSplitParameterName
+                  >
+                  </kendo-dropdownlist>
+                  <div
+                    *ngIf="
+                      frmsplitpara.controls.fcSplitParameterName.touched &&
+                      frmsplitpara.controls.fcSplitParameterName.errors
+                    "
+                  >
+                    <small class="text-danger"
+                      >Split Parameter is required</small
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-12">
+                  <label class="form-label">
+                    <strong class="text-danger">*</strong>Split Parameter Value:
+                  </label>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="w-100"
+                    formControlName="fcSplitParameterValue"
+                    [(ngModel)]="objsplit.splitparametervalue"
+                    #fcSplitParameterValue
+                  />
+                  <div
+                    *ngIf="
+                      frmsplitpara.controls.fcSplitParameterValue.touched &&
+                      frmsplitpara.controls.fcSplitParameterValue.errors
+                    "
+                    class="text-danger"
+                  >
+                    <small
+                      *ngIf="
+                        frmsplitpara.controls.fcSplitParameterValue.errors
+                          ?.required
+                      "
+                      >Split Parameter Value is required</small
+                    >
+                    <small
+                      *ngIf="
+                        frmsplitpara.controls.fcSplitParameterValue.errors
+                          ?.maxlength
+                      "
+                      >Split Parameter Value allows 100 characters</small
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="row" *ngIf="dplicatepara">
+                <div class="form-group col-md-12">
+                  <div class="alert alert-warning alert-dismissible text-center"
+                    style="border-radius: 25px;margin-top:5px">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>                       
+                       <i class="icon fa fa-warning"></i><small> Splitparameter with same name already present!</small>
+                  </div>
+                </div>
+              </div>
+               -->
+            </form>
+
+            <!-- <button type="button" class="btn btn-primary" [disabled]="!frmsplitpara.valid"
+                ></button> -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              No
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!frmsplitpara.valid"
+              (click)="addsplitpara()"
+            >
+              Add Parameter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      data-backdrop="static"
+      data-keyboard="false"
+      id="confirmationModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="info"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header p-3">
+            <h4 class="modal-title">Confirmation</h4>
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              data-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            {{ ftpConnectionMsg }} Are you sure you want to save the ftp?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              No
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              (click)="onYes()"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="updatestatusmodal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="signup"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmation</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>{{ updatemessage }}</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              No
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="removeitem()"
+              data-dismiss="modal"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="duplicateFtpConfirmation"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <app-action-confirmation
+      [InputConfirmationTitle]="'Confirmation'"
+      [InputConfirmationMessage]="InputConfirmationMessage"
+      (OutputConfirmationResult)="OutputConfirmationResult($event)"
+    >
+    </app-action-confirmation>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="changefiletransfermodal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="signup"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-2 px-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="updatefiletransferoption('No')"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Changes made to "File Transfer Option" will require additional configuration and notification to practice/practice user.</p>
+        <p><b>HUB</b>(<u>Default Option</u>): 
+          Practice ERA files are made available on HUB portal under "My Files" menu option. User will require myQOne account and configuration to HUB portal to download files from portal.
+        </p>
+        <p><b>FTP Tool:</b>
+          Practice ERA files are made available on "Practice Outbound FTP" account. Make sure the practice outbound ftp is setup and verified before turning this setting "ON".
+        </p>
+        <div>Within FTP Tool practice/user can opt for:</div>
+        <ul style="list-style-type: decimal;">
+          <li>
+            <div class="font-weight-bold">Direct FTP</div>
+            <p>Some practice management system allows direct configuration of FTP to allow download of ERA files directly in to practice management system. Provide the outbound FTP account detail to practice for configuration.</p>
+          </li>
+          <li>
+            <div class="font-weight-bold">HUBFileShare Tool</div>
+            <p>
+              TRIARQ One Team Care provides tool for practices which downloads ERA file from the designated FTP account on practice local network/machine <i>(Refer HUB File Share Quick Guide for details).</i>
+            </p>
+            </li>
+        </ul>
+
+        <i class="d-block mb-2">If switching from “FTP Tool” to “HUB” existing files on FTP will not be removed from FTP account.</i>
+        <i class="d-block mb-2">Note that FTP keyword used is “SFTP” protocol</i>
+        <div>Continue changing the file transfer option for this practice?</div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary btn-sm"
+          (click)="updatefiletransferoption('No')"
+          data-dismiss="modal"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          (click)="updatefiletransferoption('Yes')"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

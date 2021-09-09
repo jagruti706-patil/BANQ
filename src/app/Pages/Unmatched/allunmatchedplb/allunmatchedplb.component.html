@@ -1,0 +1,961 @@
+<ngx-loading
+  [show]="emailloading"
+  [config]="{
+    backdropBorderRadius: '1px',
+    fullScreenBackdrop: true,
+    primaryColour: '#EEA127',
+    secondaryColour: '#EEA127',
+    tertiaryColour: '#EEA127',
+    backdropBackgroundColour: 'rgba(255, 255, 255, 0.5)'
+  }"
+></ngx-loading>
+<div class="card">
+  <div class="card-body">
+    <div class="panelSep">
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <div class="d-flex">
+            <div class="mr-3">
+              <div class="form-group">
+                <label class="form-label">Processed Start Date</label>
+                <kendo-datepicker
+                  id="dtstartDate"
+                  [(value)]="startDate"
+                  (valueChange)="onDateChange($event, 'start date')"
+                  [max]="endDate"
+                  class="w-100"
+                  [disabled]="disabledstartdate"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label class="form-label">Processed End Date</label>
+                <kendo-datepicker
+                  id="dtendDate"
+                  [(value)]="endDate"
+                  (valueChange)="onDateChange($event, 'end date')"
+                  [min]="startDate"
+                  class="w-100"
+                  [disabled]="disabledenddate"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9 mb-2 pl-0">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="d-flex">
+              <div class="form-group mr-3">
+                <label class="form-label">Group</label>
+                <kendo-dropdownlist
+                  formControlName="fcClientName"
+                  id="ddClients"
+                  [class.is-invalid]="ClientName.invalid && ClientName.touched"
+                  [data]="sAllClients"
+                  [textField]="'clientname'"
+                  [valueField]="'clientid'"
+                  [(ngModel)]="sSelectedClientID"
+                  [valuePrimitive]="true"
+                  (valueChange)="onClientChange($event)"
+                  [filterable]="true"
+                  [disabled]="disabledclient"
+                  (filterChange)="handleClientFilter($event)"
+                >
+                </kendo-dropdownlist>
+              </div>
+              <div class="form-group mr-3">
+                <label class="form-label" for="">Email Status</label>
+                <kendo-dropdownlist
+                  formControlName="fcSendEmailfilter"
+                  id="ddSendEmailfilter"
+                  [class.is-invalid]="
+                    SendEmailFilter.invalid && SendEmailFilter.touched
+                  "
+                  [data]="sSendemailfilter"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedsendemailfilter"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledsendemail"
+                  (valueChange)="onSendEmailfilterchange($event)"
+                >
+                </kendo-dropdownlist>
+                <div *ngIf="SendEmailFilter.invalid && SendEmailFilter.touched">
+                  <small
+                    *ngIf="SendEmailFilter.errors?.required"
+                    class="text-danger"
+                    >Email status is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group mr-3">
+                <label class="form-label" for="">Search By</label>
+                <kendo-dropdownlist
+                  formControlName="fcUnmatchedSearchBy"
+                  id="ddUnmatchedSearchBy"
+                  [class.is-invalid]="
+                    UnmatchedSearchBy.invalid && UnmatchedSearchBy.touched
+                  "
+                  [data]="sUnmatchedPLBSearchBy"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedUnmatchedPLBSearchBy"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledsearchBy"
+                  (valueChange)="onUnmatchedSearchByChange($event)"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="UnmatchedSearchBy.invalid && UnmatchedSearchBy.touched"
+                >
+                  <small
+                    *ngIf="UnmatchedSearchBy.errors?.required"
+                    class="text-danger"
+                    >SearchBy is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group flex-fill mr-3">
+                <label class="form-label" for="">Search</label>
+                <div class="d-flex">
+                  <input
+                    kendoTextBox
+                    formControlName="fcSearch"
+                    type="text"
+                    id="Search"
+                    class="w-100"
+                    [ngClass]="{ disabled: disabledsearch }"
+                    title="Search by {{ sSelectedUnmatchedPLBSearchBy }}"
+                    placeholder="Search by {{ sSelectedUnmatchedPLBSearchBy }}"
+                  />
+                </div>
+              </div>
+              <div class="ml-auto">
+                <div class="form-group">
+                  <label class="form-label" for="">&nbsp;</label>
+                  <button
+                    [primary]="true"
+                    kendoButton
+                    type="button"
+                    [primary]="true"
+                    (click)="applyFilters()"
+                    title="Apply filters"
+                    [disabled]="disabledapplybtn"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    kendoButton
+                    type="button"
+                    class="ml-3"
+                    (click)="clearFilters()"
+                    title="Default filters set"
+                    [disabled]="disabledclearbtn"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- <form [formGroup]="DropDownGroup" autocomplete="off">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="d-flex">
+              <div class="form-group">
+                <label class="form-label">Processed Start Date</label>
+                <kendo-datepicker
+                  id="dtstartDate"
+                  [(value)]="startDate"
+                  (valueChange)="onDateChange($event, 'start date')"
+                  [max]="endDate"
+                  class="w-100"
+                  [disabled]="disabledstartdate"
+                >
+                </kendo-datepicker>
+              </div>
+              <div class="form-group ml-3">
+                <label class="form-label">Processed End Date</label>
+                <kendo-datepicker
+                  id="dtendDate"
+                  [(value)]="endDate"
+                  (valueChange)="onDateChange($event, 'end date')"
+                  [min]="startDate"
+                  class="w-100"
+                  [disabled]="disabledenddate"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-4 form-group">
+                <label class="form-label">Group</label>
+                <kendo-dropdownlist
+                  class="form-control form-control-sm"
+                  formControlName="fcClientName"
+                  id="ddClients"
+                  [class.is-invalid]="ClientName.invalid && ClientName.touched"
+                  [data]="sAllClients"
+                  [textField]="'clientname'"
+                  [valueField]="'clientid'"
+                  [(ngModel)]="sSelectedClientID"
+                  [valuePrimitive]="true"
+                  (valueChange)="onClientChange($event)"
+                  [filterable]="true"
+                  [disabled]="disabledclient"
+                  (filterChange)="handleClientFilter($event)"
+                >
+                </kendo-dropdownlist>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="clsPermission.sendemail" class="col-md-2 form-group">
+            <label for="" class="form-label">Email Status</label>
+            <kendo-dropdownlist
+              formControlName="fcSendEmailfilter"
+              id="ddSendEmailfilter"
+              [class.is-invalid]="
+                SendEmailFilter.invalid && SendEmailFilter.touched
+              "
+              [data]="sSendemailfilter"
+              [textField]="'text'"
+              [valueField]="'value'"
+              [(ngModel)]="sSelectedsendemailfilter"
+              [valuePrimitive]="true"
+              [disabled]="disabledsendemail"
+              (valueChange)="onSendEmailfilterchange($event)"
+            >
+            </kendo-dropdownlist>
+            <div *ngIf="SendEmailFilter.invalid && SendEmailFilter.touched">
+              <small
+                *ngIf="SendEmailFilter.errors?.required"
+                class="text-danger"
+                >Email status is required</small
+              >
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="" class="form-label">Search By</label>
+              <kendo-dropdownlist
+                formControlName="fcUnmatchedSearchBy"
+                id="ddUnmatchedSearchBy"
+                [class.is-invalid]="
+                  UnmatchedSearchBy.invalid && UnmatchedSearchBy.touched
+                "
+                [data]="sUnmatchedPLBSearchBy"
+                [textField]="'text'"
+                [valueField]="'value'"
+                [(ngModel)]="sSelectedUnmatchedPLBSearchBy"
+                [valuePrimitive]="true"
+                [disabled]="disabledsearchBy"
+                (valueChange)="onUnmatchedSearchByChange($event)"
+              >
+              </kendo-dropdownlist>
+              <div
+                *ngIf="UnmatchedSearchBy.invalid && UnmatchedSearchBy.touched"
+              >
+                <small
+                  *ngIf="UnmatchedSearchBy.errors?.required"
+                  class="text-danger"
+                  >SearchBy is required</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="" class="form-label">Search</label>
+
+              <input
+                kendoTextBox
+                formControlName="fcSearch"
+                type="text"
+                id="Search"
+                class="w-100"
+                [ngClass]="{ disabled: disabledsearch }"
+                title="Search by {{ sSelectedUnmatchedPLBSearchBy }}"
+                placeholder="Search by {{ sSelectedUnmatchedPLBSearchBy }}"
+              />
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label for="" class="form-label">&nbsp;</label>
+              <button
+                [primary]="true"
+                kendoButton
+                type="button"
+                [primary]="true"
+                (click)="applyFilters()"
+                title="Apply filters"
+                [disabled]="disabledapplybtn"
+              >
+                Apply
+              </button>
+              <button
+                kendoButton
+                type="button"
+                class="ml-3"
+                (click)="clearFilters()"
+                title="Default filters set"
+                [disabled]="disabledclearbtn"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </form> -->
+
+      <!-- <div class="row mb-3">
+        <div class="col-md-4">
+          <div class="d-flex">
+            <div class="mr-3">
+              <div class="form-group">
+                <label class="form-label">Processed Start Date</label>
+                <kendo-datepicker
+                  id="dtstartDate"
+                  [(value)]="startDate"
+                  (valueChange)="onDateChange($event, 'start date')"
+                  [max]="endDate"
+                  class="w-100"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+            <div>
+              <div class="form-group">
+                <label class="form-label">Processed End Date</label>
+                <kendo-datepicker
+                  id="dtendDate"
+                  [(value)]="endDate"
+                  (valueChange)="onDateChange($event, 'end date')"
+                  [min]="startDate"
+                  class="w-100"
+                >
+                </kendo-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 mb-2">
+          <form [formGroup]="DropDownGroup" autocomplete="off">
+            <div class="d-flex">
+              <div *ngIf="clsPermission.sendemail" class="form-group mr-3">
+                <label for="" class="form-label">Email Status</label>
+                <kendo-dropdownlist
+                  formControlName="fcSendEmailfilter"
+                  id="ddSendEmailfilter"
+                  [class.is-invalid]="
+                    SendEmailFilter.invalid && SendEmailFilter.touched
+                  "
+                  [data]="sSendemailfilter"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedsendemailfilter"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledsendemail"
+                  (valueChange)="onSendEmailfilterchange($event)"
+                >
+                </kendo-dropdownlist>
+                <div *ngIf="SendEmailFilter.invalid && SendEmailFilter.touched">
+                  <small
+                    *ngIf="SendEmailFilter.errors?.required"
+                    class="text-danger"
+                    >Email status is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group mr-3">
+                <label for="" class="form-label">Search By</label>
+                <kendo-dropdownlist
+                  formControlName="fcUnmatchedSearchBy"
+                  id="ddUnmatchedSearchBy"
+                  [class.is-invalid]="
+                    UnmatchedSearchBy.invalid && UnmatchedSearchBy.touched
+                  "
+                  [data]="sUnmatchedPLBSearchBy"
+                  [textField]="'text'"
+                  [valueField]="'value'"
+                  [(ngModel)]="sSelectedUnmatchedPLBSearchBy"
+                  [valuePrimitive]="true"
+                  [disabled]="disabledsearchBy"
+                  (valueChange)="onUnmatchedSearchByChange($event)"
+                >
+                </kendo-dropdownlist>
+                <div
+                  *ngIf="UnmatchedSearchBy.invalid && UnmatchedSearchBy.touched"
+                >
+                  <small
+                    *ngIf="UnmatchedSearchBy.errors?.required"
+                    class="text-danger"
+                    >SearchBy is required</small
+                  >
+                </div>
+              </div>
+              <div class="form-group flex-fill mr-3">
+                <label for="" class="form-label">Search</label>
+                <div class="d-flex">
+                  <input
+                    kendoTextBox
+                    formControlName="fcSearch"
+                    type="text"
+                    id="Search"
+                    class="w-100"
+                    title="Search by {{ sSelectedUnmatchedPLBSearchBy }}"
+                    placeholder="Search by {{ sSelectedUnmatchedPLBSearchBy }}"
+                  />
+                </div>
+              </div>
+
+              <div class="ml-auto">
+                <div class="form-group">
+                  <label for="" class="form-label">&nbsp;</label>
+                  <button
+                    kendoButton
+                    type="button"
+                    [primary]="true"
+                    (click)="applyFilters()"
+                    title="Apply filters"
+                  >
+                    Apply
+                  </button>
+                  <button
+                    kendoButton
+                    type="button"
+                    class="ml-3"
+                    (click)="clearFilters()"
+                    title="Default filters set"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="d-flex">
+      <h4>Un-Matched PLBs</h4>
+      <div class="ml-auto">
+        <div class="text-muted">
+          {{ UnmatchedPLBsdisplaytotalrecordscount }} records found
+        </div>
+      </div>
+    </div>
+    <div class="grid-wrapper">
+      <kendo-grid
+        #grid="kendoGrid"
+        id="gridUnmatchedClaims"
+        [data]="UnmatchedPLBsGridView"
+        [pageSize]="UnmatchedPLBsPageSize"
+        [pageable]="true"
+        [skip]="UnmatchedPLBsSkip"
+        (pageChange)="pageChangeUnmatchedPLBs($event)"
+        [sortable]="true"
+        [sort]="sortUnmatchedPLBs"
+        (sortChange)="sortUnmatchedPLBsChange($event)"
+        [loading]="loadingUnmatchedFilesGrid"
+        class="w-100 master"
+        [height]="555"
+        [selectable]="{ enabled: true, checkboxOnly: true }"
+        (selectedKeysChange)="onSelectedKeysChange($event)"
+        [kendoGridSelectBy]="selectedCallback"
+        [selectedKeys]="mySelection"
+        (excelExport)="onExcelExport($event)"
+      >
+        <ng-template
+          kendoGridToolbarTemplate
+          *ngIf="
+            (clsPermission.sendemail ||
+              clsPermission.allunmatchedplbsexportexcel) &&
+            bHidebtn
+          "
+        >
+          <button
+            *ngIf="clsPermission.allunmatchedplbsexportexcel"
+            [primary]="true"
+            kendoButton
+            (click)="onPLBExcelExportClick()"
+            class="pull-right mr-1"
+            type="button"
+            style="float: right;"
+            title="Export Excel"
+            [disabled]="UnmatchedPLBsdisplaytotalrecordscount <= 0"
+          >
+            Export Excel
+          </button>
+          <button
+            [primary]="true"
+            *ngIf="clsPermission.sendemail"
+            class="pull-right mr-1"
+            type="button"
+            kendoGridExcelCommand
+            style="float: right;"
+            title="Send email with attachment of unmatched plb claims."
+            [disabled]="
+              (this.mySelection.length <= 0 && this.myremove.length <= 0) ||
+              !bHidebtn
+            "
+          >
+            Send Email
+          </button>
+          <!-- <button
+          *ngIf="clsPermission.unmatchedselectpractice"
+          [primary]="true"
+          kendoButton
+          class="pull-right mr-1"
+          type="button"
+          style="float: right;"
+          title="Match practice to send file"
+          (click)="onSelectSuclientClick()"
+          [disabled]="(this.mySelection.length <= 0 && this.myremove.length <= 0) ||
+          !bHidebtn"
+        >
+          Match To Practice
+        </button> -->
+        </ng-template>
+
+        <kendo-grid-checkbox-column width="15" showSelectAll="true" 
+          *ngIf="clsPermission.sendemail && bHidebtn">
+          <ng-template kendoGridHeaderTemplate let-idx="rowIndex">
+            <input [kendoGridSelectAllCheckbox]="true"               
+              id="selectAllCheckboxId"                 
+              [state]="selectAllState"
+              title="Select all rows on all pages to send email"
+              (selectAllChange)="onSelectAllChange($event)" 
+            />
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-idx="rowIndex">
+            <input [kendoGridSelectionCheckbox]="idx" />
+          </ng-template>
+        </kendo-grid-checkbox-column>
+
+        <!-- <kendo-grid-checkbox-column
+          *ngIf="clsPermission.sendemail && bHidebtn"
+          width="12"
+        >
+          <ng-template kendoGridHeaderTemplate>
+            <input
+              class="k-checkbox"
+              id="selectAllCheckboxId"
+              kendoGridSelectAllCheckbox
+              [state]="selectAllState"
+              (selectAllChange)="onSelectAllChange($event)"
+            />
+            <label
+              class="k-checkbox-label"
+              for="selectAllCheckboxId"
+              title="Select all rows on all pages to send email"
+            ></label>
+          </ng-template>
+        </kendo-grid-checkbox-column> -->
+
+        <kendo-grid-column
+          field="sfilename"
+          title="File Name"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.sfilename }}">
+              {{ dataItem.sfilename }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkno"
+          title="Check #"
+          width="70"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.checkno }}">
+              {{ dataItem.checkno }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="payername"
+          title="Payer"
+          width="70"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.payername }}">
+              {{ dataItem.payername }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="identifier"
+          title="Adjustment Identifier"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Adjustment Identifier</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.identifier }}">
+              {{ dataItem.identifier }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="adjustmentamount"
+          title="Adjustment"
+          width="40"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Adjustment</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentamount | currency }}">
+              {{ dataItem.adjustmentamount | currency }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="importdate"
+          title="Date"
+          width="65"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              title="{{ dataItem.importdate | date: 'MM-dd-yyyy hh:mm:ss a' }}"
+            >
+              {{ dataItem.importdate | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-excel
+          [fetchData]="allData"
+          fileName="{{ exportFilename }}.xlsx"
+          #excelexport
+        >
+          <kendo-excelexport-column
+            field="sfilename"
+            title="File Name"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+          <kendo-excelexport-column
+            field="checkno"
+            title="Check #"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="payername"
+            title="Payer"
+            [width]="70"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="identifier"
+            title="Adjustment Identifier"
+            [width]="230"
+          >
+          </kendo-excelexport-column>
+          <kendo-excelexport-column
+            field="adjustmentamount"
+            title="Adjustment Amount"
+            [width]="130"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="importdate"
+            title="Process Date"
+            [width]="65"
+          >
+          </kendo-excelexport-column>
+        </kendo-grid-excel>
+      </kendo-grid>
+    </div>
+
+    <div class="grid-wrapper">
+      <kendo-grid
+        hidden
+        #sdsendemailgrid="kendoGrid"
+        id="dgridUnmatchedClaims"
+        [data]="UnmatchedPLBsGridView"
+        [pageSize]="UnmatchedPLBsPageSize"
+        [pageable]="true"
+        [skip]="UnmatchedPLBsSkip"
+        (pageChange)="pageChangeUnmatchedPLBs($event)"
+        [sortable]="true"
+        [sort]="sortUnmatchedPLBs"
+        (sortChange)="sortUnmatchedPLBsChange($event)"
+        [loading]="loadingUnmatchedFilesGrid"
+        class="w-100 master"
+        [height]="555"
+        [selectable]="{ enabled: true, checkboxOnly: true }"
+        (selectedKeysChange)="onSelectedKeysChange($event)"
+        [kendoGridSelectBy]="selectedCallback"
+        [selectedKeys]="mySelection"
+        (excelExport)="PLBExcelExport($event)"
+      >
+        <ng-template
+          kendoGridToolbarTemplate
+          *ngIf="
+            (clsPermission.sendemail ||
+              clsPermission.allunmatchedplbsexportexcel) &&
+            bHidebtn
+          "
+        >
+          <button
+            [primary]="true"
+            id="hbtnExportExcel"
+            class="pull-right mr-1"
+            type="button"
+            kendoGridExcelCommand
+            style="float: right;"
+            title="Send email with attachment of unmatched plb claims."
+          >
+            Send Email
+          </button>
+        </ng-template>
+        <kendo-grid-checkbox-column
+          *ngIf="clsPermission.sendemail && bHidebtn"
+          width="12"
+        >
+          <ng-template kendoGridHeaderTemplate>
+            <input
+              class="k-checkbox"
+              id="selectAllCheckboxId"
+              kendoGridSelectAllCheckbox
+              [state]="selectAllState"
+              (selectAllChange)="onSelectAllChange($event)"
+            />
+            <label
+              class="k-checkbox-label"
+              for="selectAllCheckboxId"
+              title="Select all rows on all pages to send email"
+            ></label>
+          </ng-template>
+        </kendo-grid-checkbox-column>
+        <kendo-grid-column
+          field="sfilename"
+          title="File Name"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.sfilename }}">
+              {{ dataItem.sfilename }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="checkno"
+          title="Check #"
+          width="70"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.checkno }}">
+              {{ dataItem.checkno }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="payername"
+          title="Payer"
+          width="70"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.payername }}">
+              {{ dataItem.payername }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column
+          field="identifier"
+          title="Adjustment Identifier"
+          width="80"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Adjustment Identifier</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.identifier }}">
+              {{ dataItem.identifier }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="adjustmentamount"
+          title="Adjustment"
+          width="40"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridHeaderTemplate let-column>
+            <span title="">Adjustment</span>
+          </ng-template>
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div title="{{ dataItem.adjustmentamount | currency }}">
+              {{ dataItem.adjustmentamount | currency }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column
+          field="importdate"
+          title="Date"
+          width="65"
+          [headerStyle]="{ 'font-weight': '600' }"
+        >
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div
+              title="{{ dataItem.importdate | date: 'MM-dd-yyyy hh:mm:ss a' }}"
+            >
+              {{ dataItem.importdate | date: "MM-dd-yyyy hh:mm:ss a" }}
+            </div>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-excel
+          [fetchData]="ExportData"
+          fileName="{{ exportFilename }}.xlsx"
+          #excelexport
+        >
+          <kendo-excelexport-column
+            field="sfilename"
+            title="File Name"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+          <kendo-excelexport-column
+            field="checkno"
+            title="Check #"
+            [width]="200"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="payername"
+            title="Payer"
+            [width]="70"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="identifier"
+            title="Adjustment Identifier"
+            [width]="230"
+          >
+          </kendo-excelexport-column>
+          <kendo-excelexport-column
+            field="adjustmentamount"
+            title="Adjustment Amount"
+            [width]="130"
+          >
+          </kendo-excelexport-column>
+
+          <kendo-excelexport-column
+            field="importdate"
+            title="Process Date"
+            [width]="65"
+          >
+          </kendo-excelexport-column>
+        </kendo-grid-excel>
+      </kendo-grid>
+    </div>
+  </div>
+</div>
+
+<!--Export Excel Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="ExportExcelPLBconfirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="info"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lgc" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-3">
+        <h4 class="modal-title">Confirmation</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onExportExcelCloseConfirmationClick()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {{ ExportExcelDownloadConfirmationMessage }}
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onExportExcelCloseConfirmationClick()"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="onExportExcelYesConfirmationClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Export Excel Confirmation Model -->
+
+<!-- Select Subclient Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="selectsubclientModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <app-selectsubclient
+      [Inputclientid]="Inputclientid"
+      [InputGenerateUnmatchedClaim]="InputGenerateUnmatchedClaim"
+      [InputAllClaimno]="InputAllClaimno"
+      [Inputcomponent]="Inputcomponent"
+      (OutputSelectSubclientResult)="OutputSelectSubclientResult($event)"
+      #SelectsubclientChild
+    ></app-selectsubclient>
+  </div>
+</div>
+<!-- Select Subclient Model -->

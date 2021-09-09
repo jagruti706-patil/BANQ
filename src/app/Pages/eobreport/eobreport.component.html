@@ -1,0 +1,523 @@
+
+  <div class="modal-content" style="margin-bottom: 50px;">   
+    <div class="modal-body" *ngFor="let EOBDetails of EOBReportItems">
+      <div class="row">
+        <div class="col-md-11">
+          <h3 class="text-center text-dark text-uppercase ">
+            ERA EOB Report
+          </h3>
+          <h6 class="text-center mb-3 text-uppercase">
+            <span *ngIf="EOBDetails.subclientname == null">
+              {{ EOBDetails.clientname }}
+            </span>
+            <span *ngIf="EOBDetails.subclientname != null">
+              {{ EOBDetails.subclientname }}
+            </span>
+          </h6>
+        </div>
+        <div class="col-md-1">
+          <button
+            type="button"
+            class="close float-right"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="onCloseClick()"
+          ></button>
+        </div>
+      </div>
+      <hr />
+      <div class="d-box">
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let checkinfo of EOBDetails.payerandcheck">
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.payername }}
+                </td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.address }}
+                </td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.address1 }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let checkinfo of EOBDetails.payerandcheck">
+              <tr>
+                <td class="p-0 text-muted">Check Date:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.checkdate | date: "MM/dd/yyyy" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Check #:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.checknumber }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Payment Method:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.paymentmethod }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="d-box">
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let patientinfo of EOBDetails.otherdetails">
+              <tr>
+                <td class="p-0 text-muted">Patient:</td>
+                <td class="font-weight-bold p-0 text-uppercase pl-3">
+                  {{ patientinfo.patient }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Patient Member:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ patientinfo.patientmember }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Patient Group:</td>
+                <td class="font-weight-bold p-0 pl-3"></td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Claim Adjs:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ patientinfo.claimleveladjstment }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let claiminfo of EOBDetails.otherdetails">
+              <tr>
+                <td class="p-0 text-muted">Claim #:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ claiminfo.claimno }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Claim Remit Ref.#:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ claiminfo.claimremittancerefnumber }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Insured:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ claiminfo.insured }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Rendered Provider:</td>
+                <td class="font-weight-bold p-0 text-uppercase pl-3">
+                  {{ renderingproviderNameNpi }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let claiminfo of EOBDetails.otherdetails">
+              <tr>
+                <td class="p-0 text-muted">Claim Billed:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.claimbilledamount }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Claim Paid:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.claimpaidamount }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Total Claim Adjs:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.totalclaimleveladjstment }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Patient Responsibility Amount:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.patientres }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div
+          class="col-md-12  d-flex justify-content-end"
+          *ngFor="let claiminfo of EOBDetails.otherdetails"
+        >
+          <h6 class="text-primary mb-2 mt-2" style="color: blue !important;">
+            {{ claiminfo.status }}
+          </h6>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <kendo-grid            
+            class="report master"
+            [data]="EOBReportSVCGridView"      
+            [height]="210"      
+          >
+            <kendo-grid-column field="dos" title="DOS"></kendo-grid-column>
+            <kendo-grid-column
+              field="unit"
+              title="Unit"
+              width="55"
+              title="Unit"
+            ></kendo-grid-column>
+            <kendo-grid-column field="cptcode" title="Proc/Mod">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div
+                  title=" {{ dataItem.cptcode }} {{ dataItem.modifier1 }}
+                {{ dataItem.modifier2 }} {{ dataItem.modifier3 }}
+                {{ dataItem.modifier4 }}"
+                >
+                  {{ dataItem.cptcode }} {{ dataItem.modifier1 }}
+                  {{ dataItem.modifier2 }} {{ dataItem.modifier3 }}
+                  {{ dataItem.modifier4 }}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="billedamount"
+              title="Billed "
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="allowed"
+              title="Allowed"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="deduct"
+              title="Deduct"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="coins"
+              title="Co-Ins"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="copay"
+              title="Copay"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="payment"
+              title="Paid"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="adjustment"
+              title="Adjustment"
+            ></kendo-grid-column>
+            <kendo-grid-column field="reasoncodes" title="Reason">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div title="{{ dataItem.reasoncodes }}">
+                  {{ dataItem.reasoncodes }}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="remark" title="Remark">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div title="{{ dataItem.remark }}">
+                  {{ dataItem.remark }}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+    </div> 
+    <div class="modal-footer ">
+      <button
+        style="visibility: hidden;"
+        id="hiddenbtn"
+        type="button"
+        class="btn btn-secondary"        
+        (click)="pdf.saveAs(this.exportfilename);exporttopdfclick()">        
+      </button>
+      <button *ngIf="clsPermission.exporttopdfvieweob"
+        type="button"
+        class="btn btn-secondary "        
+        [disabled]="disabledbutton"
+        (click)="exportpdf()"
+      >
+        Export To PDF
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary "
+        data-dismiss="modal"
+        (click)="onCloseClick()"
+      >
+        Close
+      </button>     
+    </div>
+  </div>
+
+<!-- PDF EXport Start -->
+<kendo-pdf-export id="pdfmodel"  #pdf paperSize="A4" margin="0.5cm" landscape="true" [scale]="0.7"  [repeatHeaders]="true">
+  <ng-container *ngIf="displayreport == true" >
+    <div class="modal-body" *ngFor="let EOBDetails of EOBReportItems">
+      <div class="row">
+        <div class="col-md-11">
+          <h3 class="text-center text-dark text-uppercase ">
+            ERA EOB Report
+          </h3>
+          <h6 class="text-center mb-3 text-uppercase">
+            <span *ngIf="EOBDetails.subclientname == null">
+              {{ EOBDetails.clientname }}
+            </span>
+            <span *ngIf="EOBDetails.subclientname != null">
+              {{ EOBDetails.subclientname }}
+            </span>
+          </h6>
+        </div>       
+      </div>
+      <hr />
+      <div class="d-box">
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let checkinfo of EOBDetails.payerandcheck">
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.payername }}
+                </td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.address }}
+                </td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold text-uppercase p-0">
+                  {{ checkinfo.address1 }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let checkinfo of EOBDetails.payerandcheck">
+              <tr>
+                <td class="p-0 text-muted">Check Date:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.checkdate | date: "MM/dd/yyyy" }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Check #:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.checknumber }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Payment Method:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ checkinfo.paymentmethod }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+      </div>
+  
+      <hr />
+      <div class="d-box">
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let patientinfo of EOBDetails.otherdetails">
+              <tr>
+                <td class="p-0 text-muted">Patient:</td>
+                <td class="font-weight-bold p-0 text-uppercase pl-3">
+                  {{ patientinfo.patient }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Patient Member:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ patientinfo.patientmember }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Patient Group:</td>
+                <td class="font-weight-bold p-0 pl-3"></td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Claim Adjs:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ patientinfo.claimleveladjstment }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let claiminfo of EOBDetails.otherdetails">
+              <tr>
+                <td class="p-0 text-muted">Claim #:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ claiminfo.claimno }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Claim Remit Ref.#:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ claiminfo.claimremittancerefnumber }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Insured:</td>
+                <td class="font-weight-bold p-0 pl-3">
+                  {{ claiminfo.insured }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Rendered Provider:</td>               
+                <td class="font-weight-bold p-0 text-uppercase pl-3">
+                  {{ renderingproviderNameNpi }}
+                </td>                         
+              </tr>
+            </tbody>
+          </div>
+        </div>
+        <div class="flex-g">
+          <div class="table table-borderless mb-0">
+            <tbody *ngFor="let claiminfo of EOBDetails.otherdetails">
+              <tr>
+                <td class="p-0 text-muted">Claim Billed:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.claimbilledamount }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Claim Paid:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.claimpaidamount }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Total Claim Adjs:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.totalclaimleveladjstment }}
+                </td>
+              </tr>
+              <tr>
+                <td class="p-0 text-muted">Patient Responsibility Amount:</td>
+                <td class="font-weight-bold p-0 pl-3 float-right">
+                  {{ claiminfo.patientres }}
+                </td>
+              </tr>
+            </tbody>
+          </div>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div
+          class="col-md-12  d-flex justify-content-end"
+          *ngFor="let claiminfo of EOBDetails.otherdetails"
+        >
+          <h6 class="text-primary mb-2 mt-2" style="color: blue !important;">
+            {{ claiminfo.status }}
+          </h6>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-12">
+          <kendo-grid
+            class="report master"
+            [data]="EOBReportSVCGridView"         
+          >
+            <kendo-grid-column field="dos" title="DOS"></kendo-grid-column>
+            <kendo-grid-column
+              field="unit"
+              title="Unit" 
+            ></kendo-grid-column>
+            <kendo-grid-column field="cptcode" title="Proc/Mod">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div
+                  title=" {{ dataItem.cptcode }} {{ dataItem.modifier1 }}
+                {{ dataItem.modifier2 }} {{ dataItem.modifier3 }}
+                {{ dataItem.modifier4 }}"
+                >
+                  {{ dataItem.cptcode }} {{ dataItem.modifier1 }}
+                  {{ dataItem.modifier2 }} {{ dataItem.modifier3 }}
+                  {{ dataItem.modifier4 }}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column
+              field="billedamount"
+              title="Billed "
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="allowed"
+              title="Allowed"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="deduct"
+              title="Deduct"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="coins"
+              title="Co-Ins"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="copay"
+              title="Copay"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="payment"
+              title="Paid"
+            ></kendo-grid-column>
+            <kendo-grid-column
+              field="adjustment"
+              title="Adjustment"
+            ></kendo-grid-column>
+            <kendo-grid-column field="reasoncodes" title="Reason" width="120">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div title="{{ dataItem.reasoncodes }}" style="word-wrap: break-word;">
+                  {{ dataItem.reasoncodes }}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="remark" title="Remark">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <div title="{{ dataItem.remark }}">
+                  {{ dataItem.remark }}
+                </div>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</kendo-pdf-export>
+<!-- PDF EXport End -->

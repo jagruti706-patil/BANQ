@@ -1,0 +1,9 @@
+.k-textbox.disabled, .k-textbox[disabled]{
+    outline: none;
+    cursor: default;
+    opacity: .6;
+    -webkit-filter: grayscale(0.1);
+    filter: grayscale(0.1);
+    pointer-events: none;
+    box-shadow: none;
+}

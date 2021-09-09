@@ -1,0 +1,105 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="newProviders">
+      Add Providers
+    </h4>
+    <h4 class="modal-title" id="exampleModalLabel" *ngIf="!newProviders">
+      Update Providers
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="OnClose()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="ProvidersGroup">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label"
+              ><strong class="text-danger">*</strong>Code
+            </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="
+                ProvidersCode.invalid && ProvidersCode.touched
+              "
+              formControlName="fcProvidersCode"
+              type="text"
+              id="txtproviderscode"
+              class="form-control form-control-sm"
+            />
+            <div
+              *ngIf="
+                submitted || (ProvidersCode.invalid && ProvidersCode.touched)
+              "
+            >
+              <small *ngIf="ProvidersCode.errors?.required" class="text-danger"
+                >Code is required</small
+              >
+              <small *ngIf="ProvidersCode.errors?.maxlength" class="text-danger"
+                >Code allows 50 characters</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="form-label"
+              ><strong class="text-danger">*</strong>Description
+            </label>
+            <input
+              kendoTextBox
+              [class.is-invalid]="
+                ProvidersDescription.invalid && ProvidersDescription.touched
+              "
+              formControlName="fcProvidersDescription"
+              type="text"
+              id="txtprovidersdescription"
+              class="form-control form-control-sm"
+            />
+            <div
+              *ngIf="
+                submitted ||
+                (ProvidersDescription.invalid && ProvidersDescription.touched)
+              "
+            >
+              <small
+                *ngIf="ProvidersDescription.errors?.required"
+                class="text-danger"
+                >Description is required</small
+              >
+              <small
+                *ngIf="ProvidersDescription.errors?.maxlength"
+                class="text-danger"
+                >Description allows 150 characters</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-dismiss="modal"
+      (click)="OnClose()"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary btn-sm"
+      id="AddProviders"
+      (click)="saveProviders()"
+    >
+      Save
+    </button>
+  </div>
+</div>

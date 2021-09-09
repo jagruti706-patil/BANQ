@@ -1,0 +1,290 @@
+<div class="modal-content">
+  <div class="modal-header p-3">
+    <h4 class="modal-title">Practice Details</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-details">
+          <div class="card-body p-3">
+            <div class="row" *ngIf="objclient">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="small text-muted">Group Name</div>
+                  <span>{{ objclient.clientname }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">Practice Code</div>
+                  <span>{{ objclient.subclientcode }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">Division Code</div>
+                  <span>{{ objclient.subclientdivisioncode }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">Billing Location</div>
+                  <span>{{ objclient.billinglocationcode }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">Practice Name</div>
+                  <span>{{ objclient.subclientname }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">Practice Status</div>
+                  <span *ngIf="objclient.subclientstatus" class="text-success"
+                    >Active</span
+                  >
+                  <span *ngIf="!objclient.subclientstatus" class="text-danger"
+                    >Inactive</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="small text-muted">Contact Name</div>
+                  <span>{{ objclient.subclientcontactname }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">Contact Phone</div>
+                  <span>{{ objclient.subclientcontactphone | phone }}</span>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <div class="small text-muted">Contact Email</div>
+                  <span>{{ objclient.subclientcontactemail }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">Billing Company</div>
+                  <span>{{ objclient.billingcompany }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">
+                    Company
+                    <ng-container
+                      *ngIf="objclient.billingcompany == '3rd Party'"
+                      >Name</ng-container
+                    >
+                    <ng-container
+                      *ngIf="objclient.billingcompany != '3rd Party'"
+                      >Type</ng-container
+                    >
+                  </div>
+                  <span>{{ objclient.companytype }}</span>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <div class="small text-muted">
+                    File Transfer Option
+                  </div>
+                  <span *ngIf="objclient.ftpoption == '1'">FTP Tool</span>
+                  <span *ngIf="objclient.ftpoption == '2'">HUB</span>
+                </div>
+              </div>
+              <div class="col-md-2" *ngIf="clsPermission.practicesendfilecopyto">
+                <div class="form-group">
+                  <div class="small text-muted">
+                    Send File copy to
+                  </div>
+                  <span>{{objclient.copytoftpsubclientname}}</span>                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header pl-4">
+            <h5 class="mb-0">
+              Practice Split Parameters
+              <small>(Count: {{ splitparalist?.length }}) </small>
+            </h5>
+          </div>
+          <div class="card-body o-auto p-3">
+            <div class="col-lg-12 mt-2" *ngIf="splitparalist?.length == 0">
+              <p class="text-muted">
+                <i class="fe fe-alert-circle mr-1"></i>
+                No Records Available.
+              </p>
+            </div>
+
+            <div class="table-responsive" *ngIf="splitparalist?.length > 0">
+              <table class="table card-table table-striped table-vcenter">
+                <thead>
+                  <tr>
+                    <th>Split Parameter</th>
+                    <th>Split Value</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of splitparalist">
+                    <td>{{ item.splitparametername }}</td>
+                    <td>{{ item.splitparametervalue }}</td>
+                    <td>
+                      <span
+                        class="badge badge-success"
+                        *ngIf="item.splitparameterstatus"
+                        >Active</span
+                      >
+                      <span
+                        class="badge badge-secondary"
+                        *ngIf="!item.splitparameterstatus"
+                        >Inactive</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <h4 class="mt-2">Outbound FTP Details</h4>
+
+        <kendo-grid id="gridMaster" [data]="getftpinfo">
+          <kendo-grid-column
+            field="ftpcode"
+            title="Code"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpname"
+            title="FTP Name"
+            width="50"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpurl"
+            title="FTP Url"
+            width="70"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpusername"
+            title="FTP User Name"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftptype"
+            title="FTP Type"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftpport"
+            title="FTP Port"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="ftp835outboundfolder"
+            title="835 Outbound Folder"
+            width="40"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="status"
+            title="Status"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div *ngIf="dataItem.status" class="text-success">
+                Active
+              </div>
+              <div *ngIf="!dataItem.status" class="text-danger">
+                Inactive
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+
+      <div class="col-md-12" *ngIf="getproviderinfo != null">
+        <h4 class="mt-2">Provider Mapping</h4>
+
+        <kendo-grid
+          id="gridProvider"
+          [data]="getproviderinfo"
+          style="height: 220px;"
+        >
+          <kendo-grid-column
+            field="providernpi"
+            title="NPI"
+            width="30"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="sname"
+            title="Provider Name"
+            width="50"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="npitype"
+            title="Type"
+            width="20"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+          </kendo-grid-column>
+          <kendo-grid-column
+            field="status"
+            title="Status"
+            width="20"
+            [headerStyle]="{ 'font-weight': '600' }"
+          >
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <div *ngIf="dataItem.status != 'false'" class="text-success">
+                Active
+              </div>
+              <div *ngIf="dataItem.status == 'false'" class="text-danger">
+                Inactive
+              </div>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="black-box" *ngIf="loading">
+  <div class="k-i-loading"></div>
+</div>

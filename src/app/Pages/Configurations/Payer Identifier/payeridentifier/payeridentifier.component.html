@@ -1,0 +1,240 @@
+<div class="card border-0">
+  <div class="card-header pl-4">
+    <h4 class="mb-0">
+      <i class="fe fe-menu pointer mr-1" (click)="togglesidebar()"></i>PLB
+      Config
+    </h4>
+    <div class="row ml-auto">
+      <button
+        *ngIf="clsPermission.addplbconfig"
+        class="ml-auto"
+        kendoButton
+        [primary]="true"
+        data-toggle="modal"
+        data-target="#addpayeridentifierModal"
+        (click)="AddPayeridentifier()"
+      >
+        Add PLB Config
+      </button>
+    </div>
+  </div>
+  <div class="card-body o-auto p-3" style=" height: 78vh">
+    <kendo-grid
+      [data]="PayerIdentifierGridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [filterable]="true"
+      [loading]="loadingPayeridentifierGrid"
+      (dataStateChange)="PayerIdentifierDataStateChange($event)"
+      (edit)="EditPayerIdentifier($event)"
+      (remove)="DeletePayerIdentifier($event)"
+      [height]="660"
+    >
+      <kendo-grid-column
+        field="payerid"
+        title="Payer id"
+        width="30"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="payername"
+        title="Payer"
+        width="50"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="separator"
+        title="Seperator"
+        width="30"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="adjustmentreasoncode"
+        title="Reason Code"
+        width="30"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-column
+        field="status"
+        title="Status"
+        width="30"
+        [filterable]="true"
+        filter="boolean"
+        [headerStyle]="{ 'font-weight': '600' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <div *ngIf="dataItem.status == true" class="text-success">
+            Active
+          </div>
+          <div *ngIf="dataItem.status == false" class="text-danger">
+            Inactive
+          </div>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-command-column
+        title="Action"
+        width="30"
+        [headerStyle]="{ 'font-weight': 'bold' }"
+      >
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button
+            *ngIf="clsPermission.editplbconfig"
+            kendoGridEditCommand
+            [primary]="true"
+            title="Edit"
+            data-toggle="modal"
+            data-target="#editpayeridentifierconfirmationModal"
+          >
+            <i class="fe fe-edit-2"></i>
+          </button>
+          <button
+            *ngIf="clsPermission.statusofplbconfig"
+            class="k-button"
+            data-toggle="modal"
+            data-target="#statusModal"
+            (click)="updateStatusConfirmation(dataItem)"
+          >
+            <i
+              class="fa fa-toggle-off"
+              title="Click here to Activate payer identifier"
+              *ngIf="dataItem.status == false"
+            ></i>
+            <i
+              class="fa fa-toggle-on"
+              title="Click here to Deactivate payer identifier"
+              *ngIf="dataItem.status != false"
+            ></i>
+          </button>
+
+          <button
+            *ngIf="clsPermission.deleteplbconfig"
+            kendoGridRemoveCommand
+            title="Delete"
+            data-toggle="modal"
+            data-target="#deletepayeridentifierconfirmationModal"
+          >
+            <i class="fe fe-x"></i>
+          </button>
+        </ng-template>
+      </kendo-grid-command-column>
+      <ng-template kendoGridNoRecordsTemplate>
+        No records available.
+      </ng-template>
+    </kendo-grid>
+  </div>
+</div>
+
+<!-- Add Payeridentifier -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="addpayeridentifierModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <app-addpayeridentifier
+      [InputPayeridentifierEditid]="EditPayeridentifierid"
+      (OutputPayeridentifierEditResult)="
+        OutputPayeridentifierEditResult($event)
+      "
+      #AddPayeridentifierChild
+    ></app-addpayeridentifier>
+  </div>
+</div>
+<!-- Add Payeridentifier -->
+
+<!--Edit Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="editpayeridentifierconfirmationModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <app-editconfirmation
+      [InputEditMessage]="InputEditMessage"
+      (OutputEditResult)="OutputEditResult($event)"
+    >
+    </app-editconfirmation>
+  </div>
+</div>
+<!--Edit Confirmation Model -->
+
+<!--Delete Confirmation Model -->
+<div
+  class="modal fade"
+  data-backdrop="static"
+  data-keyboard="false"
+  id="deletepayeridentifierconfirmationModal"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <app-deleteconfirmation
+      [InputDeleteMessage]="InputDeleteMessage"
+      (OutputDeleteResult)="OutputDeleteResult($event)"
+    >
+    </app-deleteconfirmation>
+  </div>
+</div>
+<!--Delete Confirmation Model -->
+
+<!-- Status Confirmation Model -->
+<div
+  class="modal fade"
+  id="statusModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="statusModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ updatePayeridentifierMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateStatusPayeridentifier()"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Status Confirmation Model -->

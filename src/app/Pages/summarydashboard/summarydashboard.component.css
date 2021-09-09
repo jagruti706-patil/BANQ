@@ -1,0 +1,61 @@
+.card-chart {
+    border-right: 1px solid #f0f0f0;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+.chart-header {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 0;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chart-title {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 0;
+}
+
+.chart-body {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chart-footer {
+    border-top: 1px solid #f0f0f0;
+    padding: 10px 20px;
+    border-color: #e9ecef;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tx-60 {
+    font-size: 60px;
+}
+
+.tx-11 {
+    font-size: 12px;
+}
+
+.tx-24 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.tx-14 {
+    font-size: 14px;
+}
+
+.tx-inverse {
+    color: #37393b;
+}
